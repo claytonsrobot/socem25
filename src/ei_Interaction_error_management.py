@@ -35,7 +35,7 @@ import math
 #l = 10  # beam length
 #s = 1  # beam-to-beam spacing
 definite_beam_num = False  # if False, assumes max number of beams (full interaction) at the first beam's max deflection
-beams = 8  # num. of beams in a row (only used if "definite_beam_num" set to True)
+beam_count = 8  # num. of beams in a row (only used if "definite_beam_num" set to True)
 
 # Model lists/arrays - each index is a beam's attribute (0 index = 1st beam, last index = last beam)
 theta = list()  # PRBM angle (radians)
@@ -196,7 +196,7 @@ def EI_Interaction(f, h, l, s):
             i += 1
     else:  # definite number of beams in a row (may not be full/max interaction possible)
         i = 0
-        while d[i] > 0 and i < beams-1:  # will previous beam hit next beam & does that beam exist? If so, run that beam through otherBeams()
+        while d[i] > 0 and i < beam_count-1:  # will previous beam hit next beam & does that beam exist? If so, run that beam through otherBeams()
             otherBeams(i)
             i += 1
     print("iterations: ",i)

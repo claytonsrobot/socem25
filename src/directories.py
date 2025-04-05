@@ -13,8 +13,7 @@ from src.directories import Directories
 """
 import os
 import inspect
-from src import toml_utils
-#from pathlib import Path
+from src.helpers import toml_utils
 from src import environmental
 
 class Directories:
@@ -62,9 +61,8 @@ class Directories:
         if environmental.vercel==False:
             return cls.get_project_dir()+"\\imports\\"
         elif environmental.vercel==True: # web app, blob
-            folder='\\tmp\\' # https://maxson-engineering-notes.vercel.app/personal/pavlov3-d/chat-gpt-pavlov3-d-django-improvements-report/
-            folder=cls.scene_object.blob_dir+'/csv_uploads_pavlovdata/' # blob=dir shold be known here.
-            return folder
+            print("\nYou have not yet built a web app, last I checked.\nAnd yet, environmental.vercel==True")
+            pass
         return cls.get_project_dir()+"\\imports\\"
     @classmethod
     def get_groupings_dir(cls):

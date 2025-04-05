@@ -24,7 +24,7 @@ import math
 # l = 10 # beam length
 # s = 1 # beam-to-beam spacing
 definite_beam_num = False # # if False, assumes max number of beams at the first beam's max deflection
-beams = 8 # num. of beams in a row (only used if "definite_beam_num" set to True)
+beam_count = 8 # num. of beams in a row (only used if "definite_beam_num" set to True)
 
 # Model lists/arrays - each index is a beam's attribute (0 index = 1st beam, last index = last beam)
 theta = list() # PRBM angle (rads)
@@ -177,7 +177,7 @@ def EI_NoInteraction(f, h, l, s):
             i += 1
     else:  # definite number of beams in a row (may expect more beams than the system actually has)
         i = 0
-        while i <= (numBeams-2) and i < beams-1:  # will beam hit force bar & does that beam exist? If so, run that beam through otherBeams()
+        while i <= (numBeams-2) and i < beam_count-1:  # will beam hit force bar & does that beam exist? If so, run that beam through otherBeams()
             otherBeams(i)
             i += 1
             

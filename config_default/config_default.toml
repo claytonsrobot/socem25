@@ -45,3 +45,12 @@
 
 [notes]
 ## visualizeDatastream ( search: "def datafeed(" ) is broken right now. Refer to earlier versions (pre v65)for reference of how Bebee left it.
+
+[flexural rigidity parameters]
+# INPUT PARAMETERS (EI will be calculated in units of f*l^2)
+"f" = 5 # peak force
+"h" = 8 # force bar height
+"l" = 10 # beam length
+"s" = 1 # beam-to-beam spacing
+"definite_beam_num = False # # if False, assumes max number of beams at the first beam's max deflection
+"beam_count" = 8 # num. of beams in a row (only used if "definite_beam_num" set to True)
