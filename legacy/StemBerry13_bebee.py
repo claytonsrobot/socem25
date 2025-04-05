@@ -43,7 +43,7 @@ path = address
 import serial.tools.list_ports
 import time
 import tkinter as tk
-from tkinter import *
+#from tkinter import 
 import threading
 import xlsxwriter
 import csv
@@ -67,7 +67,8 @@ import peakutils
 #from PeakUtils.Plot import plot as pplot
 import math
 import struct
-from PIL import ImageTk,Image
+import PIL.ImageTk
+import PIL.Image
 
 #Global varibles  
 collect = False # controls data collection loop from GUI frontend
@@ -259,21 +260,21 @@ def run(self, ser):
 
     if vis == 's':# data displayed in scrollbars (default)
         # Displays incoming data 
-        scroll = Scrollbar(self)
+        scroll = tk.Scrollbar(self)
 
         self.timeLabel = tk.Label(self, text = "s",font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
         self.timeLabel.place(x = 274, y = 70)
-        self.Timelist = Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 1, font = ("arial", 14, "bold"), fg = "dodgerblue2")
+        self.Timelist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 1, font = ("arial", 14, "bold"), fg = "dodgerblue2")
         self.Timelist.place(x = 240, y = 100)
 
         self.disLabel = tk.Label(self, text = "in.",font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
         self.disLabel.place(x = 357, y = 70)
-        self.Dislist = Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 1, font = ("arial", 14, "bold"), fg = "dodgerblue2")
+        self.Dislist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 1, font = ("arial", 14, "bold"), fg = "dodgerblue2")
         self.Dislist.place(x = 330, y = 100)
 
         self.forceLabel = tk.Label(self, text = "lbs.",font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
         self.forceLabel.place(x = 444, y = 70)
-        self.Forcelist = Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 11, font = ("arial", 14, "bold"), fg = "dodgerblue2")
+        self.Forcelist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 11, font = ("arial", 14, "bold"), fg = "dodgerblue2")
         self.Forcelist.place(x = 420, y = 100)
 
     else:# user decided for no data display
@@ -442,7 +443,7 @@ class Home(tk.Frame):
 
         # y = 255, 220, 285, 80, 150, 185, 115
         '''
-        plotText = StringVar()
+        plotText = tk.StringVar()
         plotText.set("")
         plotLabel = tk.Label(self, text = "Plot: ",
                           font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=0,y=80)
@@ -452,15 +453,15 @@ class Home(tk.Frame):
                           font = ("arial", 14, "italic"), fg = "gray3", bg="ghost white").place(x=200,y=80)
         
         ''
-        usePlotnameAsFilenameYN = IntVar()
+        usePlotnameAsFilenameYN = tk.IntVar()
         usePlotnameAsFilenameYN.set(1)
         #plotnameAsfilenameLabel = tk.Label(self, text = "Use Plot Name as File Name?",
         #                  font = ("arial", 10, ""), fg = "gray3", bg="ghost white").place(x=230,y=80)
         plotnameAsFilenameCheckbox = tk.Checkbutton(self, text= "Use Plot Name as File Name?",variable = usePlotnameAsFilenameYN).grid(row=0, sticky=W)
         '''
 
-        rowCountLeft = IntVar()
-        rowCountRight = IntVar()
+        rowCountLeft = tk.IntVar()
+        rowCountRight = tk.IntVar()
         rowCountLeft.set(100)
         rowCountRight.set(106)
         rowCountLeftLabel = tk.Label(self, text = "Left Row Stem Count:",
@@ -472,8 +473,8 @@ class Home(tk.Frame):
         rowCountRightEntry = tk.Entry(self, textvariable=rowCountRight,
                 font = ("arial", 14, "bold"), width= 4, bg="white", fg="gray1").place(x = 540, y = 120)
         
-        startCount = IntVar()
-        endCount = IntVar()
+        startCount = tk.IntVar()
+        endCount = tk.IntVar()
         startCount.set(60)
         endCount.set(100)
         startCountDisLabel = tk.Label(self, text = "Horizontal Range of Stem Counts (in.):",
@@ -486,7 +487,7 @@ class Home(tk.Frame):
                 font = ("arial", 14, "bold"), width= 4, bg="white", fg="gray1").place(x = 455, y = 160)
 
         
-        barHeight = DoubleVar() # Whatever number is typed into the field
+        barHeight = tk.DoubleVar() # Whatever number is typed into the field
         Fb_place = 7.5 # default value, which can be altered 
         barHeight.set(Fb_place) #
         Fb_center = barHeight # CB 3/13/2022 # In 2021 the ruler was not used, and the ruler is risky.
@@ -500,12 +501,12 @@ class Home(tk.Frame):
         
         stemHeightLabel = tk.Label(self, text = "Avg. Stem Height (in.):",
                           font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=0,y=240)
-        stemHeight = DoubleVar()
+        stemHeight = tk.DoubleVar()
         stemHeight.set(10)# sets initial stem height to 10 (ave. estimate observed)
         stemHeightEntry = tk.Entry(self, textvariable=stemHeight,
                 font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 210, y = 240)
 
-        rows = IntVar()
+        rows = tk.IntVar()
         rows.set(4)#sets rows to be 4 initially since typical number
         rowsLabel = tk.Label(self, text = "# of Contact Rows:",
                 font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=0,y=280)
@@ -515,7 +516,7 @@ class Home(tk.Frame):
                 font = ("arial", 14, "italic"), fg = "gray3", bg="ghost white").place(x=250,y=280)
         
         # possibly get rid of this box, though the variable needs to be kept for passing to storage
-        stemCount = DoubleVar()
+        stemCount = tk.DoubleVar()
         stemCount.set(99)
         stemCount.set((rowCountLeft.get()+rowCountRight.get())/2)
         stemCountLabel = tk.Label(self, text = "Avg. Stem Count:",
@@ -526,13 +527,13 @@ class Home(tk.Frame):
         # possibly get rid of this box, though the variable needs to be kept for passing to storage
         perDisLabel = tk.Label(self, text = "per (in.):",
                           font = ("arial", 14, "italic"), fg = "gray3", bg="ghost white").place(x=240,y=320)
-        perDis = IntVar()# counting stem distance
+        perDis = tk.IntVar()# counting stem distance
         perDis.set(44)# standard distance used (approx. 1 meter)
         perDis.set(endCount.get()-startCount.get())
         perDisEntry = tk.Entry(self, textvariable=perDis,
                 font = ("arial", 14, "italic"), width= 6, bg="white", fg="gray1").place(x = 320, y = 320)
 
-        self.directionChoice = IntVar()
+        self.directionChoice = tk.IntVar()
         self.directionChoice.set(1)
         frameRadioDirection = tk.LabelFrame(self, text='SOCEM Travel Direction*',font = ("arial", 12, "bold"), width= 6, bg="white", fg="gray1")
         frameRadioDirection.place(x = 410, y = 320)
@@ -592,7 +593,7 @@ class DataCollect(tk.Frame):
     
     
     #window = Tk()
-    #filename = StringVar()
+    #filename = tk.StringVar()
     def __init__(self, parent, controller):# automatically runs
 
         
@@ -619,19 +620,19 @@ class DataCollect(tk.Frame):
                font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",
                command=keyboard).place(x = 675, y = 316)
         
-        name = Label(self, text = "Filename: ",
+        name = tk.Label(self, text = "Filename: ",
                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=0,y=35)
         
         #self.filename = filename.get()
-        self.filename = StringVar()# user inputted filename
+        self.filename = tk.StringVar()# user inputted filename
         '''
         if usePlotnameAsFilenameYN.get() == 1:
             print('Top')
-            self.filename = StringVar() 
+            self.filename = tk.StringVar() 
             #self.filename = plotText # this does work, but the objects are married
             self.filename.set(plotText.get()) # this doesn't work, but at least the object isn't married
         elif usePlotnameAsFilenameYN.get() == 0:
-            self.filename = StringVar()# user input filename
+            self.filename = tk.StringVar()# user input filename
 
         filenameEntry = tk.Entry(self, textvariable=self.filename,
                           font = ("arial", 14, "bold"), width="32", bg="white", fg="gray1")
@@ -663,12 +664,12 @@ class DataCollect(tk.Frame):
         if usePlotnameAsFilenameYN.get()==1:
             print("Bottom")
             #self.filename = plotText  # this does work, but the objects are married
-            self.filename = StringVar()
+            self.filename = tk.StringVar()
             self.filename.set(plotText.get()) # this doesn't work, but at least the object isn't married
             print(self.filename.get())
         elif usePlotnameAsFilenameYN.get()==0:
             print(self.filename.get())
-            #self.filename = StringVar()
+            #self.filename = tk.StringVar()
 
         #return filename
         '''
@@ -726,7 +727,7 @@ class DataCollect(tk.Frame):
         tareB = tk.Button(self, text = "Tare", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:self.tare())
         tareB.place(x = 675, y = 224)
         
-        self.checkAutoGraph = IntVar()
+        self.checkAutoGraph = tk.IntVar()
         self.checkAutoGraph.set(1)
         #on/off control of auto graph after stopping & saving data
         graphB = tk.Checkbutton(self, text = "Auto graph", variable = self.checkAutoGraph, width = 13, height = 2, bg = 'ghost white')
@@ -1033,8 +1034,8 @@ class DataCollect(tk.Frame):
             EI_Inter = EI_Interaction_Fx.EI_Interaction(meanPeak, self.Fb_bottom, stemHeight.get(), spacing[1]) # compute EI assuming interactions
             EI_Non = EI_No_Interaction_Fx.EI_NoInteraction(meanPeak, self.Fb_bottom, stemHeight.get(), spacing[1]) # compute EI assuming no interactions
             EI_mean = (EI_Inter + EI_Non)/2
-            EI_Interaction_Fx.clearAll() # ckear all arrays/lists for next calculation
-            EI_No_Interaction_Fx.clearAll()
+            EI_Interaction_Fx.clear_all() # ckear all arrays/lists for next calculation
+            EI_No_Interaction_Fx.clear_all()
         except: # if error in peak finding process, indicate auto-calcs didn't process
             meanPeak = 'NA' 
             topPeaks = ['NA']  
@@ -1219,8 +1220,8 @@ class DataCollect(tk.Frame):
         EIave.clear()
         
         filename = '' # issue?
-       # EI_Interaction.clearAll()
-       # EI_NoInteraction2.clearAll()
+       # EI_Interaction.clear_all()
+       # EI_NoInteraction2.clear_all()
 
         plt.show()
 
@@ -1248,7 +1249,7 @@ class DataCollect(tk.Frame):
             self.saveRaw(filename)# run the Save Raw Data function (it then runs the Auto-Calcs function)
             self.dataset+=1 # increases the data set number 
             if self.dataset > 1: # updates 'New' button label to include increment
-                incra = Label(self, text = '(increment)', bg='gray2', fg = 'ghost white', font = ('arial', 12))
+                incra = tk.Label(self, text = '(increment)', bg='gray2', fg = 'ghost white', font = ('arial', 12))
                 incra.place(x = 575, y = 100)
 
             #print('stop isOpen ', ser.isOpen())      
@@ -1280,7 +1281,7 @@ class Calibrate(tk.Frame):
         testW = tk.Label(self, text = "Weight:",
                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=5,y=183)
 
-        self.knownW = DoubleVar() # know weight textvariable
+        self.knownW = tk.DoubleVar() # know weight textvariable
         self.knownW.set(0.0) # initially = 1.0 kg (assuming 1.0 kg will be used)
         knownWEntry = tk.Entry(self, textvariable=self.knownW,
                font = ("arial", 14, "bold"), width= 5, bg="white", fg="gray1").place(x = 80, y =183)
@@ -1290,7 +1291,7 @@ class Calibrate(tk.Frame):
 
         self.lbs = self.knownW.get() * convert # convert known weight kg to lbs 
         self.strW = str('%.3f' % self.lbs) # store as string
-        self.strLbs = StringVar() # for displaying & updating on GUI
+        self.strLbs = tk.StringVar() # for displaying & updating on GUI
         self.strLbs.set(self.strW) # initial value = self.knownW
 
         eqLabel = tk.Label(self, text = '= ',
@@ -1304,7 +1305,7 @@ class Calibrate(tk.Frame):
         caliLabel = tk.Label(self, text = "Cali. Factor:",
                           font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=5,y=223)
     
-        self.calibra = IntVar() # needs to be int, not float
+        self.calibra = tk.IntVar() # needs to be int, not float
         self.calibra.set(199750) # initial calibration num. Has been working well
         self.factor = self.calibra.get() 
         self.calibraEntry = tk.Entry(self, textvariable=self.calibra,
@@ -1341,16 +1342,16 @@ class Calibrate(tk.Frame):
                          font = ("arial", 16, "bold"), height = 1, width = 8, fg = "ghost white", bg = "gray2",
                          command=lambda:self.updateCali(-100)).place(x = 675, y = 136+44)
 
-        scroll = Scrollbar(self)
+        scroll = tk.Scrollbar(self)
 
         self.LCLabel = tk.Label(self, text = "lbs.",font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
         self.LCLabel.place(x = 330, y = 43)
-        self.LClist = Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 14, font = ("arial", 14, "bold"), fg = "dodgerblue2")
+        self.LClist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 14, font = ("arial", 14, "bold"), fg = "dodgerblue2")
         self.LClist.place(x = 310, y = 73)
 
         self.DiffLabel = tk.Label(self, text = "Diff.",font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
         self.DiffLabel.place(x = 420, y = 43)
-        self.Difflist = Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 14, font = ("arial", 14, "bold"), fg = "dodgerblue2")
+        self.Difflist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 14, font = ("arial", 14, "bold"), fg = "dodgerblue2")
         self.Difflist.place(x = 400, y = 73)
 
         HomeB = tk.Button(self, text ="Inputs",
@@ -1378,7 +1379,7 @@ class Calibrate(tk.Frame):
         self.strW = str('%.3f' % self.lbs) # store as string
         self.strLbs.set(self.strW) # update GUI text
         
-        scroll = Scrollbar(self)
+        scroll = tk.Scrollbar(self)
         self.factor = self.calibra.get() # get user input calibration factor
         self.doneCali() # if Arduino sending force data, this will momentarily stop it 
         
@@ -1446,15 +1447,15 @@ class ErrorReport(tk.Frame):
                        font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",
                        command=lambda:controller.show_frame(DataCollect)).place(x = 675, y = 225)
         
-        scroll = Scrollbar(self)
+        scroll = tk.Scrollbar(self)
         
         self.ErrorCodeLabel = tk.Label(self, text = "Error Code\n(Location)",font = ("arial", 14, "bold"), fg = "gray3", bg = "ghost white").place(x = 179, y = 50)
-        self.ErrorCodeList = Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 10, height = 13, font = ("arial", 14, "bold"), fg = "dodgerblue2")
+        self.ErrorCodeList = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 10, height = 13, font = ("arial", 14, "bold"), fg = "dodgerblue2")
         self.ErrorCodeList.place(x = 175, y = 100)
 
         self.ErrorLabel = tk.Label(self, text = "Description",font = ("arial", 14, "bold"), fg = "gray3", bg = "ghost white")
         self.ErrorLabel.place(x = 400, y = 75)
-        self.ErrorDesc = Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 30, height = 13, font = ("arial", 14, "bold"), fg = "dodgerblue2")
+        self.ErrorDesc = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 30, height = 13, font = ("arial", 14, "bold"), fg = "dodgerblue2")
         self.ErrorDesc.place(x = 289, y = 100)
         
     def showErrors2(self):
@@ -1483,42 +1484,42 @@ class Heights(tk.Frame):
         xLabel = tk.Label(self, text = "x (in).",
                           font = ("arial", 17, "bold"), fg = "gray3", bg="ghost white").place(x=230,y=60)
 
-        x1 = DoubleVar()
+        x1 = tk.DoubleVar()
         x1.set(20)
         x1Box = tk.Entry(self, textvariable=x1,
                font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 230, y = 90)
 
-        x2 = DoubleVar()
+        x2 = tk.DoubleVar()
         x2.set(40)
         x2Box = tk.Entry(self, textvariable=x2,
                font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 230, y = 118)
 
-        x3 = DoubleVar()
+        x3 = tk.DoubleVar()
         x3.set(60)
         x3Box = tk.Entry(self, textvariable=x3,
                font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 230, y = 118+28)
 
-        x4 = DoubleVar()
+        x4 = tk.DoubleVar()
         x4.set(80)
         x4Box = tk.Entry(self, textvariable=x4,
                font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 230, y = 118+28+28)
 
-        x5 = DoubleVar()
+        x5 = tk.DoubleVar()
         x5.set(100)
         x5Box = tk.Entry(self, textvariable=x5,
                font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 230, y = 118+(3*28))
 
-        x6 = DoubleVar()
+        x6 = tk.DoubleVar()
         x6.set(120)
         x6Box = tk.Entry(self, textvariable=x6,
                font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 230, y = 118+(4*28))
 
-        x7 = DoubleVar()
+        x7 = tk.DoubleVar()
         x7.set(-1)
         x7Box = tk.Entry(self, textvariable=x7,
                font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 230, y = 118+(5*28))
 
-        x8 = DoubleVar()
+        x8 = tk.DoubleVar()
         x8.set(-1)
         x8Box = tk.Entry(self, textvariable=x8,
                font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 230, y = 118+(6*28))
@@ -1526,36 +1527,36 @@ class Heights(tk.Frame):
         hLabel = tk.Label(self, text = "h (in).",
                           font = ("arial", 17, "bold"), fg = "gray3", bg="ghost white").place(x=330,y=60)
 
-        h1 = DoubleVar()
+        h1 = tk.DoubleVar()
         h1Box = tk.Entry(self, textvariable=h1,
                font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 330, y = 90)
 
-        h2 = DoubleVar()
+        h2 = tk.DoubleVar()
         h2Box = tk.Entry(self, textvariable=h2,
                font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 330, y = 118)
 
-        h3 = DoubleVar()
+        h3 = tk.DoubleVar()
         h3Box = tk.Entry(self, textvariable=h3,
                font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 330, y = 118+28)
 
-        h4 = DoubleVar()
+        h4 = tk.DoubleVar()
         h4Box = tk.Entry(self, textvariable=h4,
                font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 330, y = 118+28+28)
 
-        h5 = DoubleVar()
+        h5 = tk.DoubleVar()
         h5Box = tk.Entry(self, textvariable=h5,
                font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 330, y = 118+(3*28))
 
-        h6 = DoubleVar()
+        h6 = tk.DoubleVar()
         h6Box = tk.Entry(self, textvariable=h6,
                font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 330, y = 118+(4*28))
 
-        h7 = DoubleVar()
+        h7 = tk.DoubleVar()
         h7.set(-1)
         h7Box = tk.Entry(self, textvariable=h7,
                font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 330, y = 118+(5*28))
 
-        h8 = DoubleVar()
+        h8 = tk.DoubleVar()
         h8.set(-1)
         h8Box = tk.Entry(self, textvariable=h8,
                font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 330, y = 118+(6*28))
@@ -1671,14 +1672,14 @@ class Guide(tk.Frame):
         nine = tk.Label(self, text = '9. Press "New" and rename for next data file',
                           font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=5,y=256)
 
-       ten = tk.Label(self, text = '10. Repeat 5.-9.',
+        ten = tk.Label(self, text = '10. Repeat 5.-9.',
                           font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=5,y=281)
 
         '''
         # SOCEM diagram of use 
-        load = Image.open('SOCEM.png')
-        render = ImageTk.PhotoImage(load)
-        img = Label(self, image=render)
+        load = PIL.Image.open('SOCEM.png')
+        render = PIL.ImageTk.PhotoImage(load)
+        img = tk.Label(self, image=render)
         img.image = render
         img.place(x = 480, y = 65)
         '''

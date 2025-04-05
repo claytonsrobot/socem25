@@ -38,7 +38,7 @@ q = list()  # effective beam lengths
 KO = list()  # stiffness coefficient
 gl = list()  # gamma*l (longer rigid link length)
 
-def clearAll(): # Clears variables for new simulation
+def clear_all(): # Clears variables for new simulation
     beta.clear()
     x.clear()
     d.clear()
@@ -203,7 +203,7 @@ def EI_Interaction(f, h, l, s):
     return EI
 
 def test(f, h, l, s):
-    clearAll()
+    clear_all()
     EI = EI_Interaction(f, h, l, s)
     print(EI)
 

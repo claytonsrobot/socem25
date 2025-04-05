@@ -3,8 +3,9 @@ from shell import main
 
 def cli_entry():
     try:
-        # Launch the cmd2 terminal
+        # Launch main
         main()
+        #shell.shell.main()
     except Exception as e:
         print(f"An error occurred: {e}")
 
