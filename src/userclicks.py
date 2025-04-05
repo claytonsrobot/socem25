@@ -1,5 +1,10 @@
-import matplotlib.pyplot as plt
 from itertools import zip_longest
+import matplotlib.pyplot as plt
+import numpy as np
+
+import src.cursor
+from src.guiframe_final_inputs import FinalInputs
+
 ''' Figure Interation classes '''
 class SnaptoCursor(object):
     '''

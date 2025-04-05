@@ -50,11 +50,11 @@ import csv
 import matplotlib
 from matplotlib import style
 matplotlib.use("TkAgg")
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+#from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from matplotlib.figure import Figure
-import matplotlib.animation as animation
+#import matplotlib.animation as animation
 import matplotlib.pyplot as plt
-import itertools
+#import itertools
 import subprocess
 import sys
 import os
@@ -792,7 +792,7 @@ class DataCollect(tk.Frame):
         
     def overwriteGuard(self, raw):# prevents overwriting by checking if filename already exists in saving folder
 
-        return path.exists(raw) # True = already exits, False = doesn't exist
+        return os.path.exists(raw) # True = already exits, False = doesn't exist
     
     # saves raw data in case of errors in processing of auto stats/graph save
     def saveRaw(self, filename):

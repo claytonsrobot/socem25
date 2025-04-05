@@ -1,3 +1,5 @@
+import csv
+import datetime
 from itertools import zip_longest
 import threading
 import time
@@ -322,10 +324,6 @@ class RecordForce(tk.Frame):
         sampling.clear()
         '''
         
-    '''
-    def overwriteGuard(self, filename):# prevents overwriting by checking if filename already exists in saving folder
-        return path.exists(filename) # True = already exits, False = doesn't exist
-    '''
     '''
     #auto graph feature 
     def instantGraph(self):
