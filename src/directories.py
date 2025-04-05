@@ -14,7 +14,7 @@ from src.directories import Directories
 import os
 import inspect
 from src import toml_utils
-from pathlib import Path
+#from pathlib import Path
 from src import environmental
 
 class Directories:
@@ -25,12 +25,7 @@ class Directories:
     imports = None
     groupings = None
 
-
-    ## migrated
-    #initial_program_dir = None
-    #project_dir = None
-
-    #setters
+    """ setters """
     @classmethod
     def set_core_dir(cls,path):
         cls.core = path
@@ -44,22 +39,8 @@ class Directories:
             if os.path.isdir(relative_path):
                 cls.project = relative_path
         print(f"Project directory set: {cls.project}")
-    """
-    @classmethod
-    def set_configs_dir(cls,path):
-        cls.configs = path
-    @classmethod
-    def set_exports_dir(cls,path):
-        cls.exports = path
-    @classmethod
-    def set_imports_dir(cls,path):
-        cls.imports = path
-    @classmethod
-    def set_groupings_dir(cls,path):
-        cls.groupings = path
-        """
 
-    # getters
+    """ getters """
     @classmethod
     def get_core_dir(cls):
         #return cls.core
@@ -105,7 +86,7 @@ class Directories:
     @classmethod
     def initilize_program_dir(cls): # called in CLI. Should also be called at other entry points.
         cls.set_core_dir(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))
-        print(f"cls.initial_program_dir = {cls.get_core_dir()}")
+        print(f"cls.get_core_dir() = {cls.get_core_dir()}")
         #cls.initialize_startup_project()
     @classmethod
     def initialize_startup_project(cls):
