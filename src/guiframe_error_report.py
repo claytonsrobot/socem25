@@ -1,4 +1,6 @@
 import tkinter as tk
+
+from src.gui_main import GUI
 # error page for displaying errors
 class ErrorReport(tk.Frame):
 

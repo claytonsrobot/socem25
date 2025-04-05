@@ -3,6 +3,8 @@ import pandas as pd
 import sys
 import tkinter as tk
 
+from src.gui_main import GUI
+
 ''' Methods'''
 
 def overwriteGuard(filename):# prevents overwriting by checking if filename already exists in saving folder

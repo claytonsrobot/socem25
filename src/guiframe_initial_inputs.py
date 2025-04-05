@@ -2,6 +2,8 @@ import csv
 from itertools import zip_longest
 import tkinter as tk
 
+from src.gui_main import GUI
+
 #Home page
 class InitialInputs(tk.Frame):
     def __init__(self, parent, controller): # automatically runs

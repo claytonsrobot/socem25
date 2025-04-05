@@ -1,6 +1,8 @@
 import tkinter as tk
 import PIL.ImageTk
 import PIL.Image
+
+from gui_main import GUI
 # Guide page 
 class Guide(tk.Frame):
     def __init__(self, parent, controller): # automatically runs

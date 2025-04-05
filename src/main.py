@@ -90,9 +90,8 @@ Notes:
 '''
 
 '''Local libraries'''
-import src.cursor
-from src.guiframe_final_inputs import FinalInputs
-import src.serial
+#import src.serial
+from src.gui_main import GUI
 
 ''' Libraries '''
 import tkinter as tk

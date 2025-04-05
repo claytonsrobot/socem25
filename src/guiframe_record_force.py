@@ -5,6 +5,8 @@ import threading
 import time
 import tkinter as tk
 
+from src.gui_main import GUI
+
 # Data collection page
 class RecordForce(tk.Frame):
     def __init__(self, parent, controller):# automatically runs
@@ -323,7 +325,7 @@ class RecordForce(tk.Frame):
         hz.clear()
         sampling.clear()
         '''
-        
+
     '''
     #auto graph feature 
     def instantGraph(self):
