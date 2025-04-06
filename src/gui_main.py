@@ -4,8 +4,14 @@ from src.guiframe_final_inputs import FinalInputs
 '''Classes, Tkinter GUI'''
 # GUI overarching class
 class GUI(tk.Tk):
+
+    @classmethod
+    def pass_in_FinalInputs(cls,FinalInputs):
+        cls.FinalInputs = FinalInputs
     def __init__(self, *args, **kwargs):# automatically runs
-        
+        self.nope = "nope"
+
+    def run(self,*args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
 
         GUI.initializeVarsGUI()
@@ -31,7 +37,7 @@ class GUI(tk.Tk):
         pagemenu.add_command(label="Guide", command=lambda:GUI.show_frame(Guide))
         pagemenu.add_command(label="Initial Inputs", command=lambda:GUI.show_frame(InitialInputs))
         pagemenu.add_command(label="Record Force", command=lambda:GUI.show_frame(RecordForce))
-        pagemenu.add_command(label="Post Test Inputs", command=lambda:GUI.show_frame(FinalInputs))
+        pagemenu.add_command(label="Post Test Inputs", command=lambda:GUI.show_frame(self.FinalInputs))
         pagemenu.add_command(label="Calibrate", command=lambda:GUI.show_frame(Calibrate))
         pagemenu.add_command(label="Stem Count PreTest, Classic", command=lambda:GUI.show_frame(StemCountClassic))
         datamenu.add_command(label="Data Feed Display, On", command = lambda:data_display(True))

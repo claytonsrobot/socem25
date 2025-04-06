@@ -1464,7 +1464,7 @@ class ErrorReport(tk.Frame):
         self.ErrorDesc.delete(0, 'end')
 
         for e in range(len(errorCodes)):
-            self.ErrorCodeList.insert(END, errorCodes[e])# inserts at end of listbox to actually display
+            self.ErrorCodeList.insert(END, errorCodes[e])# inserts at end   of listbox to actually display
             self.ErrorCodeList.see(END)# makes sure listbox is at end so it displays live data
             self.ErrorDesc.insert(END, errors[e])
             self.ErrorDesc.see(END)
@@ -1689,21 +1689,21 @@ class Guide(tk.Frame):
                         font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",
                         command=lambda:controller.show_frame(Home)).place(x = 0, y = 316)
 
-        
-# INITIATES GUI TO START
-#root= tk.Tk() # added CB
-app = GUI()
-#ser = SerConnect()
-b = DataCollect(app,tk.Frame)
-fig = plt.figure()
-#global filename
-#filename = tk.StringVar()
-#c = named(app, tk.Frame)
-app.title("StemBerry")
-app.geometry("800x480+0+0")
-#app.iconbitmap(s'/home/pi/Desktop/SOCEM Code')
-#full screen:
-#app.geometry("{0}x{1}+0+0".format(app.winfo_screenwidth()-3,app.winfo_screenheight()-3))
-app.mainloop()
+if __name__ == "__main__":
+    # INITIATES GUI TO START
+    #root= tk.Tk() # added CB
+    app = GUI()
+    #ser = SerConnect()
+    b = DataCollect(app,tk.Frame)
+    fig = plt.figure()
+    #global filename
+    #filename = tk.StringVar()
+    #c = named(app, tk.Frame)
+    app.title("StemBerry")
+    app.geometry("800x480+0+0")
+    #app.iconbitmap(s'/home/pi/Desktop/SOCEM Code')
+    #full screen:
+    #app.geometry("{0}x{1}+0+0".format(app.winfo_screenwidth()-3,app.winfo_screenheight()-3))
+    app.mainloop()
         
 

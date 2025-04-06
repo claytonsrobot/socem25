@@ -92,6 +92,7 @@ Notes:
 '''Local libraries'''
 #import src.serial
 from src.gui_main import GUI
+from directories import Directories
 
 ''' Libraries '''
 import tkinter as tk
@@ -123,12 +124,7 @@ location = 'EP425' # 'Kambitsch Farm'
 coordinates = '46.592516,-116.946268'
 script = os.path.basename(__file__)
 directory = os.path.dirname(__file__)
-operatingsystem = platform.system() #determine OS
-# use or sys.plaform instead of platform.system, to avoid importing platform
-print("operatingsystem =",operatingsystem)
-print("os.getlogin() =",os.getlogin())
-print("operator =",operator)
-print("location =",location)
+
 today = date.today()
 datestring = today.strftime("%b-%d-%Y")
 ignoreserial = False # True 
@@ -164,24 +160,6 @@ importFileDataTF = True
 vis = 's' # legacy
 vis = 'nope' # 
 
-if operatingsystem == 'Windows':
-    if os.getlogin() == 'clayt':
-        address = r'C:\Users\clayton\OneDrive - University of Idaho\AqMEQ\SOCEM\Data - Instron and SOCEM - 2020, 2021\SOCEM_DATA_2021'
-        dev_guess = 'COM3' # manual override, windows 10 OS
-    else:
-        #dev_manualOverride = False
-        address = directory + '/SOCEM_data'
-        if not os.path.exists(address):
-            os.makedirs(address) 
-elif operatingsystem == 'Linux':
-    dev_guess = '/dev/ttyACM0' # manual override raspian OS
-    address = '/home/pi/Desktop/SOCEM_data_2022'
-else:
-    address = directory + '/SOCEM_data'
-    dev_guess = dev_manual
-    dev_manualOverride = False
-    if not os.path.exists(address):
-        os.makedirs(address)
         
 ''' matplotlib Graph Settings '''
 '''
@@ -333,20 +311,22 @@ def run(self, ser):
 
         
 
-        
-''' Main '''
-print("StemBerry is loading.....")
-print("output: address = "+address)
-print("script = "+script)
-print("directory = "+directory)
-print("ignoreserial = "+str(ignoreserial))
-app = GUI() # INITIATES GUI TO START
-app.title("StemBerry")
-app.geometry("800x480+0+0")
-app.aspect()
-#app.geometry("700x700+0+0")
-#fig = plt.figure()
-#app.iconbitmap(s'/home/pi/Desktop/SOCEM Code')
-#app.geometry("{0}x{1}+0+0".format(app.winfo_screenwidth()-3,app.winfo_screenheight()-3)) #full screen:
-app.mainloop()
-''' End '''
+if __name__ == "__main__":
+
+    ''' Main '''
+    print("StemBerry is loading.....")
+    print("output: address = "+address)
+    print("script = "+script)
+    print("directory = "+Directories.get_core_dir())
+    print("ignoreserial = "+str(ignoreserial))
+    app = GUI() 
+    app.run() # INITIATES GUI TO START
+    app.title("StemBerry")
+    app.geometry("800x480+0+0")
+    app.aspect()
+    #app.geometry("700x700+0+0")
+    #fig = plt.figure()
+    #app.iconbitmap(s'/home/pi/Desktop/SOCEM Code')
+    #app.geometry("{0}x{1}+0+0".format(app.winfo_screenwidth()-3,app.winfo_screenheight()-3)) #full screen:
+    app.mainloop()
+    ''' End '''

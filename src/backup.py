@@ -1,4 +1,8 @@
 import datetime
+import time
+
+import src.environment
+from gui_main import GUI
 def createBackupFile():
     ''' Create a temp text file, with a list of all variables and variable names, that would be awesome '''
     '''update_filename_preTest()
@@ -30,7 +34,7 @@ def createBackupFile():
         'Units: diameter (mm), height (cm), range (cm), length (cm), mass (g), time (sec), force (N) \n',
         'script = '+script,
         'directory = '+directory+'/',
-        'operatingsystem = '+operatingsystem,
+        'operatingsystem = '+src.environment.get_operatingsystem(),
         'os.getlogin() = '+os.getlogin(),
         'operator = '+operator,
         'location = '+location,

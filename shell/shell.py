@@ -57,9 +57,6 @@ class HistoryEntry:
     def __str__(self):
         "return self.command"
         return f"{'-'}: {self.command}"
-        
-
-
 
     
 class PavlovCLI(cmd2.Cmd):
@@ -71,7 +68,6 @@ class PavlovCLI(cmd2.Cmd):
     |_|   \__,_| \_/ |_|\___/ \_/ |____/|____/
 
     """
-    topography = "▅▃▂▅▆▆▆▆▆▆▄▂▂▃▄▆▅▃▂▁▂▃▅▆▆▅▃▂▅▆▆▆▆▆▆▄▂▂▃▄▆▅▃▂▁"
     prompt = '>> '
     intro = pavlov3d_prettyprint + \
     '''

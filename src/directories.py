@@ -14,9 +14,10 @@ from src.directories import Directories
 import os
 import inspect
 from src.helpers import toml_utils
-from src import environmental
+import src.environment
 
 class Directories:
+    "from directories import Directories"
     core = None
     project = None
     configs = None
@@ -92,6 +93,15 @@ class Directories:
         loaded_entry = toml_utils.load_toml(filename_default_project_entry)
         cls.set_project_dir(cls.get_core_dir()+"\\projects\\"+loaded_entry["project_directory"])
 
+    """get filepaths"""
+    @classmethod
+    def get_config_entry(self): 
+        loaded_config_entry_toml = toml_utils.load_toml(self.config_entry_filepath)
+        config_input_filename = loaded_config_entry_toml["entry"]["config_input_filename"]
+        config_input_path = os.path.normpath(Directories.get_config_dir()+"\\"+config_input_filename)
+        Directories.check_file(config_input_path)
+        return config_input_path
+
     @staticmethod
     def check_file(filepath):
         if not(os.path.isfile(filepath)):
@@ -102,3 +112,22 @@ class Directories:
             # the file exists
             return True
         
+def bless_this_mess():
+    if src.environment.get_operatingsystem() == 'Windows':
+        if os.getlogin() == 'clayt':
+            address = r'C:\Users\clayton\OneDrive - University of Idaho\AqMEQ\SOCEM\Data - Instron and SOCEM - 2020, 2021\SOCEM_DATA_2021'
+            dev_guess = 'COM3' # manual override, windows 10 OS
+        else:
+            #dev_manualOverride = False
+            address = directory + '/SOCEM_data'
+            if not os.path.exists(address):
+                os.makedirs(address) 
+    elif src.environment.get_operatingsystem() == 'Linux':
+        dev_guess = '/dev/ttyACM0' # manual override raspian OS
+        address = '/home/pi/Desktop/SOCEM_data_2022'
+    else:
+        address = directory + '/SOCEM_data'
+        dev_guess = dev_manual
+        dev_manualOverride = False
+        if not os.path.exists(address):
+            os.makedirs(address)

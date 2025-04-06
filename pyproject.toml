@@ -9,6 +9,11 @@ license = {text = "BSD-3"}
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "pyserial (>=3.5,<4.0)",
+    "numpy (>=2.2.4,<3.0.0)",
+    "matplotlib (>=3.10.1,<4.0.0)",
+    "xlsxwriter (>=3.2.2,<4.0.0)",
+    "cmd2 (>=2.5.11,<3.0.0)"
 ]
 
 

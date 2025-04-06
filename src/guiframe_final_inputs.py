@@ -3,12 +3,17 @@ import tkinter as tk
 
 import src.physics.ei_interaction_error_management
 import src.physics.ei_no_interaction_error_management
-from src.gui_main import GUI
+# from src.gui_main import GUI
 
 class FinalInputs(tk.Frame):
-        
-    def __init__(self, parent, controller): # automatically runs
+    @classmethod
+    def pass_in_GUI(cls,GUI):
+        cls.GUI = GUI
 
+    def __init__(self): # automatically runs
+        #self.nope = "nope"
+        self.run()
+    def run(self, parent, controller): # automatically runs
         FinalInputs.mass1 = [] # TypeError: 'float' object is not iterable
         FinalInputs.mass2 = []
         FinalInputs.mass3 = []
