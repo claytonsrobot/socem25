@@ -57,15 +57,15 @@ foreach ($File in $DesktopIniFiles) {
         $CurrentIconFilename = ""  # Variable to store the current icon filename
         $RelativeIconPath = ""    # Variable for relative icon path
         foreach ($Line in $FileContent) {
-            if ($Line -like "IconResource=*") {
-                $ExistingFilename = Split-Path -Leaf ($Line -replace "IconResource=", "")
+            if ($Line -like "IconResource=C:\Users\user\Documents\dev\AgMEQ\*") {
+                $ExistingFilename = Split-Path -Leaf ($Line -replace "IconResource=C:\Users\user\Documents\dev\AgMEQ\", "")
                 $CurrentIconFilename = $ExistingFilename  # Store the current icon filename
                 $NewPath = Resolve-IconPath -Library $ProjectDirName -Filename $ExistingFilename
                 $RelativeIconPath = Convert-ToRelativePath -AbsolutePath $NewPath
 
-                if ($Line -ne "IconResource=$NewPath") {
+                if ($Line -ne "IconResource=C:\Users\user\Documents\dev\AgMEQ\$NewPath") {
                     # Only update if the new path is different
-                    $UpdatedLines += "IconResource=$NewPath"
+                    $UpdatedLines += "IconResource=C:\Users\user\Documents\dev\AgMEQ\$NewPath"
                     $Changed = $true
                 } else {
                     $UpdatedLines += $Line

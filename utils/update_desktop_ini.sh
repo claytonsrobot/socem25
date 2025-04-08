@@ -14,10 +14,10 @@ find "$PROJECT_DIR" -name "desktop.ini" | while read -r DESKTOP_INI_PATH; do
     # Read and process desktop.ini
     UPDATED_LINES=""
     while IFS= read -r LINE; do
-        if [[ $LINE == IconResource=* ]]; then
-            EXISTING_FILENAME=$(basename "${LINE#IconResource=}")
+        if [[ $LINE == IconResource=C:\Users\user\Documents\dev\AgMEQ\* ]]; then
+            EXISTING_FILENAME=$(basename "${LINE#IconResource=C:\Users\user\Documents\dev\AgMEQ\}")
             NEW_ABSOLUTE_PATH="$MEDIA_ICON_BASE_PATH/$EXISTING_FILENAME"
-            UPDATED_LINES+="IconResource=$NEW_ABSOLUTE_PATH"$'\n'
+            UPDATED_LINES+="IconResource=C:\Users\user\Documents\dev\AgMEQ\$NEW_ABSOLUTE_PATH"$'\n'
         else
             UPDATED_LINES+="$LINE"$'\n'
         fi

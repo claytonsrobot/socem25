@@ -36,6 +36,7 @@ def import_toml(filepath):
     Simple function to import a TOML file.
     :param filepath: Path to the TOML file
     :return: Parsed TOML data as a dictionary
+    Does not involve null checks.
     """
     try:
         # Open in binary mode for Python 3.11+; no encoding argument needed
