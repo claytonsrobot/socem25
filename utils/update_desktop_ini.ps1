@@ -4,41 +4,48 @@ param(
 )
 
 # Determine verbosity
-if ($Silent) {
-    $SilentMode = $true
-} elseif ($Verbose) {
-    $SilentMode = $false
-} else {
-    # Default to verbose mode if neither flag is passed
-    $SilentMode = $false
-}
+$SilentMode = $Silent
+$VerboseMode = $Verbose -and -not $Silent
 
 # Define directories
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 $ProjectDir = Split-Path -Parent $ScriptDir
-$ProjectDirName = Split-Path -Leaf $ProjectDir
-$MediaIconBasePath = Join-Path $ProjectDir "media\media-ico"
+$ProjectDirName = Split-Path -Leaf $ProjectDir  # Extract project directory name
 
-# Helper function to convert absolute paths to project-relative paths
-function Convert-ToProjectRelativePath {
+# Function to convert absolute paths to project-relative paths
+function Convert-ToRelativePath {
     param (
         [string]$AbsolutePath
     )
-    $RelativePath = $AbsolutePath.Substring($ProjectDir.Length).TrimStart('\')
-    return ".\$ProjectDirName\$RelativePath"
+    if ($AbsolutePath -like "$ProjectDir*") {
+        $RelativePath = $AbsolutePath.Substring($ProjectDir.Length).TrimStart('\')
+        return ".\$ProjectDirName\$RelativePath"
+    } else {
+        return $AbsolutePath
+    }
+}
+
+# Function to resolve icon paths
+function Resolve-IconPath {
+    param (
+        [string]$Library,
+        [string]$Filename
+    )
+    $ResolvedPath = "$Library\media\media-ico\$Filename"
+    return $ResolvedPath
 }
 
 # Find all desktop.ini files
 $DesktopIniFiles = Get-ChildItem $ProjectDir -Recurse -Filter "desktop.ini" -Force
 
 if ($DesktopIniFiles.Count -eq 0) {
-    if (-not $SilentMode) { Write-Host "No desktop.ini files found." }
+    if ($VerboseMode) { Write-Host "No desktop.ini files found." }
     Exit 0
 }
 
 foreach ($File in $DesktopIniFiles) {
     $DesktopIniPath = $File.FullName
-    $RelativeDesktopIniPath = Convert-ToProjectRelativePath -AbsolutePath $DesktopIniPath
+    $RelativeDesktopIniPath = Convert-ToRelativePath -AbsolutePath $DesktopIniPath
 
     try {
         # Read content
@@ -47,20 +54,21 @@ foreach ($File in $DesktopIniFiles) {
         # Update paths
         $UpdatedLines = @()
         $Changed = $false
-        $RelativeIconPath = ""
+        $CurrentIconFilename = ""  # Variable to store the current icon filename
+        $RelativeIconPath = ""    # Variable for relative icon path
         foreach ($Line in $FileContent) {
             if ($Line -like "IconResource=*") {
                 $ExistingFilename = Split-Path -Leaf ($Line -replace "IconResource=", "")
-                $NewPath = Join-Path $MediaIconBasePath $ExistingFilename
-                $RelativeNewPath = Convert-ToProjectRelativePath -AbsolutePath $NewPath
-                $RelativeIconPath = Convert-ToProjectRelativePath -AbsolutePath ($Line -replace "IconResource=", "")
+                $CurrentIconFilename = $ExistingFilename  # Store the current icon filename
+                $NewPath = Resolve-IconPath -Library $ProjectDirName -Filename $ExistingFilename
+                $RelativeIconPath = Convert-ToRelativePath -AbsolutePath $NewPath
+
                 if ($Line -ne "IconResource=$NewPath") {
                     # Only update if the new path is different
                     $UpdatedLines += "IconResource=$NewPath"
                     $Changed = $true
-                    $RelativeIconPath = $RelativeNewPath  # Update relative path reference
                 } else {
-                    $UpdatedLines += $Line  # Keep original if already correct
+                    $UpdatedLines += $Line
                 }
             } else {
                 $UpdatedLines += $Line
@@ -70,18 +78,17 @@ foreach ($File in $DesktopIniFiles) {
         # Write changes if any
         if ($Changed) {
             Set-Content $DesktopIniPath -Value $UpdatedLines -Force
-            if (-not $SilentMode) {
-                # Show changed files with relative path
+            if ($VerboseMode) {
                 Write-Host "$RelativeDesktopIniPath -> $RelativeIconPath"
             }
         } else {
-            if (-not $SilentMode) {
-                # Show unchanged files with relative path
+            if ($VerboseMode) {
+                # Include the relative path to the icon file for unchanged files
                 Write-Host "$RelativeDesktopIniPath ~ $RelativeIconPath"
             }
         }
     } catch {
-        if (-not $SilentMode) {
+        if ($VerboseMode) {
             Write-Error "Failed: $RelativeDesktopIniPath, Error: $($_.Exception.Message)"
         }
     }

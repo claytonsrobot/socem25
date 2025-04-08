@@ -2,13 +2,13 @@ import subprocess
 import os
 import sys
 
-# Ensure that the root directory ('socem25') is part of sys.path
+# Ensure the root directory is part of sys.path
 script_dir = os.path.dirname(os.path.abspath(__file__))
-project_root = os.path.abspath(os.path.join(script_dir, "../"))  # Navigate to project root
+project_root = os.path.abspath(os.path.join(script_dir, "../"))
 if project_root not in sys.path:
-    sys.path.insert(0, project_root)  # Add project root to sys.path
+    sys.path.insert(0, project_root)
 
-from src.helpers.toml_utils import import_toml  # Import works as src is part of the hierarchy
+from src.helpers.toml_utils import import_toml
 
 # Path to the configuration file
 CONFIG_FILE = os.path.join(script_dir, "update_desktop_ini_config.toml")
@@ -18,20 +18,20 @@ def run_powershell_script():
     config = import_toml(CONFIG_FILE)
 
     # Retrieve verbosity setting from the TOML file
-    verbose = config["config"].get("verbose", False)  # Default to False if not set
+    verbose = config["config"].get("verbose", False)
 
-    # Define the relative path to the PowerShell script
+    # Define the path to the PowerShell script
     powershell_script = os.path.join(script_dir, "update_desktop_ini.ps1")
 
-    # Check if the PowerShell script exists
+    # Verify the PowerShell script exists
     if not os.path.isfile(powershell_script):
         print(f"Error: PowerShell script not found at {powershell_script}")
         return
 
-    print(f"Running PowerShell script: {powershell_script}")
+    #print(f"Running PowerShell script: {powershell_script}")
 
     try:
-        # Pass the verbosity configuration to the PowerShell script
+        # Pass verbosity configuration to the PowerShell script
         verbosity_flag = "-Verbose" if verbose else "-Silent"
         subprocess.run(["powershell", "-ExecutionPolicy", "Bypass", "-File", powershell_script, verbosity_flag], check=True)
     except subprocess.CalledProcessError as e:
