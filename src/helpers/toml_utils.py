@@ -7,11 +7,11 @@ from pathlib import Path
 import os
 import sys
 # Use tomllib if the Python version is 3.11+. Otherwise use the toml package.
-if sys.version_info >= (3,11):
-    import tomllib
+if sys.version_info >= (3, 11):
+    import tomllib  # Built-in TOML module in Python 3.11+
 else:
-    import toml
-
+    import toml  # Third-party TOML package for older versions
+    
 def load_toml(filepath):
     if check_file(filepath):
         with open(filepath,"r", encoding="utf-8") as f:
@@ -29,6 +29,26 @@ def load_toml_tuple(filepath):
     data = load_toml(filepath)
     data_tuple = tuple(data.items())
     return data_tuple
+    
+
+def import_toml(filepath):
+    """
+    Simple function to import a TOML file.
+    :param filepath: Path to the TOML file
+    :return: Parsed TOML data as a dictionary
+    """
+    try:
+        # Open in binary mode for Python 3.11+; no encoding argument needed
+        with open(filepath, "rb" if sys.version_info >= (3, 11) else "r", encoding=None if sys.version_info >= (3, 11) else "utf-8") as file:
+            if sys.version_info >= (3, 11):
+                return tomllib.load(file)  # Parse using tomllib
+            else:
+                return toml.load(file)  # Parse using toml
+    except Exception as e:
+        print(f"Error loading TOML file: {e}")
+        return {}
+
+
 
 def check_for_null(data):
     # Check if the data is a nested dictionary or flat
@@ -61,7 +81,7 @@ def check_file(filepath):
 
 
 if "__main__" == __name__:
-   filepath = r"C:\Users\user\Documents\pavlov\pavlov25\core\projects\Don-EvonikPAA-MemphisCellulose\configs\config_input_22February_PAA.toml"
+   filepath = r"C:\\stuff\\"
    filepath = Path(os.path.normpath(filepath))
    t = load_toml(filepath)
    print(t)
