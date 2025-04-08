@@ -1,3 +1,0 @@
-[config]
-"verbose" = false
-"relative_ico_path_template" = "{library}\\media\\media-ico\\{icon_filename}"

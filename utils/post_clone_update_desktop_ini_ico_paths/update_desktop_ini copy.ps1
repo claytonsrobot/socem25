@@ -9,10 +9,10 @@ $VerboseMode = $Verbose -and -not $Silent
 
 # Define directories
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
-$ProjectDir = Split-Path -Parent $ScriptDir
+$ProjectDir = Split-Path -Parent (Split-Path -Parent $ScriptDir)  # Go up an additional level
 $ProjectDirName = Split-Path -Leaf $ProjectDir  # Extract project directory name
 
-# Function to convert absolute paths to project-relative paths
+# Function to convert absolute paths to project-relative paths including root directory
 function Convert-ToRelativePath {
     param (
         [string]$AbsolutePath
@@ -25,14 +25,13 @@ function Convert-ToRelativePath {
     }
 }
 
-# Function to resolve icon paths
+# Function to resolve absolute icon paths
 function Resolve-IconPath {
     param (
-        [string]$Library,
         [string]$Filename
     )
-    $ResolvedPath = "$Library\media\media-ico\$Filename"
-    return $ResolvedPath
+    # Return the absolute path for IconResource
+    return "$ProjectDir\media\media-ico\$Filename"
 }
 
 # Find all desktop.ini files
@@ -55,17 +54,18 @@ foreach ($File in $DesktopIniFiles) {
         $UpdatedLines = @()
         $Changed = $false
         $CurrentIconFilename = ""  # Variable to store the current icon filename
-        $RelativeIconPath = ""    # Variable for relative icon path
+        $AbsoluteIconPath = ""    # Absolute path for IconResource assignment
+        $RelativeIconPath = ""    # Relative path for logging
         foreach ($Line in $FileContent) {
-            if ($Line -like "IconResource=C:\Users\user\Documents\dev\AgMEQ\*") {
-                $ExistingFilename = Split-Path -Leaf ($Line -replace "IconResource=C:\Users\user\Documents\dev\AgMEQ\", "")
+            if ($Line -like "IconResource=*") {
+                $ExistingFilename = Split-Path -Leaf ($Line -replace "IconResource=", "")
                 $CurrentIconFilename = $ExistingFilename  # Store the current icon filename
-                $NewPath = Resolve-IconPath -Library $ProjectDirName -Filename $ExistingFilename
-                $RelativeIconPath = Convert-ToRelativePath -AbsolutePath $NewPath
+                $AbsoluteIconPath = Resolve-IconPath -Filename $ExistingFilename  # Absolute path for IconResource
+                $RelativeIconPath = Convert-ToRelativePath -AbsolutePath $AbsoluteIconPath  # Relative path for logs
 
-                if ($Line -ne "IconResource=C:\Users\user\Documents\dev\AgMEQ\$NewPath") {
+                if ($Line -ne "IconResource=$AbsoluteIconPath") {
                     # Only update if the new path is different
-                    $UpdatedLines += "IconResource=C:\Users\user\Documents\dev\AgMEQ\$NewPath"
+                    $UpdatedLines += "IconResource=$AbsoluteIconPath"
                     $Changed = $true
                 } else {
                     $UpdatedLines += $Line
@@ -83,7 +83,6 @@ foreach ($File in $DesktopIniFiles) {
             }
         } else {
             if ($VerboseMode) {
-                # Include the relative path to the icon file for unchanged files
                 Write-Host "$RelativeDesktopIniPath ~ $RelativeIconPath"
             }
         }
