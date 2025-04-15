@@ -32,23 +32,23 @@ def load_toml_tuple(filepath):
     return data_tuple
     
 
-def import_toml(filepath):
-    """
-    Simple function to import a TOML file.
-    :param filepath: Path to the TOML file
-    :return: Parsed TOML data as a dictionary
-    Does not involve null checks.
-    """
-    try:
-        # Open in binary mode for Python 3.11+; no encoding argument needed
-        with open(filepath, "rb" if sys.version_info >= (3, 11) else "r", encoding=None if sys.version_info >= (3, 11) else "utf-8") as file:
-            if sys.version_info >= (3, 11):
-                return tomllib.load(file)  # Parse using tomllib
-            else:
-                return toml.load(file)  # Parse using toml
-    except Exception as e:
-        print(f"Error loading TOML file: {e}")
-        return {}
+#def import_toml(filepath):
+#    """
+#    Simple function to import a TOML file.
+#    :param filepath: Path to the TOML file
+#    :return: Parsed TOML data as a dictionary
+#    Does not involve null checks.
+#    """
+#    try:
+#        # Open in binary mode for Python 3.11+; no encoding argument needed
+#        with open(filepath, "rb" if sys.version_info >= (3, 11) else "r", encoding=None if sys.version_info >= (3, 11) else "utf-8") as file:
+#            if sys.version_info >= (3, 11):
+#                return tomllib.load(file)  # Parse using tomllib
+#            else:
+#                return toml.load(file)  # Parse using toml
+#    except Exception as e:
+#        print(f"Error loading TOML file: {e}")
+#        return {}
 
 
 

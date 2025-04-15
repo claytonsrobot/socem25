@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import src.cursor
-from src.gui_main import GUI
+from gui.gui_main import GUI
 
 ''' Figure Interation classes '''
 class SnaptoCursor(object):

@@ -3180,7 +3180,7 @@ Notes:
 
 '''Local libraries'''
 #import src.serial
-from src.gui_main import GUI
+from gui.gui_main import GUI
 from directories import Directories
 
 ''' Libraries '''
@@ -3427,7 +3427,7 @@ from serial import Serial
 ### from serial import *
 import serial.tools.list_ports # need this
 
-from src.gui_main import GUI
+from gui.gui_main import GUI
 
 ### Determine Arduino serial port address
 def serial_connect():
@@ -3496,7 +3496,7 @@ Here's the refactored version of your code, including modular structure, improve
 # - Main function to execute the program
 
 ''' Local libraries '''
-from src.gui_main import GUI
+from gui.gui_main import GUI
 from directories import Directories
 
 ''' Standard Libraries '''
@@ -3699,7 +3699,7 @@ Sure! Here's the refactored version of the `serial.py` code, following similar p
 import serial
 from serial import Serial
 import serial.tools.list_ports
-from src.gui_main import GUI
+from gui.gui_main import GUI
 
 def serial_connect():
     """
@@ -3895,7 +3895,7 @@ poetry add cmd2
 # ChatGPT Integer Title: Shell Command-Line Interface for SOCEM Package
 
 import cmd2
-from src.gui_main import GUI
+from gui.gui_main import GUI
 from directories import Directories
 import serial
 from serial import Serial

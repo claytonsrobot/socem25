@@ -1,6 +1,6 @@
 import tkinter as tk
 
-from src.gui_main import GUI
+from gui.gui_main import GUI
 # Load cell calibration page 
 class Calibrate(tk.Frame):
     

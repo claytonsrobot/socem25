@@ -91,7 +91,7 @@ Notes:
 
 '''Local libraries'''
 #import src.serial
-from src.gui_main import GUI
+from gui.gui_main import GUI
 from directories import Directories
 
 ''' Libraries '''

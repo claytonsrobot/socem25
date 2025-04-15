@@ -3,17 +3,21 @@ name = "socem25"
 version = "2.0.0"
 description = "Clayton takes a stab at modularizing his old SOCEM code.The goals is to create a directory of code, rather than a single file, and to use good coding principles."
 authors = [
-    {name = "georgeclaytonbennett@gmail.coma"}
+    {name = "Clayton Bennett",email = "georgeclaytonbennett@gmail.com"},
+    {name = "Austin Bebee"},
+    {name = "Tim Stevens",  email="stev1754@vandals.uidaho.edu"}
 ]
 license = {text = "BSD-3"}
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.10"
 dependencies = [
     "pyserial (>=3.5,<4.0)",
+    "cmd2 (>=2.5.11,<3.0.0)",
     "numpy (>=2.2.4,<3.0.0)",
+    "six (>=1.17.0,<2.0.0)",
+    "python-dateutil (>=2.9.0.post0,<3.0.0)",
     "matplotlib (>=3.10.1,<4.0.0)",
-    "xlsxwriter (>=3.2.2,<4.0.0)",
-    "cmd2 (>=2.5.11,<3.0.0)"
+    "xlsxwriter (>=3.2.2,<4.0.0)"
 ]
 
 
