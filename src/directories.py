@@ -14,11 +14,11 @@ from src.directories import Directories
 import os
 import inspect
 from src.helpers import toml_utils
-import src.environment
+import src.environment as environment
 
 class Directories:
     "from src.directories import Directories"
-    core = None
+    program = None
     project = None
     configs = None
     exports = None
@@ -27,27 +27,26 @@ class Directories:
 
     """ setters """
     @classmethod
-    def set_core_dir(cls,path):
-        cls.core = path
+    def set_program_dir(cls,path):
+        cls.program = path
     @classmethod
     def set_project_dir(cls,path):
-        # if a legitimate full path is not provided, assume that the project directory is within the core\projects\ directory
+        # if a legitimate full path is not provided, assume that the project directory is within the program\projects\ directory
         if os.path.isdir(path):
             cls.project = path
         else:
-            relative_path =  cls.get_core_dir()+"\\projects\\"+path
+            relative_path =  cls.get_program_dir()+"\\projects\\"+path
             if os.path.isdir(relative_path):
                 cls.project = relative_path
         print(f"Project directory set: {cls.project}")
 
     """ getters """
     @classmethod
-    def get_core_dir(cls):
-        #return cls.core
-        return cls.core
+    def get_program_dir(cls):
+        return cls.program
     @classmethod
     def get_program_dir(cls):
-        return cls.get_core_dir()
+        return cls.program
     @classmethod
     def get_project_dir(cls):
         return cls.project
@@ -59,9 +58,9 @@ class Directories:
         return cls.get_project_dir()+"\\exports\\"
     @classmethod
     def get_import_dir(cls):
-        if environmental.vercel==False:
+        if environment.vercel==False:
             return cls.get_project_dir()+"\\imports\\"
-        elif environmental.vercel==True: # web app, blob
+        elif environment.vercel==True: # web app, blob
             print("\nYou have not yet built a web app, last I checked.\nAnd yet, environmental.vercel==True")
             pass
         return cls.get_project_dir()+"\\imports\\"
@@ -84,14 +83,14 @@ class Directories:
     # migrated
     @classmethod
     def initilize_program_dir(cls): # called in CLI. Should also be called at other entry points.
-        cls.set_core_dir(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))
-        print(f"cls.get_core_dir() = {cls.get_core_dir()}")
+        cls.set_program_dir(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))
+        print(f"cls.get_program_dir() = {cls.get_program_dir()}")
         #cls.initialize_startup_project()
     @classmethod
     def initialize_startup_project(cls):
         filename_default_project_entry = "./src/projects/default-project.toml"
         loaded_entry = toml_utils.load_toml(filename_default_project_entry)
-        cls.set_project_dir(cls.get_core_dir()+"\\projects\\"+loaded_entry["project_directory"])
+        cls.set_project_dir(cls.get_program_dir()+"\\projects\\"+loaded_entry["project_directory"])
 
     """get filepaths"""
     @classmethod

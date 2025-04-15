@@ -317,7 +317,7 @@ if __name__ == "__main__":
     print("StemBerry is loading.....")
     print("output: address = "+address)
     print("script = "+script)
-    print("directory = "+Directories.get_core_dir())
+    print("directory = "+Directories.get_program_dir())
     print("ignoreserial = "+str(ignoreserial))
     app = GUI() 
     app.run() # INITIATES GUI TO START

@@ -1931,27 +1931,27 @@ class Directories:
 
     """ setters """
     @classmethod
-    def set_core_dir(cls,path):
-        cls.core = path
+    def set_program_dir(cls,path):
+        cls.program = path
     @classmethod
     def set_project_dir(cls,path):
         # if a legitimate full path is not provided, assume that the project directory is within the core\projects\ directory
         if os.path.isdir(path):
             cls.project = path
         else:
-            relative_path =  cls.get_core_dir()+"\\projects\\"+path
+            relative_path =  cls.get_program_dir()+"\\projects\\"+path
             if os.path.isdir(relative_path):
                 cls.project = relative_path
         print(f"Project directory set: {cls.project}")
 
     """ getters """
     @classmethod
-    def get_core_dir(cls):
-        #return cls.core
-        return cls.core
+    def get_program_dir(cls):
+        #return cls.program
+        return cls.program
     @classmethod
     def get_program_dir(cls):
-        return cls.get_core_dir()
+        return cls.get_program_dir()
     @classmethod
     def get_project_dir(cls):
         return cls.project
@@ -1988,14 +1988,14 @@ class Directories:
     # migrated
     @classmethod
     def initilize_program_dir(cls): # called in CLI. Should also be called at other entry points.
-        cls.set_core_dir(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))
-        print(f"cls.get_core_dir() = {cls.get_core_dir()}")
+        cls.set_program_dir(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))
+        print(f"cls.get_program_dir() = {cls.get_program_dir()}")
         #cls.initialize_startup_project()
     @classmethod
     def initialize_startup_project(cls):
         filename_default_project_entry = "./src/projects/default-project.toml"
         loaded_entry = toml_utils.load_toml(filename_default_project_entry)
-        cls.set_project_dir(cls.get_core_dir()+"\\projects\\"+loaded_entry["project_directory"])
+        cls.set_project_dir(cls.get_program_dir()+"\\projects\\"+loaded_entry["project_directory"])
 
     """get filepaths"""
     @classmethod
@@ -2087,9 +2087,9 @@ class Directories:
     groupings_dir = None
 
     @classmethod
-    def set_core_dir(cls, path):
+    def set_program_dir(cls, path):
         """Sets the core directory of the project."""
-        cls.core_dir = os.path.abspath(path)
+        cls.program_dir = os.path.abspath(path)
 
     @classmethod
     def set_project_dir(cls, path):
@@ -2097,7 +2097,7 @@ class Directories:
         if os.path.isdir(path):
             cls.project_dir = os.path.abspath(path)
         else:
-            relative_path = os.path.join(cls.get_core_dir(), "projects", path)
+            relative_path = os.path.join(cls.get_program_dir(), "projects", path)
             if os.path.isdir(relative_path):
                 cls.project_dir = relative_path
             else:
@@ -2105,14 +2105,14 @@ class Directories:
         print(f"Project directory set: {cls.project_dir}")
 
     @classmethod
-    def get_core_dir(cls):
+    def get_program_dir(cls):
         """Returns the core directory."""
-        return cls.core_dir
+        return cls.program_dir
 
     @classmethod
     def get_program_dir(cls):
         """Returns the core directory."""
-        return cls.get_core_dir()
+        return cls.get_program_dir()
 
     @classmethod
     def get_project_dir(cls):
@@ -2162,15 +2162,15 @@ class Directories:
     @classmethod
     def initialize_program_dir(cls):
         """Initializes the program directory path."""
-        cls.set_core_dir(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))
-        print(f"Core directory set: {cls.get_core_dir()}")
+        cls.set_program_dir(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))
+        print(f"Core directory set: {cls.get_program_dir()}")
 
     @classmethod
     def initialize_startup_project(cls):
         """Initializes the startup project based on default configuration."""
         filename_default_project_entry = "./src/projects/default-project.toml"
         loaded_entry = toml_utils.load_toml(filename_default_project_entry)
-        cls.set_project_dir(os.path.join(cls.get_core_dir(), "projects", loaded_entry["project_directory"]))
+        cls.set_project_dir(os.path.join(cls.get_program_dir(), "projects", loaded_entry["project_directory"]))
 
     @classmethod
     def get_config_entry(cls):
@@ -2726,7 +2726,7 @@ class Guide(tk.Frame):
         """
         try:
             # Try to load the SOCEM diagram image
-            load = PIL.Image.open(Directories.get_core_dir() + '/' + 'GuideSOCEM_2022.png')
+            load = PIL.Image.open(Directories.get_program_dir() + '/' + 'GuideSOCEM_2022.png')
             load = load.resize((275, 275))
             render = PIL.ImageTk.PhotoImage(load)
             img = tk.Label(self, image=render)
@@ -3406,7 +3406,7 @@ if __name__ == "__main__":
     print("StemBerry is loading.....")
     print("output: address = "+address)
     print("script = "+script)
-    print("directory = "+Directories.get_core_dir())
+    print("directory = "+Directories.get_program_dir())
     print("ignoreserial = "+str(ignoreserial))
     app = GUI() 
     app.run() # INITIATES GUI TO START
@@ -3632,7 +3632,7 @@ if __name__ == "__main__":
     print("StemBerry is loading...")
     print(f"Output: Address = {address}")
     print(f"Script = {script}")
-    print(f"Directory = {Directories.get_core_dir()}")
+    print(f"Directory = {Directories.get_program_dir()}")
     print(f"Serial connection ignored: {str(ignoreserial)}")
 
     # Start the GUI

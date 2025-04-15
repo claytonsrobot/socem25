@@ -195,7 +195,7 @@ class PavlovCLI(cmd2.Cmd):
     @classmethod
     def link_initial_project_directory(cls):
         #cls.project_active = None
-        Directories.set_project_dir(Directories.get_core_dir()+r"/projects/sample/")
+        Directories.set_project_dir(Directories.get_program_dir()+r"/projects/sample/")
         print(f"project_active = {Directories.get_project_dir()}")
         # dynamic, points to default-project.json file
         #cls.set_project_active(cls.get_startup_project("./projects/default-project.json")) # pull from config file
@@ -1654,7 +1654,7 @@ class PavlovCLI(cmd2.Cmd):
         except ValueError:
             self.poutput("Usage: call <module_name> <method_name> [args...]")
         except Exception as e:
-            self.poutput(f"An error occurred: {e}")
+            self.poutput(f"An error occurred in call(): {e}")
 
     def do_call2(self, args):
         """Call a method from an imported library using the notation module_name.method_name(args...)."""
@@ -1679,7 +1679,7 @@ class PavlovCLI(cmd2.Cmd):
         except ValueError:
             self.poutput("Usage: call <module_name>.<method_name>(args...)")
         except Exception as e:
-            self.poutput(f"An error occurred: {e}")
+            self.poutput(f"An error occurred in call2(): {e}")
 
     def do_eval(self, args):
         """Evaluate an expression using stored variables."""
