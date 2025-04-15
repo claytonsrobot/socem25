@@ -1,10 +1,11 @@
 # __main__.py
-from shell import main
+from shell.shell import SocemCLI
 
 def cli_entry():
     try:
         # Launch the cmd2 terminal
-        main()
+        app = SocemCLI()
+        app.run()
     except Exception as e:
         print(f"An error occurred: {e}")
 

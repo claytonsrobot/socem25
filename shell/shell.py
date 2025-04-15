@@ -13,16 +13,16 @@ https://medium.com/@noransaber685/simple-guide-to-creating-a-command-line-interf
 import cmd2
 import os
 import pprint
-from src import main
-from src.hidden_prints import HiddenPrints
+from src import stemberry
+#from src.hidden_prints import HiddenPrints
 import time
 from datetime import datetime
 #import subprocess
-from sparklines import sparklines
+#from sparklines import sparklines
 #import gui_customtk_basic
 from src.filemanagement import DirectoryControl
 from src import filemanagement as fm
-from src import environmental
+from src import environment
 #import copy
 import importlib
 import ast
@@ -32,7 +32,7 @@ import sys
 #print(sys.path)
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from tests import Test
-from src import toml_utils # pleae migrate the json-handler.py
+from src.helpers import toml_utils # pleae migrate the json-handler.py
 
 from src.directories import Directories
 try:
@@ -40,7 +40,7 @@ try:
 except:
     pass
 
-from src.datapoint import DataPoint
+#from src.datapoint import DataPoint
 
 
 
@@ -60,7 +60,8 @@ class HistoryEntry:
 
     
 class PavlovCLI(cmd2.Cmd):
-    pavlov3d_prettyprint =  """
+    pavlov3d_prettyprint =\
+    """
      ____             _            _____ ____
     |  _ \ __ ___   _| | _____   _|___ /|  _ \\
     | |_) / _` \ \ / / |/ _ \ \ / / |_ \| | | |
@@ -69,7 +70,7 @@ class PavlovCLI(cmd2.Cmd):
 
     """
     prompt = '>> '
-    intro = pavlov3d_prettyprint + \
+    intro = pavlov3d_prettyprint 
     '''
     
     Welcome to PavlovShell! 
@@ -103,7 +104,7 @@ class PavlovCLI(cmd2.Cmd):
         startup_script_path = os.path.join("startup", "shell_startup.txt") # "relative path"
         
         
-        self.add_settable(cmd2.Settable('DataPoint', object, 'The DataPoint class, imported in main and accessible in the shell.', DataPoint))
+        #self.add_settable(cmd2.Settable('DataPoint', object, 'The DataPoint class, imported in main and accessible in the shell.', DataPoint))
         
         # Check if the file exists before setting it
         if os.path.exists(startup_script_path):
@@ -188,8 +189,6 @@ class PavlovCLI(cmd2.Cmd):
         self.poutput("  python x = 5")
 
 
-    
-    
     @classmethod
     def initialize_scene_object(cls):
         cls.scene_object = None
@@ -250,14 +249,6 @@ class PavlovCLI(cmd2.Cmd):
         """Debugging command to display raw history entries with hidden characters."""
         for i, item in enumerate(self.history, start=1):
             self.poutput(repr(str(item)))  # Use string representation to ensure compatibility
-
-
-    def run(self):
-        #self.scene_object = None
-        self.initialize_scene_object()
-        self.link_initial_project_directory()
-        Directories.initialize_startup_project()
-        self.cmdloop()
 
     def do_status(self,line):
         "Get a rough idea of what the program has done so far."
@@ -545,7 +536,7 @@ class PavlovCLI(cmd2.Cmd):
         print('Running Pavlov....')
         print('Have fun, and may the odds be ever in your favor.')
         #global scene_object
-        self.scene_object, self.hierarchy_object, self.createFBX_object = main.main()
+        self.scene_object, self.hierarchy_object, self.createFBX_object = stemberry.main()
         #self.hierarchy_object = copy.deepcopy(self.scene_object.hierarchy_object)
         self.record_export_path()
 
@@ -579,7 +570,7 @@ class PavlovCLI(cmd2.Cmd):
         "Instead of running main.main(), independantly make the scene."
         #global scene_object
         request = None
-        scene_object,style_object,hierarchy_object = main.set_up(request)
+        scene_object,style_object,hierarchy_object = stemberry.set_up(request)
         self.scene_object,self.style_object,self.hierarchy_object = scene_object,style_object,hierarchy_object
         #scene_object = self.scene_object
         print('Built: scene, style, hierarchy')
@@ -590,7 +581,7 @@ class PavlovCLI(cmd2.Cmd):
         "Independantly generate config_input_object & user_input_object"
         try:
             self.config_input_object,self.user_input_object = \
-                main.get_configuration(self.scene_object,
+                stemberry.get_configuration(self.scene_object,
                                     self.style_object)
             print("make config, done")
         except Exception as e:
@@ -747,7 +738,7 @@ class PavlovCLI(cmd2.Cmd):
         
         #try:
         print(f"\nself.scene_object = {self.scene_object}")
-        self.export_control_object = main.import_data(self.scene_object,
+        self.export_control_object = stemberry.import_data(self.scene_object,
                                                 self.style_object,
                                                 self.user_input_object,
                                                 self.hierarchy_object)
@@ -767,12 +758,12 @@ class PavlovCLI(cmd2.Cmd):
 
     def build_grouping(self,line):
         # jam in do_3(None), skipinterface for now
-        main.build_grouping(self.hierarchy_object,self.user_input_object,loaded_grouping = self.config_input_object.loaded_grouping)
+        stemberry.build_grouping(self.hierarchy_object,self.user_input_object,loaded_grouping = self.config_input_object.loaded_grouping)
 
     def build_pointcloud(self,line):
         "Independantly build the point cloud"  
         #try:
-        main.build_point_cloud(self.scene_object,
+        stemberry.build_point_cloud(self.scene_object,
                             self.style_object,
                             self.user_input_object,
                             self.hierarchy_object)
@@ -831,7 +822,7 @@ class PavlovCLI(cmd2.Cmd):
     def export_model(self,line):
         "Independantly generate export" 
     
-        self.createFBX_object = main.generate_export(self.scene_object,
+        self.createFBX_object = stemberry.generate_export(self.scene_object,
                             self.style_object,
                             self.user_input_object)
         return self.createFBX_object
@@ -1255,10 +1246,10 @@ class PavlovCLI(cmd2.Cmd):
         if self.pointcloud_bool==True:
             #try:
             if args.scene is True:
-                main.preview_scene3D(self.scene_object)
+                stemberry.preview_scene3D(self.scene_object)
             elif args.curve is not None:
                 i=args.curve
-                main.preview_curve3D(self.scene_object,i)
+                stemberry.preview_curve3D(self.scene_object,i)
             else:
                 self.do_help("preview")
             #except:
@@ -1763,10 +1754,25 @@ class PavlovCLI(cmd2.Cmd):
                             self.onecmd(command)
             except Exception as e:
                 self.perror(f"Error: {e}")
+    def run(self):
+        #self.scene_object = None
+        self.initialize_scene_object()
+        self.link_initial_project_directory()
+        Directories.initialize_startup_project()
+        self.cmdloop()
 
+class SocemCLI(PavlovCLI):
+    def __init__(self):
+        super().__init__()
+    def run(self):
+        #self.scene_object = None
+        self.initialize_scene_object()
+        self.link_initial_project_directory()
+        Directories.initialize_startup_project()
+        self.cmdloop()
 
 if __name__=='__main__':
-    app = PavlovCLI()
+    app = SocemCLI()
     app.onecmd_plus_hooks("test")
     Directories.initilize_program_dir()
     app.initialize_scene_object()

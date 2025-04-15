@@ -1,5 +1,5 @@
 # __main__.py
-from src import main
+from src import stemberry
 from pprint import pprint as pprint
 def cli_entry():
     try:

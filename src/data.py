@@ -1,8 +1,8 @@
 import tkinter as tk
 import time
 
-from gui_main import GUI
-from guiframe_record_force import RecordForce
+from gui.gui_main import GUI
+from gui.guiframe_record_force import RecordForce
 def datafeed():
     #frame = tk.Frame.RecordForce
     frame = RecordForce.container

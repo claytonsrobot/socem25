@@ -17,7 +17,7 @@ from src.helpers import toml_utils
 import src.environment
 
 class Directories:
-    "from directories import Directories"
+    "from src.directories import Directories"
     core = None
     project = None
     configs = None

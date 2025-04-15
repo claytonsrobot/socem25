@@ -92,7 +92,7 @@ Notes:
 '''Local libraries'''
 #import src.serial
 from gui.gui_main import GUI
-from directories import Directories
+from src.directories import Directories
 
 ''' Libraries '''
 import tkinter as tk

@@ -1,6 +1,6 @@
 import tkinter as tk
 
-from src.guiframe_final_inputs import FinalInputs
+from gui.guiframe_final_inputs import FinalInputs
 '''Classes, Tkinter GUI'''
 # GUI overarching class
 class GUI(tk.Tk):
