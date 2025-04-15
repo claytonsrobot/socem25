@@ -3,7 +3,7 @@ import pandas as pd
 import sys
 import tkinter as tk
 
-from gui.gui_main import GUI
+from gui.gui_main import SocemGUI
 
 ''' Methods'''
 

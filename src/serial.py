@@ -3,7 +3,7 @@ from serial import Serial
 # from serial import *
 import serial.tools.list_ports # need this
 
-from gui.gui_main import GUI
+from gui.gui_main import SocemGUI
 
 # Determine Arduino serial port address
 def serial_connect():

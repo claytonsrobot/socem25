@@ -3,7 +3,7 @@ import tkinter as tk
 from gui.guiframe_final_inputs import FinalInputs
 '''Classes, Tkinter GUI'''
 # GUI overarching class
-class GUI(tk.Tk):
+class SocemGUI(tk.Tk):
 
     @classmethod
     def pass_in_FinalInputs(cls,FinalInputs):
@@ -14,8 +14,8 @@ class GUI(tk.Tk):
     def run(self,*args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
 
-        GUI.initializeVarsGUI()
-        GUI.refreshAll()
+        SocemGUI.initializeVarsGUI()
+        SocemGUI.refreshAll()
         
         container = tk.Frame(self)
         container.pack(side='top', fill='both',expand = True)
@@ -34,12 +34,12 @@ class GUI(tk.Tk):
         filemenu.add_command(label='Save State', command = lambda:createBackupFile())
         filemenu.add_command(label='Restore State', command = lambda:restoreState())
         filemenu.add_command(label="Exit", command = lambda:close())
-        pagemenu.add_command(label="Guide", command=lambda:GUI.show_frame(Guide))
-        pagemenu.add_command(label="Initial Inputs", command=lambda:GUI.show_frame(InitialInputs))
-        pagemenu.add_command(label="Record Force", command=lambda:GUI.show_frame(RecordForce))
-        pagemenu.add_command(label="Post Test Inputs", command=lambda:GUI.show_frame(self.FinalInputs))
-        pagemenu.add_command(label="Calibrate", command=lambda:GUI.show_frame(Calibrate))
-        pagemenu.add_command(label="Stem Count PreTest, Classic", command=lambda:GUI.show_frame(StemCountClassic))
+        pagemenu.add_command(label="Guide", command=lambda:SocemGUI.show_frame(Guide))
+        pagemenu.add_command(label="Initial Inputs", command=lambda:SocemGUI.show_frame(InitialInputs))
+        pagemenu.add_command(label="Record Force", command=lambda:SocemGUI.show_frame(RecordForce))
+        pagemenu.add_command(label="Post Test Inputs", command=lambda:SocemGUI.show_frame(self.FinalInputs))
+        pagemenu.add_command(label="Calibrate", command=lambda:SocemGUI.show_frame(Calibrate))
+        pagemenu.add_command(label="Stem Count PreTest, Classic", command=lambda:SocemGUI.show_frame(StemCountClassic))
         datamenu.add_command(label="Data Feed Display, On", command = lambda:data_display(True))
         datamenu.add_command(label="Data Feed Display, Off", command = lambda:data_display(False))
 
@@ -48,7 +48,7 @@ class GUI(tk.Tk):
         menubar.add_cascade(label="Livestream Data Recording", menu=datamenu)
         
         tk.Tk.config(self, menu=menubar)                
-        GUI.frames = {}# empty dictionary
+        SocemGUI.frames = {}# empty dictionary
 
         for F in (InitialInputs, RecordForce, FinalInputs, Calibrate, Guide, ErrorReport, StemCountClassic):# must put all pages in here
             frame = F(container, self)
@@ -56,174 +56,174 @@ class GUI(tk.Tk):
             frame.grid(row=0, column=0, sticky='nsew')
             frame.configure(background = 'ghost white')
         
-        GUI.show_frame(InitialInputs)
+        SocemGUI.show_frame(InitialInputs)
         
     def initializeVarsGUI():
-        GUI.filename_force = tk.StringVar()
-        GUI.filename_preTest = tk.StringVar()
-        GUI.filename_postTest = tk.StringVar()
-        GUI.filename_all = tk.StringVar()
-        GUI.varietyname = tk.StringVar()
-        GUI.plotname = tk.StringVar()
-        GUI.stemheight = tk.DoubleVar()
-        GUI.currentdirection = tk.StringVar()#
-        GUI.barmiddle = tk.DoubleVar() #
-        GUI.barbottom = tk.DoubleVar() #
-        GUI.passfillednames_checkbox = tk.IntVar() # revert
-        GUI.timestring = tk.StringVar()
-        GUI.startRange1, GUI.startRange2, GUI.startRange3 = tk.DoubleVar(),  tk.DoubleVar(),  tk.DoubleVar() # cm = tk.StringVar()
-        GUI.addressInput = tk.StringVar()
+        SocemGUI.filename_force = tk.StringVar()
+        SocemGUI.filename_preTest = tk.StringVar()
+        SocemGUI.filename_postTest = tk.StringVar()
+        SocemGUI.filename_all = tk.StringVar()
+        SocemGUI.varietyname = tk.StringVar()
+        SocemGUI.plotname = tk.StringVar()
+        SocemGUI.stemheight = tk.DoubleVar()
+        SocemGUI.currentdirection = tk.StringVar()#
+        SocemGUI.barmiddle = tk.DoubleVar() #
+        SocemGUI.barbottom = tk.DoubleVar() #
+        SocemGUI.passfillednames_checkbox = tk.IntVar() # revert
+        SocemGUI.timestring = tk.StringVar()
+        SocemGUI.startRange1, SocemGUI.startRange2, SocemGUI.startRange3 = tk.DoubleVar(),  tk.DoubleVar(),  tk.DoubleVar() # cm = tk.StringVar()
+        SocemGUI.addressInput = tk.StringVar()
         
-        GUI.cell1Mass,GUI.cell2Mass,GUI.cell3Mass,GUI.cell4Mass,GUI.cell5Mass,GUI.cell6Mass,GUI.cell7Mass,GUI.cell8Mass,GUI.cell9Mass =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
-        GUI.cell1Count,GUI.cell2Count,GUI.cell3Count,GUI.cell4Count,GUI.cell5Count,GUI.cell6Count,GUI.cell7Count,GUI.cell8Count,GUI.cell9Count =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
-        GUI.cell1Diameter1,GUI.cell2Diameter1,GUI.cell3Diameter1,GUI.cell4Diameter1,GUI.cell5Diameter1,GUI.cell6Diameter1,GUI.cell7Diameter1,GUI.cell8Diameter1,GUI.cell9Diameter1 =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
-        GUI.cell1Diameter2,GUI.cell2Diameter2,GUI.cell3Diameter2,GUI.cell4Diameter2,GUI.cell5Diameter2,GUI.cell6Diameter2,GUI.cell7Diameter2,GUI.cell8Diameter2,GUI.cell9Diameter2 =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
-        GUI.cell1Diameter3,GUI.cell2Diameter3,GUI.cell3Diameter3,GUI.cell4Diameter3,GUI.cell5Diameter3,GUI.cell6Diameter3,GUI.cell7Diameter3,GUI.cell8Diameter3,GUI.cell9Diameter3 =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
-        GUI.cell1Diameter4,GUI.cell2Diameter4,GUI.cell3Diameter4,GUI.cell4Diameter4,GUI.cell5Diameter4,GUI.cell6Diameter4,GUI.cell7Diameter4,GUI.cell8Diameter4,GUI.cell9Diameter4 =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
+        SocemGUI.cell1Mass,SocemGUI.cell2Mass,SocemGUI.cell3Mass,SocemGUI.cell4Mass,SocemGUI.cell5Mass,SocemGUI.cell6Mass,SocemGUI.cell7Mass,SocemGUI.cell8Mass,SocemGUI.cell9Mass =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
+        SocemGUI.cell1Count,SocemGUI.cell2Count,SocemGUI.cell3Count,SocemGUI.cell4Count,SocemGUI.cell5Count,SocemGUI.cell6Count,SocemGUI.cell7Count,SocemGUI.cell8Count,SocemGUI.cell9Count =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
+        SocemGUI.cell1Diameter1,SocemGUI.cell2Diameter1,SocemGUI.cell3Diameter1,SocemGUI.cell4Diameter1,SocemGUI.cell5Diameter1,SocemGUI.cell6Diameter1,SocemGUI.cell7Diameter1,SocemGUI.cell8Diameter1,SocemGUI.cell9Diameter1 =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
+        SocemGUI.cell1Diameter2,SocemGUI.cell2Diameter2,SocemGUI.cell3Diameter2,SocemGUI.cell4Diameter2,SocemGUI.cell5Diameter2,SocemGUI.cell6Diameter2,SocemGUI.cell7Diameter2,SocemGUI.cell8Diameter2,SocemGUI.cell9Diameter2 =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
+        SocemGUI.cell1Diameter3,SocemGUI.cell2Diameter3,SocemGUI.cell3Diameter3,SocemGUI.cell4Diameter3,SocemGUI.cell5Diameter3,SocemGUI.cell6Diameter3,SocemGUI.cell7Diameter3,SocemGUI.cell8Diameter3,SocemGUI.cell9Diameter3 =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
+        SocemGUI.cell1Diameter4,SocemGUI.cell2Diameter4,SocemGUI.cell3Diameter4,SocemGUI.cell4Diameter4,SocemGUI.cell5Diameter4,SocemGUI.cell6Diameter4,SocemGUI.cell7Diameter4,SocemGUI.cell8Diameter4,SocemGUI.cell9Diameter4 =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
 
         ''' Non-tkinter GUI vars, initialize ''' # for nine cell assessment, save state
         # may as well keep everything here, for fun
-        GUI.errors = [] # for tracking errors
-        GUI.errorCodes = [] # for tracking errors
-        GUI.ignoreserial = ignoreserial
-        GUI.address = address
+        SocemGUI.errors = [] # for tracking errors
+        SocemGUI.errorCodes = [] # for tracking errors
+        SocemGUI.ignoreserial = ignoreserial
+        SocemGUI.address = address
 
-        GUI.forcePushed = []
-        GUI.distanceTraveled = []
-        GUI.timeElapsed = []
-        GUI.travelvelocity = []
-        GUI.samplingrate = []
+        SocemGUI.forcePushed = []
+        SocemGUI.distanceTraveled = []
+        SocemGUI.timeElapsed = []
+        SocemGUI.travelvelocity = []
+        SocemGUI.samplingrate = []
 
-        GUI.forcePushed_side1 = []
-        GUI.forcePushed_side2 = []
-        GUI.forcePushed_side3 = []
-        GUI.forcePushed_forward = []
-        GUI.distanceTraveled_side1 = []
-        GUI.distanceTraveled_side2 = []
-        GUI.distanceTraveled_side3 = []
-        GUI.distanceTraveled_forward = []
-        GUI.timeElapsed_side1 = []
-        GUI.timeElapsed_side2 = []
-        GUI.timeElapsed_side3 = []
-        GUI.timeElapsed_forward =  []
-        GUI.peaks_force_side1 = []
-        GUI.peaks_force_side2 = []        
-        GUI.peaks_force_side3 = []
-        GUI.peaks_force_forward = []
-        GUI.peaks_distance_side1 = []
-        GUI.peaks_distance_side2 = []        
-        GUI.peaks_distance_side3 = []
-        GUI.peaks_distance_forward = []
-        GUI.peaks_time_side1 = []
-        GUI.peaks_time_side2 = []        
-        GUI.peaks_time_side3 = []
-        GUI.peaks_time_forward = []
+        SocemGUI.forcePushed_side1 = []
+        SocemGUI.forcePushed_side2 = []
+        SocemGUI.forcePushed_side3 = []
+        SocemGUI.forcePushed_forward = []
+        SocemGUI.distanceTraveled_side1 = []
+        SocemGUI.distanceTraveled_side2 = []
+        SocemGUI.distanceTraveled_side3 = []
+        SocemGUI.distanceTraveled_forward = []
+        SocemGUI.timeElapsed_side1 = []
+        SocemGUI.timeElapsed_side2 = []
+        SocemGUI.timeElapsed_side3 = []
+        SocemGUI.timeElapsed_forward =  []
+        SocemGUI.peaks_force_side1 = []
+        SocemGUI.peaks_force_side2 = []        
+        SocemGUI.peaks_force_side3 = []
+        SocemGUI.peaks_force_forward = []
+        SocemGUI.peaks_distance_side1 = []
+        SocemGUI.peaks_distance_side2 = []        
+        SocemGUI.peaks_distance_side3 = []
+        SocemGUI.peaks_distance_forward = []
+        SocemGUI.peaks_time_side1 = []
+        SocemGUI.peaks_time_side2 = []        
+        SocemGUI.peaks_time_side3 = []
+        SocemGUI.peaks_time_forward = []
 
-        GUI.peaks_force = []
-        GUI.peaks_distance = []
-        GUI.peaks_time = []
+        SocemGUI.peaks_force = []
+        SocemGUI.peaks_distance = []
+        SocemGUI.peaks_time = []
 
         peakclick.peaks_force = []
         peakclick.peaks_distance = []
         peakclick.peaks_time = []
 
-        GUI.stemcounts = []
+        SocemGUI.stemcounts = []
 
-        GUI.peak_force_cell1, GUI.peak_force_cell2, GUI.peak_force_cell3, GUI.peak_force_cell4, GUI.peak_force_cell5, GUI.peak_force_cell6, GUI.peak_force_cell7, GUI.peak_force_cell8, GUI.peak_force_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
-        GUI.peak_distance_cell1, GUI.peak_distance_cell2, GUI.peak_distance_cell3, GUI.peak_distance_cell4, GUI.peak_distance_cell5, GUI.peak_distance_cell6, GUI.peak_distance_cell7, GUI.peak_distance_cell8, GUI.peak_distance_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
-        GUI.peak_time_cell1, GUI.peak_time_cell2, GUI.peak_time_cell3, GUI.peak_time_cell4, GUI.peak_time_cell5, GUI.peak_time_cell6, GUI.peak_time_cell7, GUI.peak_time_cell8, GUI.peak_time_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+        SocemGUI.peak_force_cell1, SocemGUI.peak_force_cell2, SocemGUI.peak_force_cell3, SocemGUI.peak_force_cell4, SocemGUI.peak_force_cell5, SocemGUI.peak_force_cell6, SocemGUI.peak_force_cell7, SocemGUI.peak_force_cell8, SocemGUI.peak_force_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+        SocemGUI.peak_distance_cell1, SocemGUI.peak_distance_cell2, SocemGUI.peak_distance_cell3, SocemGUI.peak_distance_cell4, SocemGUI.peak_distance_cell5, SocemGUI.peak_distance_cell6, SocemGUI.peak_distance_cell7, SocemGUI.peak_distance_cell8, SocemGUI.peak_distance_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+        SocemGUI.peak_time_cell1, SocemGUI.peak_time_cell2, SocemGUI.peak_time_cell3, SocemGUI.peak_time_cell4, SocemGUI.peak_time_cell5, SocemGUI.peak_time_cell6, SocemGUI.peak_time_cell7, SocemGUI.peak_time_cell8, SocemGUI.peak_time_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
 
-        GUI.data_preTest,GUI.data_recordForce,GUI.data_postTest,GUI.data_peaks,GUI.data_EI = [],[],[],[],[]
+        SocemGUI.data_preTest,SocemGUI.data_recordForce,SocemGUI.data_postTest,SocemGUI.data_peaks,SocemGUI.data_EI = [],[],[],[],[]
         
     def refreshAll(): #clear_all(self)?
         
     
-        GUI.filename_force.set("")
-        GUI.filename_preTest.set("")
-        GUI.filename_postTest.set("")
-        GUI.filename_all.set("")
-        GUI.varietyname.set("")
-        GUI.plotname.set("")
-        GUI.startRange1.set(50)
-        GUI.startRange2.set(150) 
-        GUI.startRange3.set(250) # centimeters
-        GUI.stemheight.set(default_stemheight) # cm
-        GUI.barbottom.set(round(GUI.stemheight.get()*initial_barbottomOverStemheight_coeff,3)) # cm
-        GUI.barmiddle.set(round(GUI.barbottom.get()+barradius,3)) # cm
-        GUI.passfillednames_checkbox.set(1)
-        GUI.timestring.set(time.strftime("%H%M"))
-        GUI.currentdirection.set("")
-        GUI.addressInput.set("")
+        SocemGUI.filename_force.set("")
+        SocemGUI.filename_preTest.set("")
+        SocemGUI.filename_postTest.set("")
+        SocemGUI.filename_all.set("")
+        SocemGUI.varietyname.set("")
+        SocemGUI.plotname.set("")
+        SocemGUI.startRange1.set(50)
+        SocemGUI.startRange2.set(150) 
+        SocemGUI.startRange3.set(250) # centimeters
+        SocemGUI.stemheight.set(default_stemheight) # cm
+        SocemGUI.barbottom.set(round(SocemGUI.stemheight.get()*initial_barbottomOverStemheight_coeff,3)) # cm
+        SocemGUI.barmiddle.set(round(SocemGUI.barbottom.get()+barradius,3)) # cm
+        SocemGUI.passfillednames_checkbox.set(1)
+        SocemGUI.timestring.set(time.strftime("%H%M"))
+        SocemGUI.currentdirection.set("")
+        SocemGUI.addressInput.set("")
         
         ''' Set post test variables for mass, count, and diameter'''
-        GUI.cell1Mass.set(0),GUI.cell2Mass.set(0),GUI.cell3Mass.set(0),GUI.cell4Mass.set(0),GUI.cell5Mass.set(0),GUI.cell6Mass.set(0),GUI.cell7Mass.set(0),GUI.cell8Mass.set(0),GUI.cell9Mass.set(0)
-        GUI.cell1Count.set(0),GUI.cell2Count.set(0),GUI.cell3Count.set(0),GUI.cell4Count.set(0),GUI.cell5Count.set(0),GUI.cell6Count.set(0),GUI.cell7Count.set(0),GUI.cell8Count.set(0),GUI.cell9Count.set(0)
-        GUI.cell1Diameter1.set(0),GUI.cell2Diameter1.set(0),GUI.cell3Diameter1.set(0),GUI.cell4Diameter1.set(0),GUI.cell5Diameter1.set(0),GUI.cell6Diameter1.set(0),GUI.cell7Diameter1.set(0),GUI.cell8Diameter1.set(0),GUI.cell9Diameter1.set(0)
-        GUI.cell1Diameter2.set(0),GUI.cell2Diameter2.set(0),GUI.cell3Diameter2.set(0),GUI.cell4Diameter2.set(0),GUI.cell5Diameter2.set(0),GUI.cell6Diameter2.set(0),GUI.cell7Diameter2.set(0),GUI.cell8Diameter2.set(0),GUI.cell9Diameter2.set(0)
-        GUI.cell1Diameter3.set(0),GUI.cell2Diameter3.set(0),GUI.cell3Diameter3.set(0),GUI.cell4Diameter3.set(0),GUI.cell5Diameter3.set(0),GUI.cell6Diameter3.set(0),GUI.cell7Diameter3.set(0),GUI.cell8Diameter3.set(0),GUI.cell9Diameter3.set(0)
-        GUI.cell1Diameter4.set(0),GUI.cell2Diameter4.set(0),GUI.cell3Diameter4.set(0),GUI.cell4Diameter4.set(0),GUI.cell5Diameter4.set(0),GUI.cell6Diameter4.set(0),GUI.cell7Diameter4.set(0),GUI.cell8Diameter4.set(0),GUI.cell9Diameter4.set(0)
+        SocemGUI.cell1Mass.set(0),SocemGUI.cell2Mass.set(0),SocemGUI.cell3Mass.set(0),SocemGUI.cell4Mass.set(0),SocemGUI.cell5Mass.set(0),SocemGUI.cell6Mass.set(0),SocemGUI.cell7Mass.set(0),SocemGUI.cell8Mass.set(0),SocemGUI.cell9Mass.set(0)
+        SocemGUI.cell1Count.set(0),SocemGUI.cell2Count.set(0),SocemGUI.cell3Count.set(0),SocemGUI.cell4Count.set(0),SocemGUI.cell5Count.set(0),SocemGUI.cell6Count.set(0),SocemGUI.cell7Count.set(0),SocemGUI.cell8Count.set(0),SocemGUI.cell9Count.set(0)
+        SocemGUI.cell1Diameter1.set(0),SocemGUI.cell2Diameter1.set(0),SocemGUI.cell3Diameter1.set(0),SocemGUI.cell4Diameter1.set(0),SocemGUI.cell5Diameter1.set(0),SocemGUI.cell6Diameter1.set(0),SocemGUI.cell7Diameter1.set(0),SocemGUI.cell8Diameter1.set(0),SocemGUI.cell9Diameter1.set(0)
+        SocemGUI.cell1Diameter2.set(0),SocemGUI.cell2Diameter2.set(0),SocemGUI.cell3Diameter2.set(0),SocemGUI.cell4Diameter2.set(0),SocemGUI.cell5Diameter2.set(0),SocemGUI.cell6Diameter2.set(0),SocemGUI.cell7Diameter2.set(0),SocemGUI.cell8Diameter2.set(0),SocemGUI.cell9Diameter2.set(0)
+        SocemGUI.cell1Diameter3.set(0),SocemGUI.cell2Diameter3.set(0),SocemGUI.cell3Diameter3.set(0),SocemGUI.cell4Diameter3.set(0),SocemGUI.cell5Diameter3.set(0),SocemGUI.cell6Diameter3.set(0),SocemGUI.cell7Diameter3.set(0),SocemGUI.cell8Diameter3.set(0),SocemGUI.cell9Diameter3.set(0)
+        SocemGUI.cell1Diameter4.set(0),SocemGUI.cell2Diameter4.set(0),SocemGUI.cell3Diameter4.set(0),SocemGUI.cell4Diameter4.set(0),SocemGUI.cell5Diameter4.set(0),SocemGUI.cell6Diameter4.set(0),SocemGUI.cell7Diameter4.set(0),SocemGUI.cell8Diameter4.set(0),SocemGUI.cell9Diameter4.set(0)
 
         if autopopulatestemcount == True:
-            GUI.cell1Count.set(defaultstemcount),GUI.cell2Count.set(defaultstemcount),GUI.cell3Count.set(defaultstemcount),GUI.cell4Count.set(defaultstemcount),GUI.cell5Count.set(defaultstemcount),GUI.cell6Count.set(defaultstemcount),GUI.cell7Count.set(defaultstemcount),GUI.cell8Count.set(defaultstemcount),GUI.cell9Count.set(defaultstemcount)
+            SocemGUI.cell1Count.set(defaultstemcount),SocemGUI.cell2Count.set(defaultstemcount),SocemGUI.cell3Count.set(defaultstemcount),SocemGUI.cell4Count.set(defaultstemcount),SocemGUI.cell5Count.set(defaultstemcount),SocemGUI.cell6Count.set(defaultstemcount),SocemGUI.cell7Count.set(defaultstemcount),SocemGUI.cell8Count.set(defaultstemcount),SocemGUI.cell9Count.set(defaultstemcount)
         ''' end '''
         
         ''' Non-tkinter GUI vars, initialize ''' # for nine cell assessment, save state
         # may as well keep everything here, for fun
-        GUI.errors = [] # for tracking errors
-        GUI.errorCodes = [] # for tracking errors
+        SocemGUI.errors = [] # for tracking errors
+        SocemGUI.errorCodes = [] # for tracking errors
 
-        GUI.forcePushed = []
-        GUI.distanceTraveled = []
-        GUI.timeElapsed = []
+        SocemGUI.forcePushed = []
+        SocemGUI.distanceTraveled = []
+        SocemGUI.timeElapsed = []
 
-        GUI.forcePushed_side1 = []
-        GUI.forcePushed_side2 = []
-        GUI.forcePushed_side3 = []
-        GUI.forcePushed_forward = []
-        GUI.distanceTraveled_side1 = []
-        GUI.distanceTraveled_side2 = []
-        GUI.distanceTraveled_side3 = []
-        GUI.distanceTraveled_forward = []
-        GUI.timeElapsed_side1 = []
-        GUI.timeElapsed_side2 = []
-        GUI.timeElapsed_side3 = []
-        GUI.timeElapsed_forward =  []
-        GUI.peaks_force_side1 = []
-        GUI.peaks_force_side2 = []        
-        GUI.peaks_force_side3 = []
-        GUI.peaks_force_forward = []
-        GUI.peaks_distance_side1 = []
-        GUI.peaks_distance_side2 = []        
-        GUI.peaks_distance_side3 = []
-        GUI.peaks_distance_forward = []
-        GUI.peaks_time_side1 = []
-        GUI.peaks_time_side2 = []        
-        GUI.peaks_time_side3 = []
+        SocemGUI.forcePushed_side1 = []
+        SocemGUI.forcePushed_side2 = []
+        SocemGUI.forcePushed_side3 = []
+        SocemGUI.forcePushed_forward = []
+        SocemGUI.distanceTraveled_side1 = []
+        SocemGUI.distanceTraveled_side2 = []
+        SocemGUI.distanceTraveled_side3 = []
+        SocemGUI.distanceTraveled_forward = []
+        SocemGUI.timeElapsed_side1 = []
+        SocemGUI.timeElapsed_side2 = []
+        SocemGUI.timeElapsed_side3 = []
+        SocemGUI.timeElapsed_forward =  []
+        SocemGUI.peaks_force_side1 = []
+        SocemGUI.peaks_force_side2 = []        
+        SocemGUI.peaks_force_side3 = []
+        SocemGUI.peaks_force_forward = []
+        SocemGUI.peaks_distance_side1 = []
+        SocemGUI.peaks_distance_side2 = []        
+        SocemGUI.peaks_distance_side3 = []
+        SocemGUI.peaks_distance_forward = []
+        SocemGUI.peaks_time_side1 = []
+        SocemGUI.peaks_time_side2 = []        
+        SocemGUI.peaks_time_side3 = []
 
-        GUI.peaks_force = []
-        GUI.peaks_distance = []
-        GUI.peaks_time = []
+        SocemGUI.peaks_force = []
+        SocemGUI.peaks_distance = []
+        SocemGUI.peaks_time = []
 
-        GUI.stemcounts = []
+        SocemGUI.stemcounts = []
 
-        GUI.peak_force_cell1, GUI.peak_force_cell2, GUI.peak_force_cell3, GUI.peak_force_cell4, GUI.peak_force_cell5, GUI.peak_force_cell6, GUI.peak_force_cell7, GUI.peak_force_cell8, GUI.peak_force_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
-        GUI.peak_distance_cell1, GUI.peak_distance_cell2, GUI.peak_distance_cell3, GUI.peak_distance_cell4, GUI.peak_distance_cell5, GUI.peak_distance_cell6, GUI.peak_distance_cell7, GUI.peak_distance_cell8, GUI.peak_distance_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
-        GUI.peak_time_cell1, GUI.peak_time_cell2, GUI.peak_time_cell3, GUI.peak_time_cell4, GUI.peak_time_cell5, GUI.peak_time_cell6, GUI.peak_time_cell7, GUI.peak_time_cell8, GUI.peak_time_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+        SocemGUI.peak_force_cell1, SocemGUI.peak_force_cell2, SocemGUI.peak_force_cell3, SocemGUI.peak_force_cell4, SocemGUI.peak_force_cell5, SocemGUI.peak_force_cell6, SocemGUI.peak_force_cell7, SocemGUI.peak_force_cell8, SocemGUI.peak_force_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+        SocemGUI.peak_distance_cell1, SocemGUI.peak_distance_cell2, SocemGUI.peak_distance_cell3, SocemGUI.peak_distance_cell4, SocemGUI.peak_distance_cell5, SocemGUI.peak_distance_cell6, SocemGUI.peak_distance_cell7, SocemGUI.peak_distance_cell8, SocemGUI.peak_distance_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+        SocemGUI.peak_time_cell1, SocemGUI.peak_time_cell2, SocemGUI.peak_time_cell3, SocemGUI.peak_time_cell4, SocemGUI.peak_time_cell5, SocemGUI.peak_time_cell6, SocemGUI.peak_time_cell7, SocemGUI.peak_time_cell8, SocemGUI.peak_time_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
         
-        GUI.peak_EI_fullcontact_cell1, GUI.peak_EI_fullcontact_cell2, GUI.peak_EI_fullcontact_cell3, GUI.peak_EI_fullcontact_cell4, GUI.peak_EI_fullcontact_cell5, GUI.peak_EI_fullcontact_cell6, GUI.peak_EI_fullcontact_cell7, GUI.peak_EI_fullcontact_cell8, GUI.peak_EI_fullcontact_cell9 = [],[],[],[],[],[],[],[],[]
-        GUI.peak_EI_intermediatecontact_cell1, GUI.peak_EI_intermediatecontact_cell2, GUI.peak_EI_intermediatecontact_cell3, GUI.peak_EI_intermediatecontact_cell4, GUI.peak_EI_intermediatecontact_cell5, GUI.peak_EI_intermediatecontact_cell6, GUI.peak_EI_intermediatecontact_cell7, GUI.peak_EI_intermediatecontact_cell8, GUI.peak_EI_intermediatecontact_cell9 = [],[],[],[],[],[],[],[],[]
-        GUI.peak_EI_nocontact_cell1, GUI.peak_EI_nocontact_cell2, GUI.peak_EI_nocontact_cell3, GUI.peak_EI_nocontact_cell4, GUI.peak_EI_nocontact_cell5, GUI.peak_EI_nocontact_cell6, GUI.peak_EI_nocontact_cell7, GUI.peak_EI_nocontact_cell8, GUI.peak_EI_nocontact_cell9 = [],[],[],[],[],[],[],[],[]
+        SocemGUI.peak_EI_fullcontact_cell1, SocemGUI.peak_EI_fullcontact_cell2, SocemGUI.peak_EI_fullcontact_cell3, SocemGUI.peak_EI_fullcontact_cell4, SocemGUI.peak_EI_fullcontact_cell5, SocemGUI.peak_EI_fullcontact_cell6, SocemGUI.peak_EI_fullcontact_cell7, SocemGUI.peak_EI_fullcontact_cell8, SocemGUI.peak_EI_fullcontact_cell9 = [],[],[],[],[],[],[],[],[]
+        SocemGUI.peak_EI_intermediatecontact_cell1, SocemGUI.peak_EI_intermediatecontact_cell2, SocemGUI.peak_EI_intermediatecontact_cell3, SocemGUI.peak_EI_intermediatecontact_cell4, SocemGUI.peak_EI_intermediatecontact_cell5, SocemGUI.peak_EI_intermediatecontact_cell6, SocemGUI.peak_EI_intermediatecontact_cell7, SocemGUI.peak_EI_intermediatecontact_cell8, SocemGUI.peak_EI_intermediatecontact_cell9 = [],[],[],[],[],[],[],[],[]
+        SocemGUI.peak_EI_nocontact_cell1, SocemGUI.peak_EI_nocontact_cell2, SocemGUI.peak_EI_nocontact_cell3, SocemGUI.peak_EI_nocontact_cell4, SocemGUI.peak_EI_nocontact_cell5, SocemGUI.peak_EI_nocontact_cell6, SocemGUI.peak_EI_nocontact_cell7, SocemGUI.peak_EI_nocontact_cell8, SocemGUI.peak_EI_nocontact_cell9 = [],[],[],[],[],[],[],[],[]
 
-        GUI.peaks_time_forward = []
-        GUI.EI_fullcontact = [] 
-        GUI.EI_intermediatecontact = []
-        GUI.EI_nocontact = []
-        GUI.AvgEI_intermediatecontact = []
+        SocemGUI.peaks_time_forward = []
+        SocemGUI.EI_fullcontact = [] 
+        SocemGUI.EI_intermediatecontact = []
+        SocemGUI.EI_nocontact = []
+        SocemGUI.AvgEI_intermediatecontact = []
 
-        GUI.data_preTest,GUI.data_recordForce,GUI.data_postTest,GUI.data_peaks,GUI.data_EI = [],[],[],[],[]
+        SocemGUI.data_preTest,SocemGUI.data_recordForce,SocemGUI.data_postTest,SocemGUI.data_peaks,SocemGUI.data_EI = [],[],[],[],[]
     
     def show_frame(cont):
-        frame = GUI.frames[cont]
+        frame = SocemGUI.frames[cont]
         frame.tkraise()
         frame.event_generate("<<ShowFrame>>") # event
 
@@ -233,10 +233,10 @@ class repeatPageButtons:
     def __init__(self, parent, controller): # automatically runs
         filler=1
     def showButtons(self, parent, controller):
-        guide_button = tk.Button(self, text = "Guide", font = ("arial", 14, "bold"), height = 2, width = 8, fg = "ghost white", bg = "gray2",command=lambda:GUI.show_frame(Guide))
-        initialInputs_button = tk.Button(self, text = "Initial\nInputs", font = ("arial", 14, "bold"), height = 2, width = 8, fg = "ghost white", bg = "gray2",command=lambda:GUI.show_frame(InitialInputs))
-        recordForce_button = tk.Button(self, text = "Record\nForce", font = ("arial", 14, "bold"), height = 2, width = 8, fg = "ghost white", bg = "gray2",command=lambda:GUI.show_frame(RecordForce))
-        postInputs_button = tk.Button(self, text = "Post Test\nInputs", font = ("arial", 14, "bold"), height = 2, width = 8, fg = "ghost white", bg = "gray2",command=lambda:GUI.show_frame(FinalInputs))
+        guide_button = tk.Button(self, text = "Guide", font = ("arial", 14, "bold"), height = 2, width = 8, fg = "ghost white", bg = "gray2",command=lambda:SocemGUI.show_frame(Guide))
+        initialInputs_button = tk.Button(self, text = "Initial\nInputs", font = ("arial", 14, "bold"), height = 2, width = 8, fg = "ghost white", bg = "gray2",command=lambda:SocemGUI.show_frame(InitialInputs))
+        recordForce_button = tk.Button(self, text = "Record\nForce", font = ("arial", 14, "bold"), height = 2, width = 8, fg = "ghost white", bg = "gray2",command=lambda:SocemGUI.show_frame(RecordForce))
+        postInputs_button = tk.Button(self, text = "Post Test\nInputs", font = ("arial", 14, "bold"), height = 2, width = 8, fg = "ghost white", bg = "gray2",command=lambda:SocemGUI.show_frame(FinalInputs))
 
         guide_button.place(x = 0, y = 340)
         initialInputs_button.place(x = 375/3*1, y = 340)

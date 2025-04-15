@@ -91,7 +91,7 @@ Notes:
 
 '''Local libraries'''
 #import src.serial
-from gui.gui_main import GUI
+from gui.gui_main import SocemGUI
 from src.directories import Directories
 
 ''' Libraries '''

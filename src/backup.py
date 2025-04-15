@@ -2,7 +2,7 @@ import datetime
 import time
 
 import src.environment
-from gui_main import GUI
+from gui_main import SocemGUI
 def createBackupFile():
     ''' Create a temp text file, with a list of all variables and variable names, that would be awesome '''
     '''update_filename_preTest()

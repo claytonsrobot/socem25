@@ -2,7 +2,7 @@ import csv
 from itertools import zip_longest
 import tkinter as tk
 
-from gui.gui_main import GUI
+from gui.gui_main import SocemGUI
 
 #Home page
 class InitialInputs(tk.Frame):

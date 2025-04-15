@@ -5,7 +5,7 @@ import threading
 import time
 import tkinter as tk
 
-from gui.gui_main import GUI
+from gui.gui_main import SocemGUI
 
 # Data collection page
 class RecordForce(tk.Frame):

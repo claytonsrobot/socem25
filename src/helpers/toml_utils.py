@@ -5,18 +5,19 @@ Created: 22 February 2025
 """
 from pathlib import Path
 import os
-import sys
+
 # Use tomllib if the Python version is 3.11+. Otherwise use the toml package.
-if sys.version_info >= (3, 11):
+if False:# sys.version_info >= (3, 11):
+    import sys
     import tomllib  # Built-in TOML module in Python 3.11+
 else:
     import toml  # Third-party TOML package for older versions
     
 def load_toml(filepath):
     if check_file(filepath):
-        #with open(filepath,"r", encoding="utf-8") as f:
-        with open(filepath,"rb", encoding="utf-8") as f:
-            if sys.version_info >= (3,11):
+        with open(filepath,"r", encoding="utf-8") as f:
+        #with open(filepath,"rb", encoding="utf-8") as f:
+            if False: #sys.version_info >= (3,11):
                 data = tomllib.load(f)
             else:
                 data = toml.load(f)

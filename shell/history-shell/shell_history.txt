@@ -1557,3 +1557,23 @@ p -o sample
 2
 3
 quit
+h
+src.stemberry
+eval src.stemberry
+eval stemberry
+qut
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+help
+v
+call
+call2
+gui
+quit

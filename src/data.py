@@ -1,7 +1,7 @@
 import tkinter as tk
 import time
 
-from gui.gui_main import GUI
+from gui.gui_main import SocemGUI
 from gui.guiframe_record_force import RecordForce
 def datafeed():
     #frame = tk.Frame.RecordForce

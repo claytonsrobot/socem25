@@ -1993,7 +1993,7 @@ class Directories:
         #cls.initialize_startup_project()
     @classmethod
     def initialize_startup_project(cls):
-        filename_default_project_entry = "./src/projects/default-project.toml"
+        filename_default_project_entry = "./src/default-project.toml"
         loaded_entry = toml_utils.load_toml(filename_default_project_entry)
         cls.set_project_dir(cls.get_program_dir()+"\\projects\\"+loaded_entry["project_directory"])
 
@@ -2168,7 +2168,7 @@ class Directories:
     @classmethod
     def initialize_startup_project(cls):
         """Initializes the startup project based on default configuration."""
-        filename_default_project_entry = "./src/projects/default-project.toml"
+        filename_default_project_entry = "./src/default-project.toml"
         loaded_entry = toml_utils.load_toml(filename_default_project_entry)
         cls.set_project_dir(os.path.join(cls.get_program_dir(), "projects", loaded_entry["project_directory"]))
 
@@ -2601,7 +2601,7 @@ import tkinter as tk
 import PIL.ImageTk
 import PIL.Image
 
-from gui_main import GUI
+from gui_main import SocemGUI
 ## Guide page 
 class Guide(tk.Frame):
     def __init__(self, parent, controller): # automatically runs
@@ -2661,7 +2661,7 @@ To enhance the `Guide` class while retaining its current functionality, we'll fo
 import tkinter as tk
 import PIL.ImageTk
 import PIL.Image
-from gui_main import GUI
+from gui_main import SocemGUI
 from src.directories import Directories  # For access to directories, if needed
 
 class Guide(tk.Frame):
@@ -3180,7 +3180,7 @@ Notes:
 
 '''Local libraries'''
 #import src.serial
-from gui.gui_main import GUI
+from gui.gui_main import SocemGUI
 from src.directories import Directories
 
 ''' Libraries '''
@@ -3427,7 +3427,7 @@ from serial import Serial
 ### from serial import *
 import serial.tools.list_ports # need this
 
-from gui.gui_main import GUI
+from gui.gui_main import SocemGUI
 
 ### Determine Arduino serial port address
 def serial_connect():
@@ -3496,7 +3496,7 @@ Here's the refactored version of your code, including modular structure, improve
 # - Main function to execute the program
 
 ''' Local libraries '''
-from gui.gui_main import GUI
+from gui.gui_main import SocemGUI
 from src.directories import Directories
 
 ''' Standard Libraries '''
@@ -3699,7 +3699,7 @@ Sure! Here's the refactored version of the `serial.py` code, following similar p
 import serial
 from serial import Serial
 import serial.tools.list_ports
-from gui.gui_main import GUI
+from gui.gui_main import SocemGUI
 
 def serial_connect():
     """
@@ -3895,7 +3895,7 @@ poetry add cmd2
 # ChatGPT Integer Title: Shell Command-Line Interface for SOCEM Package
 
 import cmd2
-from gui.gui_main import GUI
+from gui.gui_main import SocemGUI
 from src.directories import Directories
 import serial
 from serial import Serial

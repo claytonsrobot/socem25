@@ -3,7 +3,7 @@ import tkinter as tk
 
 import src.physics.ei_interaction_error_management
 import src.physics.ei_no_interaction_error_management
-# from gui.gui_main import GUI
+# from gui.gui_main import SocemGUI
 
 class FinalInputs(tk.Frame):
     @classmethod

@@ -60,7 +60,7 @@ class HistoryEntry:
 
     
 class PavlovCLI(cmd2.Cmd):
-    pavlov3d_prettyprint =\
+    prettyprint =\
     """
      ____             _            _____ ____
     |  _ \ __ ___   _| | _____   _|___ /|  _ \\
@@ -70,7 +70,7 @@ class PavlovCLI(cmd2.Cmd):
 
     """
     prompt = '>> '
-    intro = pavlov3d_prettyprint 
+    intro = prettyprint 
     '''
     
     Welcome to PavlovShell! 
@@ -1762,8 +1762,29 @@ class PavlovCLI(cmd2.Cmd):
         self.cmdloop()
 
 class SocemCLI(PavlovCLI):
+
+    prettyprint = \
+    """
+     ____  _                 ____                       ____  ____
+    / ___|| |_ ___ _ __ ___ | __ )  ___ _ __ _ __ _   _|___ \\| ___|
+    \___ \\| __/ _ \ '_ ` _ \|  _ \ / _ \ '__| '__| | | | __) |___ \\
+     ___) | ||  __/ | | | | | |_) |  __/ |  | |  | |_| |/ __/ ___) |
+    |____/ \__\___|_| |_| |_|____/ \___|_|  |_|   \__, |_____|____/
+                                                  |___/
+    """
+
+    prettyprint_ = \
+    """
+     ____                           ____  ____
+    / ___|  ___   ___ ___ _ __ ___ |___ \| ___|
+    \___ \ / _ \ / __/ _ \ '_ ` _ \  __) |___ \\
+     ___) | (_) | (_ | __/ | | | | |/ __/ ___) |
+    |____/ \___/ \___\___|_| |_| |_|_____|____/    
+    """
+    intro = prettyprint
     def __init__(self):
         super().__init__()
+        
     def run(self):
         #self.scene_object = None
         self.initialize_scene_object()

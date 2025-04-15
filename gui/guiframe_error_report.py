@@ -1,6 +1,6 @@
 import tkinter as tk
 
-from gui.gui_main import GUI
+from gui.gui_main import SocemGUI
 # error page for displaying errors
 class ErrorReport(tk.Frame):
 

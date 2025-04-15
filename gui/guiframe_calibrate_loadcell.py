@@ -1,6 +1,6 @@
 import tkinter as tk
 
-from gui.gui_main import GUI
+from gui.gui_main import SocemGUI
 # Load cell calibration page 
 class Calibrate(tk.Frame):
     
