@@ -11,34 +11,6 @@ from src.pass_in import PassIn
 # GUI overarching class
 class SocemGuiMain(tk.Tk,PassIn):
 
-    @classmethod
-    def pass_in_gui_final_inputs_object(cls,gui_final_inputs_object):
-        cls.gui_final_inputs_object = gui_final_inputs_object
-    
-    @classmethod
-    def pass_in_gui_peak_clicks_object(cls,gui_peak_clicks_object):
-        cls.gui_peak_clicks_object = gui_peak_clicks_object
-
-    @classmethod
-    def pass_in_gui_record_force_object(cls,gui_record_force_object):
-        cls.gui_record_force_object = gui_record_force_object
-
-    @classmethod
-    def pass_in_gui_initial_inputs_object(cls,gui_initial_inputs_object):
-        cls.gui_initial_inputs_object = gui_initial_inputs_object
-    
-    @classmethod
-    def pass_in_gui_calibrate_object(cls,gui_calibrate_object):
-        cls.gui_calibrate_object = gui_calibrate_object
-
-    @classmethod
-    def pass_in_gui_stem_count_classic_object(cls,gui_stem_count_classic_object):
-        cls.gui_stem_count_classic_object = gui_stem_count_classic_object
-
-    @classmethod
-    def pass_in_gui_guide_object(cls,gui_guide_object):
-        cls.gui_guide_object = gui_guide_object
-
     def __init__(self, *args, **kwargs):# automatically runs
         self.nope = "nope"
     
