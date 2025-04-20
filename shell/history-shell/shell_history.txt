@@ -1577,3 +1577,6 @@ call
 call2
 gui
 quit
+help
+run
+quit

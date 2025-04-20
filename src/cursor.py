@@ -1,5 +1,5 @@
 from matplotlib.widgets import Cursor
-class Cursor(object):
+class Cursor:
     '''
     Cursor crosshair that follows mouse
     '''

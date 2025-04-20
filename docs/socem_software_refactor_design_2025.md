@@ -2607,7 +2607,7 @@ class Guide(tk.Frame):
     def __init__(self, parent, controller): # automatically runs
         tk.Frame.__init__(self, parent)
 
-        pageButtons = repeatPageButtons.showButtons(self, parent, controller)
+        pageButtons = RepeatPageButtons.showButtons(self, parent, controller)
 
         # button that enters Calibrate page/class
         calibrate_button = tk.Button(self, text = "Calibrate\nForce\nSensor", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2", command=lambda:gui_main_object.show_frame(Calibrate)) #tares/zeros load cell
@@ -2691,7 +2691,7 @@ class Guide(tk.Frame):
         Creates the navigation buttons (e.g., for transitioning to other pages like Calibrate).
         """
         # Navigation buttons for the guide page
-        pageButtons = repeatPageButtons.showButtons(self, parent=self.controller, controller=self.controller)
+        pageButtons = RepeatPageButtons.showButtons(self, parent=self.controller, controller=self.controller)
         
         # Button that enters the Calibrate page/class
         calibrate_button = tk.Button(self, text="Calibrate\nForce\nSensor", font=("arial", 16, "bold"),

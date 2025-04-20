@@ -9,7 +9,7 @@ from src.configuration import Config
 from src.pass_in import PassIn
 '''Classes, Tkinter GUI'''
 # GUI overarching class
-class SocemGUI(tk.Tk,PassIn):
+class SocemGuiMain(tk.Tk,PassIn):
 
     @classmethod
     def pass_in_gui_final_inputs_object(cls,gui_final_inputs_object):
@@ -217,7 +217,7 @@ class SocemGUI(tk.Tk,PassIn):
 
 # buttons that are the same for each page
 #'''
-class repeatPageButtons:
+class RepeatPageButtons:
     def __init__(self, parent, controller): # automatically runs
         filler=1
     def showButtons(self, parent, controller):

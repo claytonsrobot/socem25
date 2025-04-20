@@ -1,4 +1,6 @@
 import tkinter as tk
+from gui.gui_main import RepeatPageButtons
+
 class StemCountClassic(tk.Frame):
     def __init__(self, parent, controller): # automatically runs
         
@@ -9,7 +11,7 @@ class StemCountClassic(tk.Frame):
         header_label.place(x=235,y=0)
         construction_label.place(x=10,y=100)
         
-        pageButtons = repeatPageButtons.showButtons(self, parent, controller)
+        pageButtons = RepeatPageButtons.showButtons(self, parent, controller)
 '''
 class Heights(tk.Frame):
     destroyed. see StemBerry_v13.

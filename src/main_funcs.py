@@ -61,7 +61,7 @@ def updateAddress(self):
 
 def showErrors(self):
     self.gui_main_object.show_frame(self.gui_error_report_object) # show Error Report page
-    self.gui_error_report_object.showErrors2(self.gui_main_object.frames[ErrorReport-->self.gui_error_report_object]) # display errors in lists
+    self.gui_error_report_object.showErrors2(self.gui_main_object.frames[self.gui_error_report_object]) # display errors in lists
 
 def update_filename_preTest(self):
     filename_preTest = nameBlackBox("preTest",self.gui_main_object.filename_preTest.get())

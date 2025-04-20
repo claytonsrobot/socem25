@@ -2,8 +2,8 @@
 #do not erase (needed to be executable for autostart)
 
 '''
-StemBerry V.105
-Last updated: 10/16/2022
+StemBerry25
+Last updated: 20/04/2025
 Dev: Clayton Bennett
 OG dev: Austin Bebee
 Description: SOCEM gui_main_object. Connect RPi to Arduino, collect raw data. Save text inputs.
@@ -61,7 +61,7 @@ V90
 V92
     - Trigger peak selection for all tests, with the assessAllTests boolean.
     - Noticed that encoderWorked_override is poorly implemented. No reason to fix now, but, should be alterable as opposed to needing manual suppression through commenting
-    - gui_main_object.currentdirection.get() set to "" on_frame_show RecordForce.
+    - gui_main_object.currentdirection.get() set to "" on_frame_show self.gui_record_force_object.
 V94
     - Changed mass measurement from kg to gramsa
     - Fixed all time units to be (sec), not (s) or (seconds), and certainly not (ms)
@@ -128,7 +128,7 @@ directory = os.path.dirname(__file__)
 today = date.today()
 datestring = today.strftime("%b-%d-%Y")
 ignoreserial = False # True 
-#ignoreserial = True # delete this # if RecordForce.ser.isOpen() == False:
+#ignoreserial = True # delete this # if self.gui_record_force_object.ser.isOpen() == False:
 barlength = 76 # cm. this shouldn't ever change, unless the bar is replaced. i.e. the width of a side hit cell.
 #dev_manual = 'COM7' # manual override
 dev_manual = '/dev/ttyACM0' # manual override
@@ -199,43 +199,43 @@ def run(self, ser):
         # Displays incoming data 
         scroll = tk.Scrollbar(self)
 
-        RecordForce.timeLabel = tk.Label(self, text = "s",font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
-        RecordForce.timeLabel.place(x = 274, y = 70)
-        RecordForce.Timelist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 1, font = ("arial", 14, "bold"), fg = "dodgerblue2")
-        RecordForce.Timelist.place(x = 240, y = 100)
+        self.gui_record_force_object.timeLabel = tk.Label(self, text = "s",font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
+        self.gui_record_force_object.timeLabel.place(x = 274, y = 70)
+        self.gui_record_force_object.Timelist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 1, font = ("arial", 14, "bold"), fg = "dodgerblue2")
+        self.gui_record_force_object.Timelist.place(x = 240, y = 100)
 
-        RecordForce.disLabel = tk.Label(self, text = "in.",font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
-        RecordForce.disLabel.place(x = 357, y = 70)
-        RecordForce.Dislist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 1, font = ("arial", 14, "bold"), fg = "dodgerblue2")
-        RecordForce.Dislist.place(x = 330, y = 100)
+        self.gui_record_force_object.disLabel = tk.Label(self, text = "in.",font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
+        self.gui_record_force_object.disLabel.place(x = 357, y = 70)
+        self.gui_record_force_object.Dislist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 1, font = ("arial", 14, "bold"), fg = "dodgerblue2")
+        self.gui_record_force_object.Dislist.place(x = 330, y = 100)
 
-        RecordForce.forceLabel = tk.Label(self, text = "lbs.",font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
-        RecordForce.forceLabel.place(x = 444, y = 70)
-        RecordForce.Forcelist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 11, font = ("arial", 14, "bold"), fg = "dodgerblue2")
-        RecordForce.Forcelist.place(x = 420, y = 100)
+        self.gui_record_force_object.forceLabel = tk.Label(self, text = "lbs.",font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
+        self.gui_record_force_object.forceLabel.place(x = 444, y = 70)
+        self.gui_record_force_object.Forcelist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 11, font = ("arial", 14, "bold"), fg = "dodgerblue2")
+        self.gui_record_force_object.Forcelist.place(x = 420, y = 100)
 
     else:# user decided for no data display
         try:#clear scrollbars if they were there
-            RecordForce.Dislist.place_forget()
-            RecordForce.Forcelist.place_forget()
-            RecordForce.Timelist.place_forget()
-            RecordForce.disLabel.place_forget()
-            RecordForce.forceLabel.place_forget()
-            RecordForce.timeLabel.place_forget()
+            self.gui_record_force_object.Dislist.place_forget()
+            self.gui_record_force_object.Forcelist.place_forget()
+            self.gui_record_force_object.Timelist.place_forget()
+            self.gui_record_force_object.disLabel.place_forget()
+            self.gui_record_force_object.forceLabel.place_forget()
+            self.gui_record_force_object.timeLabel.place_forget()
         except:# no scrollbars
             print("no scrollbars")
             pass
     
     i = 0
     print("i = 0")
-    RecordForce.elapsed = []
-    RecordForce.dis = []
-    RecordForce.force = []
+    self.gui_record_force_object.elapsed = []
+    self.gui_record_force_object.dis = []
+    self.gui_record_force_object.force = []
     string = list()
 
     #try:
     
-    while RecordForce.collect == True: # GUI in frontend controls value of collect to start/stop loop            
+    while self.gui_record_force_object.collect == True: # GUI in frontend controls value of collect to start/stop loop            
         if ser.inWaiting() > 0: #checks to see if Serial is available 
         
             try: #make sure serial data can be read/is there
@@ -265,9 +265,9 @@ def run(self, ser):
                 pounds = split[1]
                 
                 try:
-                    RecordForce.elapsed.insert(i, time.time() - start)# list of elapsed time
-                    RecordForce.dis.insert(i, float(inches))# list of inches traveled
-                    RecordForce.force.insert(i, float(pounds))# list of force traveled
+                    self.gui_record_force_object.elapsed.insert(i, time.time() - start)# list of elapsed time
+                    self.gui_record_force_object.dis.insert(i, float(inches))# list of inches traveled
+                    self.gui_record_force_object.force.insert(i, float(pounds))# list of force traveled
 
                 except:
                     errors.append('data append') # label 
@@ -300,7 +300,7 @@ def run(self, ser):
                 errorCodes.append(eCode)
                 '''
     except:
-        if RecordForce.collect == True:
+        if self.gui_record_force_object.collect == True:
             errors.append('serial disconnect')
             eCode = 'e6'
             errorCodes.append(eCode)
@@ -315,11 +315,12 @@ if __name__ == "__main__":
 
     ''' Main '''
     print("StemBerry is loading.....")
+    address = None
     print("output: address = "+address)
     print("script = "+script)
     print("directory = "+Directories.get_program_dir())
     print("ignoreserial = "+str(ignoreserial))
-    app = GUI() 
+    app = SocemGuiMain() 
     app.run() # INITIATES GUI TO START
     app.title("StemBerry")
     app.geometry("800x480+0+0")

@@ -8,7 +8,7 @@ from src.pass_in import PassIn
 from src.configuration import Config
 
 ''' Figure Interation classes '''
-class SnaptoCursor(object,PassIn):
+class SnaptoCursor(PassIn):
     '''
     Cursor crossshair snaps to nearest x, y point.
     '''

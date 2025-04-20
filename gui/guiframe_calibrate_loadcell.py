@@ -1,6 +1,8 @@
 import tkinter as tk
-
+from src.configuration import Config
+from src.main_funcs import RepeatPageButtons
 #from gui.gui_main import SocemGuiMain
+
 # Load cell calibration page 
 class Calibrate(tk.Frame,):
     
@@ -9,7 +11,7 @@ class Calibrate(tk.Frame,):
         tk.Frame.__init__(self, parent)
         
         ''' GUI design, non-frame '''
-        pageButtons = repeatPageButtons.showButtons(self, parent, controller)
+        pageButtons = RepeatPageButtons.showButtons(self, parent, controller)
         header_label = tk.Label(self, text = "FORCE SENSOR CALIBRATION", font = ("arial", 17, "bold"), fg = "gray3", bg="ghost white")
         tareIt_label = tk.Label(self, text = "1. Tare w/ no weight", font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white")
         inputWeight_label = tk.Label(self, text = "2. Input weight (kg)", font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white")
@@ -31,7 +33,7 @@ class Calibrate(tk.Frame,):
 
         kg = tk.Label(self, text = "kg", font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=140,y=183)
 
-        self.force = self.knownWeight.get() * convert_KgToN # convert known weight kg to N
+        self.force = self.knownWeight.get() * Config.convert_KgToN # convert known weight kg to N
         self.strWeight = str('%.3f' % self.force) # store as string
         self.strForce = tk.StringVar() # for displaying & updating on GUI
         self.strForce.set(self.strWeight) # initial value = self.knownWeight
@@ -48,7 +50,7 @@ class Calibrate(tk.Frame,):
     
         self.calibra = tk.DoubleVar() 
         #self.calibra.set(199750) # initial calibration num. Has been working well. AB.
-        self.calibra.set(calibrationFactor) # initial calibration num. Has been working well. AB.
+        self.calibra.set(Config.calibrationFactor) # initial calibration num. Has been working well. AB.
         #self.calibra.set(1997500) # death to the infidels. CB.
         self.factor = self.calibra.get() 
         self.calibra_entry = tk.Entry(self, textvariable=self.calibra, font = ("arial", 14, "bold"), width= 10, bg="white", fg="gray1")
