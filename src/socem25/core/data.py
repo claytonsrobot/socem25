@@ -2,13 +2,13 @@ import tkinter as tk
 import time
 import threading
 
-#from gui.gui_main import SocemGuiMain
-from src.pass_in import PassIn
-from src.configuration import Config 
-from src.serial_connection import SerialConnection as SC 
+#from socem25.gui.gui_main import SocemGuiMain
+from socem25.core.pass_in import PassIn
+from socem25.core.configuration import Config 
+from socem25.core.serial_connection import SerialConnection as SC 
 
 
-from gui.guiframe_record_force import RecordForce
+from socem25.gui.guiframe_record_force import RecordForce
 class DataFeed(PassIn):
     def datafeed(self):
         #frame = tk.Frame.RecordForce

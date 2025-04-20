@@ -1,11 +1,12 @@
 # __main__.py
-#from src import stemberry
-import src.main_funcs
+#from socem25.core import stemberry
+import socem25.core.main_funcs
 from pprint import pprint as pprint
 def cli_entry():
     try:
         # Launch main
-        src.main.run()()
+        #src.main.run()
+        socem25.core.main_funcs.run()
         #shell.shell.main()
     except Exception as e:
         print(f"An error occurred: {e}")

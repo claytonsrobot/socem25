@@ -8,16 +8,16 @@ Keep directory assignment organized, particularly for using project folders.
 Migrate away from directory amangement in environmental.py
 
 Example:
-from src.directories import Directories
+from socem25.core.directories import Directories
 
 """
 import os
 import inspect
-from src.helpers import toml_utils
-import src.environment as environment
+from socem25.core.helpers import toml_utils
+import socem25.core.environment as environment
 
 class Directories:
-    "from src.directories import Directories"
+    "from socem25.core.directories import Directories"
     program = None
     project = None
     configs = None
@@ -112,7 +112,7 @@ class Directories:
             return True
         
 def bless_this_mess():
-    if src.environment.get_operatingsystem() == 'Windows':
+    if socem25.core.environment.get_operatingsystem() == 'Windows':
         if os.getlogin() == 'clayt':
             address = r'C:\Users\clayton\OneDrive - University of Idaho\AqMEQ\SOCEM\Data - Instron and SOCEM - 2020, 2021\SOCEM_DATA_2021'
             dev_guess = 'COM3' # manual override, windows 10 OS
@@ -121,7 +121,7 @@ def bless_this_mess():
             address = directory + '/SOCEM_data'
             if not os.path.exists(address):
                 os.makedirs(address) 
-    elif src.environment.get_operatingsystem() == 'Linux':
+    elif socem25.core.environment.get_operatingsystem() == 'Linux':
         dev_guess = '/dev/ttyACM0' # manual override raspian OS
         address = '/home/pi/Desktop/SOCEM_data_2022'
     else:

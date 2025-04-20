@@ -1,12 +1,12 @@
 import tkinter as tk
 import time
 
-#from gui.guiframe_final_inputs import gui_final_inputs_object replaced by cls.pass_in_gui_final_inputs_object()
-from src.serial_connection import SerialConnection as SC #import serial_reconnect
-import src.main_funcs
-from src.userclicks import PeakClick 
-from src.configuration import Config
-from src.pass_in import PassIn
+#from socem25.gui.guiframe_final_inputs import gui_final_inputs_object replaced by cls.pass_in_gui_final_inputs_object()
+from socem25.core.serial_connection import SerialConnection as SC #import serial_reconnect
+import socem25.core.main_funcs
+from socem25.core.userclicks import PeakClick 
+from socem25.core.configuration import Config
+from socem25.core.pass_in import PassIn
 '''Classes, Tkinter GUI'''
 # GUI overarching class
 class SocemGuiMain(tk.Tk,PassIn):
@@ -36,19 +36,19 @@ class SocemGuiMain(tk.Tk,PassIn):
         pagemenu = tk.Menu(menubar, tearoff=0)
         
         filemenu.add_command(label='Serial Reconnect', command = lambda:SC.serial_reconnect())
-        filemenu.add_command(label='Choose Output Folder', command = lambda:src.main_funcs.popup_chooseFolder())
-        filemenu.add_command(label='Errors', command = lambda:src.main_funcs.showErrors())
-        filemenu.add_command(label='Save State', command = lambda:src.main_funcs.createBackupFile())
-        filemenu.add_command(label='Restore State', command = lambda:src.main_funcs.restoreState())
-        filemenu.add_command(label="Exit", command = lambda:src.main_funcs.close())
+        filemenu.add_command(label='Choose Output Folder', command = lambda:socem25.core.main_funcs.popup_chooseFolder())
+        filemenu.add_command(label='Errors', command = lambda:socem25.core.main_funcs.showErrors())
+        filemenu.add_command(label='Save State', command = lambda:socem25.core.main_funcs.createBackupFile())
+        filemenu.add_command(label='Restore State', command = lambda:socem25.core.main_funcs.restoreState())
+        filemenu.add_command(label="Exit", command = lambda:socem25.core.main_funcs.close())
         pagemenu.add_command(label="Guide", command=lambda:self.show_frame(self.gui_guide_object))
         pagemenu.add_command(label="Initial Inputs", command=lambda:self.show_frame(self.gui_initial_inputs_object))
         pagemenu.add_command(label="Record Force", command=lambda:self.show_frame(self.gui_record_force_object))
         pagemenu.add_command(label="Post Test Inputs", command=lambda:self.show_frame(self.gui_final_inputs_object))
         pagemenu.add_command(label="Calibrate", command=lambda:self.show_frame(self.gui_calibrate_object))
         pagemenu.add_command(label="Stem Count PreTest, Classic", command=lambda:self.show_frame(self.gui_stem_count_classic_object))
-        datamenu.add_command(label="Data Feed Display, On", command = lambda:src.main_funcs.data_display(True))
-        datamenu.add_command(label="Data Feed Display, Off", command = lambda:src.main_funcs.data_display(False))
+        datamenu.add_command(label="Data Feed Display, On", command = lambda:socem25.core.main_funcs.data_display(True))
+        datamenu.add_command(label="Data Feed Display, Off", command = lambda:socem25.core.main_funcs.data_display(False))
 
         menubar.add_cascade(label='File', menu=filemenu)
         menubar.add_cascade(label="Pages", menu=pagemenu)

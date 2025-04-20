@@ -1,10 +1,10 @@
 import datetime
 import time
 
-import src.environment
-from src.environment import Env
+import socem25.core.environment
+from socem25.core.environment import Env
 #from gui_main import SocemGuiMain
-from src.pass_in import PassIn
+from socem25.core.pass_in import PassIn
 
 
 class Backup(PassIn):

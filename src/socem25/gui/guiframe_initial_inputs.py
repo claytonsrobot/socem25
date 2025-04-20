@@ -2,12 +2,12 @@ import csv
 from itertools import zip_longest
 import tkinter as tk
 
-#from gui.gui_main import SocemGuiMain
-from src.pass_in import PassIn
-from src.serial_connection import SerialConnection as SC
-from gui.gui_main import RepeatPageButtons
-from src.configuration import Config
-import src.main_funcs
+#from socem25.gui.gui_main import SocemGuiMain
+from socem25.core.pass_in import PassIn
+from socem25.core.serial_connection import SerialConnection as SC
+from socem25.gui.gui_main import RepeatPageButtons
+from socem25.core.configuration import Config
+import socem25.core.main_funcs
 #Home page
 class InitialInputs(tk.Frame,PassIn):
     def __init__(self, parent, controller): # automatically runs
@@ -111,11 +111,11 @@ class InitialInputs(tk.Frame,PassIn):
         startRange2.append(self.gui_main_object.startRange2.get())
         startRange3.append(self.gui_main_object.startRange3.get())
         
-        src.main_funcs.update_filename_preTest()
+        socem25.core.main_funcs.update_filename_preTest()
         filename_preTest_csv = self.gui_main_object.address + '/' + self.gui_main_object.filename_preTest.get() + '.csv'
 
-        if src.main_funcs.overwriteGuard(filename_preTest_csv) == True: # filename already exists, needs to be renamed
-            src.main_funcs.rename(self.gui_main_object.filename_preTest.get()) # prompt user to rename file  
+        if socem25.core.main_funcs.overwriteGuard(filename_preTest_csv) == True: # filename already exists, needs to be renamed
+            socem25.core.main_funcs.rename(self.gui_main_object.filename_preTest.get()) # prompt user to rename file  
         ''' write CSV'''
         self.gui_main_object.data_preTest = [variety, plot, stemheight, barbottom, barmiddle, startRange1, startRange2, startRange3]
         columns_data_preTest = zip_longest(*self.gui_main_object.data_preTest)

@@ -8,8 +8,8 @@ import platform
 import toml
 from pprint import pprint
 
-import src.helpers.toml_utils
-from src.directories import Directories
+import socem25.core.helpers.toml_utils
+from socem25.core.directories import Directories
 
 class Config:
     defaultstemcount = 25

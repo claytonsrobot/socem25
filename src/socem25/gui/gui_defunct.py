@@ -1,5 +1,5 @@
 import tkinter as tk
-from gui.gui_main import RepeatPageButtons
+from socem25.gui.gui_main import RepeatPageButtons
 
 class StemCountClassic(tk.Frame):
     def __init__(self, parent, controller): # automatically runs

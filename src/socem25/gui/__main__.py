@@ -1,6 +1,6 @@
 # __main__.py
-from gui.gui_main import SocemGuiMain
-from src.directories import Directories
+from socem25.gui.gui_main import SocemGuiMain
+from socem25.core.directories import Directories
 def cli_entry():
     #try:
     if True:

@@ -49,7 +49,7 @@ import os
 from user_input import UserInput as userInput_class
 #from gui_export_control import GuiExportControl
 #window_export_control = GuiExportControl.window_export_control
-from src.directories import Directories
+from socem25.core.directories import Directories
 
 #pd.options.display.max_columns = None
 #pd.options.display.max_rows = None

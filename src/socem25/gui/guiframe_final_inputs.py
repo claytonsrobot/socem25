@@ -4,12 +4,12 @@ import pandas as pd
 import time
 import csv
 
-import src.physics.ei_interaction_error_management
-import src.physics.ei_no_interaction_error_management
-import src.main_funcs
-from src.configuration import Config
-from gui.gui_main import RepeatPageButtons
-from src.pass_in import PassIn
+import socem25.core.physics.ei_interaction_error_management
+import socem25.core.physics.ei_no_interaction_error_management
+import socem25.core.main_funcs
+from socem25.core.configuration import Config
+from socem25.gui.gui_main import RepeatPageButtons
+from socem25.core.pass_in import PassIn
 
 class FinalInputs(tk.Frame,PassIn):
     @classmethod
@@ -262,8 +262,8 @@ class FinalInputs(tk.Frame,PassIn):
         FinalInputs.count8.insert(0,"count_cell8")
         FinalInputs.count9.insert(0,"count_cell9")
         
-        if src.main_funcs.overwriteGuardPage(filename_postTest_csv) == True: # filename already exists, needs to be renamed
-            src.main_funcs.renamePage(self.gui_main_object.filename_postTest.get()) # prompt user to rename file
+        if socem25.core.main_funcs.overwriteGuardPage(filename_postTest_csv) == True: # filename already exists, needs to be renamed
+            socem25.core.main_funcs.renamePage(self.gui_main_object.filename_postTest.get()) # prompt user to rename file
         ''' write CSV'''
 
         self.gui_main_object.data_postTest = [FinalInputs.diam1,FinalInputs.diam2,FinalInputs.diam3,FinalInputs.diam4,FinalInputs.diam5,FinalInputs.diam6,FinalInputs.diam7,FinalInputs.diam8,FinalInputs.diam9,FinalInputs.mass1,FinalInputs.mass2,FinalInputs.mass3,FinalInputs.mass4,FinalInputs.mass5,FinalInputs.mass6,FinalInputs.mass7,FinalInputs.mass8,FinalInputs.mass9,FinalInputs.count1,FinalInputs.count2,FinalInputs.count3,FinalInputs.count4,FinalInputs.count5,FinalInputs.count6,FinalInputs.count7,FinalInputs.count8,FinalInputs.count9]
@@ -292,9 +292,9 @@ class FinalInputs(tk.Frame,PassIn):
         #print("saved:", filename_EI_csv)
         
     def compileNineCellData(self):
-        src.main_funcs.createBackupFile() # fix below # numbers are for lbs, not newtons
+        socem25.core.main_funcs.createBackupFile() # fix below # numbers are for lbs, not newtons
         if Config.importFileDataTF == True:
-            src.main_funcs.importFileData()
+            socem25.core.main_funcs.importFileData()
         self.gui_main_object.peaks_force = [self.gui_main_object.peak_force_cell1, self.gui_main_object.peak_force_cell2, self.gui_main_object.peak_force_cell3, self.gui_main_object.peak_force_cell4, self.gui_main_object.peak_force_cell5, self.gui_main_object.peak_force_cell6, self.gui_main_object.peak_force_cell7, self.gui_main_object.peak_force_cell8, self.gui_main_object.peak_force_cell9]
         self.gui_main_object.peaks_distance = [self.gui_main_object.peak_distance_cell1, self.gui_main_object.peak_distance_cell2, self.gui_main_object.peak_distance_cell3, self.gui_main_object.peak_distance_cell4, self.gui_main_object.peak_distance_cell5, self.gui_main_object.peak_distance_cell6, self.gui_main_object.peak_distance_cell7, self.gui_main_object.peak_distance_cell8, self.gui_main_object.peak_distance_cell9]
         self.gui_main_object.peaks_time = [self.gui_main_object.peak_time_cell1, self.gui_main_object.peak_time_cell2, self.gui_main_object.peak_time_cell3, self.gui_main_object.peak_time_cell4, self.gui_main_object.peak_time_cell5, self.gui_main_object.peak_time_cell6, self.gui_main_object.peak_time_cell7, self.gui_main_object.peak_time_cell8, self.gui_main_object.peak_time_cell9] 
@@ -329,11 +329,11 @@ class FinalInputs(tk.Frame,PassIn):
         #try:
         #if stemcount > 0:
         stemspacing_average = 1/(stemcount/Config.barlength)
-        EI_fullcontact = src.physics.ei_interaction_error_management.EI_Interaction(peak_force, stemheight, barbottom,stemspacing_average) # uses clicked forces (Y axis), force bar height, horizontal plot heights, and count density
-        EI_nocontact = src.physics.ei_no_interaction_error_management.ei_calc_no(peak_force, stemheight, barbottom, stemspacing_average) # the x value of the click does nothing other than find the nearest height from horz. It is not factored in to the number of beams or the character of the beams. 
+        EI_fullcontact = socem25.core.physics.ei_interaction_error_management.EI_Interaction(peak_force, stemheight, barbottom,stemspacing_average) # uses clicked forces (Y axis), force bar height, horizontal plot heights, and count density
+        EI_nocontact = socem25.core.physics.ei_no_interaction_error_management.ei_calc_no(peak_force, stemheight, barbottom, stemspacing_average) # the x value of the click does nothing other than find the nearest height from horz. It is not factored in to the number of beams or the character of the beams. 
         EI_intermediatecontact = (EI_fullcontact + EI_nocontact)/2
-        src.physics.ei_interaction_error_management.clear_all()
-        src.physics.ei_no_interaction_error_management.clear_all()
+        socem25.core.physics.ei_interaction_error_management.clear_all()
+        socem25.core.physics.ei_no_interaction_error_management.clear_all()
         #except:
         #else:
         #    print('stemcount=0. Please input stemcount value.')
@@ -412,13 +412,13 @@ class FinalInputs(tk.Frame,PassIn):
         background_box = tk.Label(self, text="This is hidden text meant to cover up old text.", font = ("arial", 14, "bold"), fg = "ghost white", bg="ghost white")
         background_box.place(x=0,y=0)
         # Update stringname of postTest file, based on filename_force, if it exists. 
-        filename_postTest = src.main_funcs.nameBlackBox("postTest",self.gui_main_object.filename_postTest.get())
+        filename_postTest = socem25.core.main_funcs.nameBlackBox("postTest",self.gui_main_object.filename_postTest.get())
         self.gui_main_object.filename_postTest.set(filename_postTest)
 
         # update filename text field, even if force page is never activated
         if (self.gui_main_object.varietyname.get()!="" or self.gui_main_object.plotname.get()!="") and (self.gui_main_object.passfillednames_checkbox.get()==1): # checks if a varietyname or plotname has been given
             self.gui_record_force_object.nameFresh(self.gui_main_object.varietyname.get(),self.gui_main_object.plotname.get()) # if so, autopopulate the basic filestructure
-        filename_force = src.main_funcs.nameBlackBox("",self.gui_main_object.filename_force.get())
+        filename_force = socem25.core.main_funcs.nameBlackBox("",self.gui_main_object.filename_force.get())
         self.gui_main_object.filename_force.set(filename_force)
         
 

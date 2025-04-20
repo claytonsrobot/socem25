@@ -5,8 +5,9 @@ import threading
 import time
 import tkinter as tk
 
-#from gui.gui_main import SocemGuiMain
-from src.pass_in import PassIn
+from socem25.gui.gui_main import RepeatPageButtons
+from socem25.core.pass_in import PassIn
+import socem25.core.main_funcs
 
 # Data collection page
 class RecordForce(tk.Frame,PassIn):
@@ -25,10 +26,10 @@ class RecordForce(tk.Frame,PassIn):
         RecordForce.container = tk.Frame(self)
         
         ''' GUI design, non-frame '''
-        pageButtons = repeatPageButtons.showButtons(self, parent, controller)
+        pageButtons = RepeatPageButtons.showButtons(self, parent, controller)
         title = tk.Label(self, text ="RECORD FORCE", font = ("arial", 17, "bold"), fg = "gray3", bg="ghost white")
         filename_label = tk.Label(self, text = "Filename: ", font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white")
-        filename_entryBox = tk.Entry(self, textvariable=gui_main_object.filename_force, font = ("arial", 14, "bold"), width="32", bg="white", fg="gray1")
+        filename_entryBox = tk.Entry(self, textvariable=self.gui_main_object.filename_force, font = ("arial", 14, "bold"), width="32", bg="white", fg="gray1")
         self.checkAutoGraph = tk.IntVar() # on/off control of auto graph after stopping & saving data
         #self.checkAutoGraph.set(1)
         self.checkAutoGraph.set(0)
@@ -56,7 +57,7 @@ class RecordForce(tk.Frame,PassIn):
         side2TestButton = tk.Button(nameset_frame, text = "Side 2", font = ("arial", 16, "bold"), height = 1, width = 6, fg = "ghost white", bg = "red4",command=lambda:self.nameSide2())
         side3TestButton = tk.Button(nameset_frame, text = "Side 3", font = ("arial", 16, "bold"), height = 1, width = 6,fg = "ghost white", bg = "red4",command=lambda:self.nameSide3())
         forwardTestButton = tk.Button(nameset_frame, text = "Forward", font = ("arial", 16, "bold"), height = 1, width = 6, fg = "ghost white", bg = "red4",command=lambda:self.nameForward())
-        increment_button = tk.Button(nameset_frame, text = "+1", font = ("arial", 16, "bold"), height = 1, width = 6, fg = "ghost white", bg = "purple4",command=lambda:self.incrementName_Force(gui_main_object.filename_force.get()))
+        increment_button = tk.Button(nameset_frame, text = "+1", font = ("arial", 16, "bold"), height = 1, width = 6, fg = "ghost white", bg = "purple4",command=lambda:self.incrementName_Force(self.gui_main_object.filename_force.get()))
         
         side1TestButton.grid(row=0, column=0)
         side2TestButton.grid(row=1, column=0)
@@ -85,34 +86,34 @@ class RecordForce(tk.Frame,PassIn):
 
     def nameForward(self):
         direction = "forward"
-        filename_force = nameBlackBox(direction,gui_main_object.filename_force.get())
-        gui_main_object.filename_force.set(filename_force)
-        gui_main_object.currentdirection.set(direction)
+        filename_force = socem25.core.main_funcs.nameBlackBox(direction,self.gui_main_object.filename_force.get())
+        self.gui_main_object.filename_force.set(filename_force)
+        self.gui_main_object.currentdirection.set(direction)
     def nameSide1(self):
         direction = "side1"
-        filename_force = nameBlackBox(direction,gui_main_object.filename_force.get())
-        gui_main_object.filename_force.set(filename_force)
-        gui_main_object.currentdirection.set(direction)
+        filename_force = socem25.core.main_funcs.nameBlackBox(direction,self.gui_main_object.filename_force.get())
+        self.gui_main_object.filename_force.set(filename_force)
+        self.gui_main_object.currentdirection.set(direction)
     def nameSide2(self):
         direction = "side2"
-        filename_force = nameBlackBox(direction,gui_main_object.filename_force.get())
-        gui_main_object.filename_force.set(filename_force)
-        gui_main_object.currentdirection.set(direction)
+        filename_force = socem25.core.main_funcs.nameBlackBox(direction,self.gui_main_object.filename_force.get())
+        self.gui_main_object.filename_force.set(filename_force)
+        self.gui_main_object.currentdirection.set(direction)
     def nameSide3(self):
         direction = "side3"
-        filename_force = nameBlackBox(direction,gui_main_object.filename_force.get())
-        gui_main_object.filename_force.set(filename_force)
-        gui_main_object.currentdirection.set(direction)
+        filename_force = socem25.core.main_funcs.nameBlackBox(direction,self.gui_main_object.filename_force.get())
+        self.gui_main_object.filename_force.set(filename_force)
+        self.gui_main_object.currentdirection.set(direction)
     def nameFresh(varietyname,plotname):
         direction = ""
-        filename_force = nameBlackBox(direction,gui_main_object.filename_force.get())
-        gui_main_object.filename_force.set(filename_force)
+        filename_force = socem25.core.main_funcs.nameBlackBox(direction,self.gui_main_object.filename_force.get())
+        self.gui_main_object.filename_force.set(filename_force)
         set(direction)
     
     def clearDisplay():
         time.sleep(0.3)
         print('You hit the "Clear" button. Please develop clearDisplay().')
-        gui_main_object.refreshAll()
+        self.gui_main_object.refreshAll()
         '''
         try:
             RecordForce.Forcelist.delete(0, 'end')
@@ -125,7 +126,7 @@ class RecordForce(tk.Frame,PassIn):
         
     def incrementName_Force(self,filename):
         newName = incrementName(filename)
-        gui_main_object.filename_force.set(newName)
+        self.gui_main_object.filename_force.set(newName)
     
         
     # calls run function (for collecting Arduino data) to run in backend while GUI runs in frontend     
@@ -134,7 +135,7 @@ class RecordForce(tk.Frame,PassIn):
         unix_now = time.mktime(now.timetuple())
         time.sleep(0.4) # for visual effect
         #threading run function (simultaneously performs run function in backend)
-        if gui_main_object.ignoreserial == False:
+        if self.gui_main_object.ignoreserial == False:
             if RecordForce.ser.isOpen() == False:
                RecordForce.ser.open()
             RecordForce.legacy = False # bebee frankserial, lez go, 08/31/2022
@@ -147,7 +148,7 @@ class RecordForce(tk.Frame,PassIn):
                 thread2_visualizeData = threading.Thread(target = datafeed,args=(RecordForce.container))
                 thread2_visualizeData.start()
         else:
-            print("Data collection not run, because gui_main_object.ignoreserial ==",str(gui_main_object.ignoreserial),"...")
+            print("Data collection not run, because self.gui_main_object.ignoreserial ==",str(self.gui_main_object.ignoreserial),"...")
 
     # saves raw force data # Bebee legacy method
     def start():
@@ -174,9 +175,9 @@ class RecordForce(tk.Frame,PassIn):
             errorCodes.append(eCode)
         finally:
             
-            gui_main_object.timeElapsed = RecordForce.elapsed
-            gui_main_object.distanceTraveled = RecordForce.dis
-            gui_main_object.forcePushed = RecordForce.force
+            self.gui_main_object.timeElapsed = RecordForce.elapsed
+            self.gui_main_object.distanceTraveled = RecordForce.dis
+            self.gui_main_object.forcePushed = RecordForce.force
             RecordForce.saveForce()# run the Save Raw Data function
 
         
@@ -190,9 +191,9 @@ class RecordForce(tk.Frame,PassIn):
         RecordForce.hasSentStop = False
         RecordForce.hasStopped = False
         # wipe vars
-        gui_main_object.forcePushed = []
-        gui_main_object.distanceTraveled = []
-        gui_main_object.timeElapsed = []
+        self.gui_main_object.forcePushed = []
+        self.gui_main_object.distanceTraveled = []
+        self.gui_main_object.timeElapsed = []
         RecordForce.datastream = []
         #thread2_count_stop.start()
         while RecordForce.hasStarted == False: # len(line)==0
@@ -233,14 +234,14 @@ class RecordForce(tk.Frame,PassIn):
                     RecordForce.allocateNineCellData() # what is this for, nine cell stuff?
                     '''
         RecordForce.ser.close()
-        print("Test runtime: ",max(gui_main_object.timeElapsed)," seconds.") # /1000
+        print("Test runtime: ",max(self.gui_main_object.timeElapsed)," seconds.") # /1000
                         
     def stopAndSave():
         if RecordForce.legacy == True:
             RecordForce.stop()
         else:
             time.sleep(.1)
-            if gui_main_object.ignoreserial == False:
+            if self.gui_main_object.ignoreserial == False:
                     
                 testForNineCellFilename()
                 if RecordForce.ser.isOpen():
@@ -253,20 +254,20 @@ class RecordForce(tk.Frame,PassIn):
                     
                 RecordForce.saveForce()
             else:
-                print("File not saved. gui_main_object.ignoreserial == True.")
+                print("File not saved. self.gui_main_object.ignoreserial == True.")
 
     def saveForce():
         createBackupFile()
         # force data filename
-        filename_force = gui_main_object.filename_force.get()
-        filename_force_csv = gui_main_object.address + '/' + (gui_main_object.filename_force.get()) + '.csv'
-        if src.main_funcs.overwriteGuard(filename_force_csv) == True: # filename already exists, needs to be renamed
+        filename_force = self.gui_main_object.filename_force.get()
+        filename_force_csv = self.gui_main_object.address + '/' + (self.gui_main_object.filename_force.get()) + '.csv'
+        if socem25.core.main_funcs.overwriteGuard(filename_force_csv) == True: # filename already exists, needs to be renamed
             rename(filename_force) # prompt user to rename file
 
         #ave. SOCEM velocity
         avelocity = ["AvgTravelVelocity(cm/s)"]
         try:
-            travelvelocity = max(gui_main_object.distanceTraveled)/(max(gui_main_object.timeElapsed)) #cm/s # /1000
+            travelvelocity = max(self.gui_main_object.distanceTraveled)/(max(self.gui_main_object.timeElapsed)) #cm/s # /1000
             avelocity.append(travelvelocity)
         except:
             travelvelocity=0
@@ -276,8 +277,8 @@ class RecordForce(tk.Frame,PassIn):
         sampling=["SamplingRate(Hz)"]
         hz = list()
         try:
-            for i in range(len(gui_main_object.distanceTraveled)-1):
-                change = gui_main_object.timeElapsed[i+1] - gui_main_object.timeElapsed[i] # ms
+            for i in range(len(self.gui_main_object.distanceTraveled)-1):
+                change = self.gui_main_object.timeElapsed[i+1] - self.gui_main_object.timeElapsed[i] # ms
                 hz.append(change)
             rate = sum(hz)/len(hz) # why flip? 
             sampling.append(1/rate) # why flip?
@@ -285,19 +286,19 @@ class RecordForce(tk.Frame,PassIn):
             rate = 0
             sampling.append(0)
 
-        gui_main_object.travelvelocity = travelvelocity
-        gui_main_object.samplingrate = 1/rate # changed from 1/rate, to avoid a divide by zero error
+        self.gui_main_object.travelvelocity = travelvelocity
+        self.gui_main_object.samplingrate = 1/rate # changed from 1/rate, to avoid a divide by zero error
 
         RecordForce.sidehit_peakclick_do()
                 
-        if gui_main_object.ignoreserial == False and len(gui_main_object.forcePushed)>0:
-            gui_main_object.distanceTraveled.insert(0, "Distance(cm)")
-            gui_main_object.forcePushed.insert(0, "Force(N)")
-            gui_main_object.timeElapsed.insert(0 , "Time(sec)")
+        if self.gui_main_object.ignoreserial == False and len(self.gui_main_object.forcePushed)>0:
+            self.gui_main_object.distanceTraveled.insert(0, "Distance(cm)")
+            self.gui_main_object.forcePushed.insert(0, "Force(N)")
+            self.gui_main_object.timeElapsed.insert(0 , "Time(sec)")
 
             ''' write CSV'''
-            gui_main_object.data_recordForce = [gui_main_object.timeElapsed,gui_main_object.distanceTraveled, gui_main_object.forcePushed, avelocity, sampling,RecordForce.peaks_force,RecordForce.peaks_distance,RecordForce.peaks_time]
-            columns_data_recordForce = zip_longest(*gui_main_object.data_recordForce)
+            self.gui_main_object.data_recordForce = [self.gui_main_object.timeElapsed,self.gui_main_object.distanceTraveled, self.gui_main_object.forcePushed, avelocity, sampling,RecordForce.peaks_force,RecordForce.peaks_distance,RecordForce.peaks_time]
+            columns_data_recordForce = zip_longest(*self.gui_main_object.data_recordForce)
             with open(filename_force_csv,'w',newline='') as f:
                 writer = csv.writer(f)
                 writer.writerows(columns_data_recordForce)
@@ -305,14 +306,14 @@ class RecordForce(tk.Frame,PassIn):
             print("filename_force_csv = "+filename_force_csv)
             
             # tell user raw data was saved
-            #print("File saved: "+gui_main_object.filename_force.get()+".csv\n")
+            #print("File saved: "+self.gui_main_object.filename_force.get()+".csv\n")
             try:
                 forceSaved_label = tk.Label(RecordForce.msgbox, text = "Force data saved.", font = ("arial", 14, "bold"), fg = "dodgerblue3", bg = "ghost white")
                 #forceSaved_label = tk.Label(RecordForce.msgbox, text = "Force data saved.", font = ("arial", 14, "bold"), fg = "dodgerblue3", bg = "ghost white").grid(row=0, column=0)
             except:
                 print("attempt to generate in-window forceSaved_label messsage. fail, dave.")
         else:
-            print("Force data not saved. gui_main_object.ignoreserial = "+str(gui_main_object.ignoreserial)+". len(gui_main_object.forcePushed) = ",len(gui_main_object.forcePushed))
+            print("Force data not saved. self.gui_main_object.ignoreserial = "+str(self.gui_main_object.ignoreserial)+". len(self.gui_main_object.forcePushed) = ",len(self.gui_main_object.forcePushed))
             
         #RecordForce.clearDisplay()
         '''
@@ -320,9 +321,9 @@ class RecordForce(tk.Frame,PassIn):
         '''
         '''
         Why clear?
-        gui_main_object.timeElapsed.clear()
-        gui_main_object.forcePushed.clear()
-        gui_main_object.distanceTraveled.clear()
+        self.gui_main_object.timeElapsed.clear()
+        self.gui_main_object.forcePushed.clear()
+        self.gui_main_object.distanceTraveled.clear()
         avelocity.clear()
         hz.clear()
         sampling.clear()
@@ -340,12 +341,12 @@ class RecordForce(tk.Frame,PassIn):
         if not plt.get_fignums():#if graph figure was closed, reset legend
             self.legends.clear()
             #print("new fig who dis")
-        self.legends.append(gui_main_object.filename_force.get())#add current filename to legend
+        self.legends.append(self.gui_main_object.filename_force.get())#add current filename to legend
         #fig = plt.figure(figsize=(8,4.8)) #fig size control 
         #plots force displacement graph
-        print("len(gui_main_object.distanceTraveled) = ",len(gui_main_object.distanceTraveled))
-        if self.checkAutoGraph.get() == 1 and len(gui_main_object.distanceTraveled)>5 and gui_main_object.ignoreserial == False:
-            plt.plot(gui_main_object.distanceTraveled, GUI,forcePushed)
+        print("len(self.gui_main_object.distanceTraveled) = ",len(self.gui_main_object.distanceTraveled))
+        if self.checkAutoGraph.get() == 1 and len(self.gui_main_object.distanceTraveled)>5 and self.gui_main_object.ignoreserial == False:
+            plt.plot(self.gui_main_object.distanceTraveled, GUI,forcePushed)
             plt.xlabel("Distance (cm)")
             plt.ylabel("Force (N)")
             plt.title(filename.get())
@@ -353,26 +354,26 @@ class RecordForce(tk.Frame,PassIn):
             plt.axis = ([min(distance), max(distance), min(force), max(force)])
             plt.show()
         else:
-            print("There is no data to graph. Try gui_main_object.ignoreserial = False, in StemBerry.")
+            print("There is no data to graph. Try self.gui_main_object.ignoreserial = False, in StemBerry.")
         '''
     def sidehit_peakclick_do():
         RecordForce.peaks_force,RecordForce.peaks_distance,RecordForce.peaks_time= [],[],[]
         # currently only lauches click assessment for side1, side2, side3
-        #print("gui_main_object.currentdirection = ",gui_main_object.currentdirection.get())
-        #print("len(gui_main_object.forcePushed) = ",len(gui_main_object.forcePushed))
-        if (assessAllTests == True) or (gui_main_object.currentdirection.get() == "side1") or (gui_main_object.currentdirection.get() == "side2") or (gui_main_object.currentdirection.get() == "side3"): 
+        #print("self.gui_main_object.currentdirection = ",self.gui_main_object.currentdirection.get())
+        #print("len(self.gui_main_object.forcePushed) = ",len(self.gui_main_object.forcePushed))
+        if (assessAllTests == True) or (self.gui_main_object.currentdirection.get() == "side1") or (self.gui_main_object.currentdirection.get() == "side2") or (self.gui_main_object.currentdirection.get() == "side3"): 
         #if True:
-            if len(gui_main_object.forcePushed)>0:
-                variety_plotname_detail = gui_main_object.filename_force.get()
+            if len(self.gui_main_object.forcePushed)>0:
+                variety_plotname_detail = self.gui_main_object.filename_force.get()
                 RecordForce.plotshown = True
                 RecordForce.closedplt = False
                 RecordForce.thread3_plotchecker = threading.Thread(target = RecordForce.plotchecker)
                 RecordForce.thread3_plotchecker.start()
-                PeakClick.peakclick_do(gui_main_object.forcePushed,gui_main_object.distanceTraveled,gui_main_object.timeElapsed,gui_main_object.filename_force.get(),gui_main_object.address,gui_main_object.travelvelocity)
+                PeakClick.peakclick_do(self.gui_main_object.forcePushed,self.gui_main_object.distanceTraveled,self.gui_main_object.timeElapsed,self.gui_main_object.filename_force.get(),self.gui_main_object.address,self.gui_main_object.travelvelocity)
                 #RecordForce.peaks_force,RecordForce.peaks_distance,RecordForce.peaks_time = peakclick.peaks_force,peakclick.peaks_distance,peakclick.peaks_time
                 # RecordForce.sortClicks(RecordForce.peaks_force,RecordForce.peaks_distance,RecordForce.peaks_time)
             else:
-                print("PeaksClick figure not triggered because len(gui_main_object.forcePushed) = 0.")
+                print("PeaksClick figure not triggered because len(self.gui_main_object.forcePushed) = 0.")
     def plotchecker():
         while RecordForce.plotshown == True:
             time.sleep(.1)
@@ -389,19 +390,19 @@ class RecordForce(tk.Frame,PassIn):
 
     def sortClicks():
         '''
-        if gui_main_object.currentdirection.get() == "side1":
+        if self.gui_main_object.currentdirection.get() == "side1":
             if len(RecordForce.peaks_force) == 3:
-                gui_main_object.peak_force_cell1, gui_main_object.peak_force_cell2, gui_main_object.peak_force_cell3 = RecordForce.peaks_force[0],RecordForce.peaks_force[1],RecordForce.peaks_force[2]
+                self.gui_main_object.peak_force_cell1, self.gui_main_object.peak_force_cell2, self.gui_main_object.peak_force_cell3 = RecordForce.peaks_force[0],RecordForce.peaks_force[1],RecordForce.peaks_force[2]
             elif len(RecordForce.peaks_force) == 4:
-                gui_main_object.peak_force_cell1, gui_main_object.peak_force_cell2, gui_main_object.peak_force_cell3 = RecordForce.peaks_force[1],RecordForce.peaks_force[2],RecordForce.peaks_force[3]
+                self.gui_main_object.peak_force_cell1, self.gui_main_object.peak_force_cell2, self.gui_main_object.peak_force_cell3 = RecordForce.peaks_force[1],RecordForce.peaks_force[2],RecordForce.peaks_force[3]
             if len(RecordForce.peaks_distance) == 3:
-                gui_main_object.peak_distance_cell1, gui_main_object.peak_distance_cell2, gui_main_object.peak_distance_cell3 = RecordForce.peaks_distance[0],RecordForce.peaks_distance[1],RecordForce.peaks_distance[2]
+                self.gui_main_object.peak_distance_cell1, self.gui_main_object.peak_distance_cell2, self.gui_main_object.peak_distance_cell3 = RecordForce.peaks_distance[0],RecordForce.peaks_distance[1],RecordForce.peaks_distance[2]
             elif len(RecordForce.peaks_distance) == 4:
-                gui_main_object.peak_distance_cell1, gui_main_object.peak_distance_cell2, gui_main_object.peak_distance_cell3 = RecordForce.peaks_distance[1],RecordForce.peaks_distance[2],RecordForce.peaks_distance[3]
+                self.gui_main_object.peak_distance_cell1, self.gui_main_object.peak_distance_cell2, self.gui_main_object.peak_distance_cell3 = RecordForce.peaks_distance[1],RecordForce.peaks_distance[2],RecordForce.peaks_distance[3]
             if len(RecordForce.peaks_time) == 3:
-                gui_main_object.peak_time_cell1, gui_main_object.peak_time_cell2, gui_main_object.peak_time_cell3=RecordForce.peaks_time[0],RecordForce.peaks_time[1],RecordForce.peaks_time[2]
+                self.gui_main_object.peak_time_cell1, self.gui_main_object.peak_time_cell2, self.gui_main_object.peak_time_cell3=RecordForce.peaks_time[0],RecordForce.peaks_time[1],RecordForce.peaks_time[2]
             elif len(RecordForce.peaks_time) == 4:
-                 gui_main_object.peak_time_cell1, gui_main_object.peak_time_cell2, gui_main_object.peak_time_cell3=RecordForce.peaks_time[1],RecordForce.peaks_time[2],RecordForce.peaks_time[3]
+                 self.gui_main_object.peak_time_cell1, self.gui_main_object.peak_time_cell2, self.gui_main_object.peak_time_cell3=RecordForce.peaks_time[1],RecordForce.peaks_time[2],RecordForce.peaks_time[3]
 
         '''
         print("RecordForce.peaks_force = ",RecordForce.peaks_force)
@@ -409,57 +410,57 @@ class RecordForce(tk.Frame,PassIn):
         # clicks must be done in order
         # only for nine cell
         # cell numbers should be switched to be 123, 456, 789; not 147, 258, 369
-        if gui_main_object.currentdirection.get() == "side1":
+        if self.gui_main_object.currentdirection.get() == "side1":
             if len(RecordForce.peaks_force) == 3:
-                gui_main_object.peak_force_cell1, gui_main_object.peak_force_cell4, gui_main_object.peak_force_cell7 = RecordForce.peaks_force[0],RecordForce.peaks_force[1],RecordForce.peaks_force[2]
+                self.gui_main_object.peak_force_cell1, self.gui_main_object.peak_force_cell4, self.gui_main_object.peak_force_cell7 = RecordForce.peaks_force[0],RecordForce.peaks_force[1],RecordForce.peaks_force[2]
             elif len(RecordForce.peaks_force) == 4:
-                gui_main_object.peak_force_cell1, gui_main_object.peak_force_cell4, gui_main_object.peak_force_cell7 = RecordForce.peaks_force[1],RecordForce.peaks_force[2],RecordForce.peaks_force[3]
+                self.gui_main_object.peak_force_cell1, self.gui_main_object.peak_force_cell4, self.gui_main_object.peak_force_cell7 = RecordForce.peaks_force[1],RecordForce.peaks_force[2],RecordForce.peaks_force[3]
             else:
-                gui_main_object.peak_force_cell1, gui_main_object.peak_force_cell4, gui_main_object.peak_force_cell7 = RecordForce.peaks_force[0],RecordForce.peaks_force[1],RecordForce.peaks_force[2]
+                self.gui_main_object.peak_force_cell1, self.gui_main_object.peak_force_cell4, self.gui_main_object.peak_force_cell7 = RecordForce.peaks_force[0],RecordForce.peaks_force[1],RecordForce.peaks_force[2]
             if len(RecordForce.peaks_distance) == 3:
-                gui_main_object.peak_distance_cell1, gui_main_object.peak_distance_cell4, gui_main_object.peak_distance_cell7 = RecordForce.peaks_distance[0],RecordForce.peaks_distance[1],RecordForce.peaks_distance[2]
+                self.gui_main_object.peak_distance_cell1, self.gui_main_object.peak_distance_cell4, self.gui_main_object.peak_distance_cell7 = RecordForce.peaks_distance[0],RecordForce.peaks_distance[1],RecordForce.peaks_distance[2]
             elif len(RecordForce.peaks_distance) == 4:
-                gui_main_object.peak_distance_cell1, gui_main_object.peak_distance_cell4, gui_main_object.peak_distance_cell7 = RecordForce.peaks_distance[1],RecordForce.peaks_distance[2],RecordForce.peaks_distance[3]
+                self.gui_main_object.peak_distance_cell1, self.gui_main_object.peak_distance_cell4, self.gui_main_object.peak_distance_cell7 = RecordForce.peaks_distance[1],RecordForce.peaks_distance[2],RecordForce.peaks_distance[3]
             
             if len(RecordForce.peaks_time) == 3:
-                gui_main_object.peak_time_cell1, gui_main_object.peak_time_cell4, gui_main_object.peak_time_cell7=RecordForce.peaks_time[0],RecordForce.peaks_time[1],RecordForce.peaks_time[2]
+                self.gui_main_object.peak_time_cell1, self.gui_main_object.peak_time_cell4, self.gui_main_object.peak_time_cell7=RecordForce.peaks_time[0],RecordForce.peaks_time[1],RecordForce.peaks_time[2]
             elif len(RecordForce.peaks_time) == 4:
-                 gui_main_object.peak_time_cell1, gui_main_object.peak_time_cell4, gui_main_object.peak_time_cell7=RecordForce.peaks_time[1],RecordForce.peaks_time[2],RecordForce.peaks_time[3]
-        elif gui_main_object.currentdirection.get() == "side2":
+                 self.gui_main_object.peak_time_cell1, self.gui_main_object.peak_time_cell4, self.gui_main_object.peak_time_cell7=RecordForce.peaks_time[1],RecordForce.peaks_time[2],RecordForce.peaks_time[3]
+        elif self.gui_main_object.currentdirection.get() == "side2":
             if len(RecordForce.peaks_force) == 3:
-                gui_main_object.peak_force_cell2, gui_main_object.peak_force_cell5, gui_main_object.peak_force_cell8 = RecordForce.peaks_force[0],RecordForce.peaks_force[1],RecordForce.peaks_force[2]
+                self.gui_main_object.peak_force_cell2, self.gui_main_object.peak_force_cell5, self.gui_main_object.peak_force_cell8 = RecordForce.peaks_force[0],RecordForce.peaks_force[1],RecordForce.peaks_force[2]
             elif len(RecordForce.peaks_force) == 4:
-                gui_main_object.peak_force_cell2, gui_main_object.peak_force_cell5, gui_main_object.peak_force_cell8 = RecordForce.peaks_force[1],RecordForce.peaks_force[2],RecordForce.peaks_force[3]
+                self.gui_main_object.peak_force_cell2, self.gui_main_object.peak_force_cell5, self.gui_main_object.peak_force_cell8 = RecordForce.peaks_force[1],RecordForce.peaks_force[2],RecordForce.peaks_force[3]
             if len(RecordForce.peaks_distance) == 3:
-                gui_main_object.peak_distance_cell2, gui_main_object.peak_distance_cell5, gui_main_object.peak_distance_cell8 = RecordForce.peaks_distance[0],RecordForce.peaks_distance[1],RecordForce.peaks_distance[2]
+                self.gui_main_object.peak_distance_cell2, self.gui_main_object.peak_distance_cell5, self.gui_main_object.peak_distance_cell8 = RecordForce.peaks_distance[0],RecordForce.peaks_distance[1],RecordForce.peaks_distance[2]
             elif len(RecordForce.peaks_distance) == 4:
-                gui_main_object.peak_distance_cell2, gui_main_object.peak_distance_cell5, gui_main_object.peak_distance_cell8 = RecordForce.peaks_distance[1],RecordForce.peaks_distance[2],RecordForce.peaks_distance[3]
+                self.gui_main_object.peak_distance_cell2, self.gui_main_object.peak_distance_cell5, self.gui_main_object.peak_distance_cell8 = RecordForce.peaks_distance[1],RecordForce.peaks_distance[2],RecordForce.peaks_distance[3]
             if len(RecordForce.peaks_time) == 3:
-                gui_main_object.peak_time_cell2, gui_main_object.peak_time_cell5, gui_main_object.peak_time_cell8=RecordForce.peaks_time[0],RecordForce.peaks_time[1],RecordForce.peaks_time[2]
+                self.gui_main_object.peak_time_cell2, self.gui_main_object.peak_time_cell5, self.gui_main_object.peak_time_cell8=RecordForce.peaks_time[0],RecordForce.peaks_time[1],RecordForce.peaks_time[2]
             elif len(RecordForce.peaks_time) == 4:
-                gui_main_object.peak_time_cell2, gui_main_object.peak_time_cell5, gui_main_object.peak_time_cell8=RecordForce.peaks_time[1],RecordForce.peaks_time[2],RecordForce.peaks_time[3]
-            #gui_main_object.peak_distance_cell4, gui_main_object.peak_distance_cell5, gui_main_object.peak_distance_cell6 = RecordForce.peaks_distance[0],RecordForce.peaks_distance[1],RecordForce.peaks_distance[2]
-            #gui_main_object.peak_time_cell4, gui_main_object.peak_time_cell5, gui_main_object.peak_time_cell6=RecordForce.peaks_time[0],RecordForce.peaks_time[1],RecordForce.peaks_time[2]
-        elif gui_main_object.currentdirection.get() == "side3":
+                self.gui_main_object.peak_time_cell2, self.gui_main_object.peak_time_cell5, self.gui_main_object.peak_time_cell8=RecordForce.peaks_time[1],RecordForce.peaks_time[2],RecordForce.peaks_time[3]
+            #self.gui_main_object.peak_distance_cell4, self.gui_main_object.peak_distance_cell5, self.gui_main_object.peak_distance_cell6 = RecordForce.peaks_distance[0],RecordForce.peaks_distance[1],RecordForce.peaks_distance[2]
+            #self.gui_main_object.peak_time_cell4, self.gui_main_object.peak_time_cell5, self.gui_main_object.peak_time_cell6=RecordForce.peaks_time[0],RecordForce.peaks_time[1],RecordForce.peaks_time[2]
+        elif self.gui_main_object.currentdirection.get() == "side3":
             if len(RecordForce.peaks_force) == 3:
-                gui_main_object.peak_force_cell3, gui_main_object.peak_force_cell6, gui_main_object.peak_force_cell9 = RecordForce.peaks_force[0],RecordForce.peaks_force[1],RecordForce.peaks_force[2]
+                self.gui_main_object.peak_force_cell3, self.gui_main_object.peak_force_cell6, self.gui_main_object.peak_force_cell9 = RecordForce.peaks_force[0],RecordForce.peaks_force[1],RecordForce.peaks_force[2]
             elif len(RecordForce.peaks_force) == 4:
-                gui_main_object.peak_force_cell3, gui_main_object.peak_force_cell6, gui_main_object.peak_force_cell9 = RecordForce.peaks_force[1],RecordForce.peaks_force[2],RecordForce.peaks_force[3]
+                self.gui_main_object.peak_force_cell3, self.gui_main_object.peak_force_cell6, self.gui_main_object.peak_force_cell9 = RecordForce.peaks_force[1],RecordForce.peaks_force[2],RecordForce.peaks_force[3]
             if len(RecordForce.peaks_distance) == 3:
-                gui_main_object.peak_distance_cell3, gui_main_object.peak_distance_cell6, gui_main_object.peak_distance_cell9 = RecordForce.peaks_distance[0],RecordForce.peaks_distance[1],RecordForce.peaks_distance[2]
+                self.gui_main_object.peak_distance_cell3, self.gui_main_object.peak_distance_cell6, self.gui_main_object.peak_distance_cell9 = RecordForce.peaks_distance[0],RecordForce.peaks_distance[1],RecordForce.peaks_distance[2]
             elif len(RecordForce.peaks_distance) == 4:
-                gui_main_object.peak_distance_cell3, gui_main_object.peak_distance_cell6, gui_main_object.peak_distance_cell9 = RecordForce.peaks_distance[1],RecordForce.peaks_distance[2],RecordForce.peaks_distance[3]
+                self.gui_main_object.peak_distance_cell3, self.gui_main_object.peak_distance_cell6, self.gui_main_object.peak_distance_cell9 = RecordForce.peaks_distance[1],RecordForce.peaks_distance[2],RecordForce.peaks_distance[3]
             if len(RecordForce.peaks_time) == 3:
-                gui_main_object.peak_time_cell3, gui_main_object.peak_time_cell6, gui_main_object.peak_time_cell9=RecordForce.peaks_time[0],RecordForce.peaks_time[1],RecordForce.peaks_time[2]
+                self.gui_main_object.peak_time_cell3, self.gui_main_object.peak_time_cell6, self.gui_main_object.peak_time_cell9=RecordForce.peaks_time[0],RecordForce.peaks_time[1],RecordForce.peaks_time[2]
             elif len(RecordForce.peaks_time) == 4:
-                gui_main_object.peak_time_cell3, gui_main_object.peak_time_cell6, gui_main_object.peak_time_cell9=RecordForce.peaks_time[1],RecordForce.peaks_time[2],RecordForce.peaks_time[3] 
-            #gui_main_object.peak_distance_cell7, gui_main_object.peak_distance_cell8, gui_main_object.peak_distance_cell9 = RecordForce.peaks_distance[0],RecordForce.peaks_distance[1],RecordForce.peaks_distance[2]
-            #gui_main_object.peak_time_cell7, gui_main_object.peak_time_cell8, gui_main_object.peak_time_cell9=RecordForce.peaks_time[0],RecordForce.peaks_time[1],RecordForce.peaks_time[2]
+                self.gui_main_object.peak_time_cell3, self.gui_main_object.peak_time_cell6, self.gui_main_object.peak_time_cell9=RecordForce.peaks_time[1],RecordForce.peaks_time[2],RecordForce.peaks_time[3] 
+            #self.gui_main_object.peak_distance_cell7, self.gui_main_object.peak_distance_cell8, self.gui_main_object.peak_distance_cell9 = RecordForce.peaks_distance[0],RecordForce.peaks_distance[1],RecordForce.peaks_distance[2]
+            #self.gui_main_object.peak_time_cell7, self.gui_main_object.peak_time_cell8, self.gui_main_object.peak_time_cell9=RecordForce.peaks_time[0],RecordForce.peaks_time[1],RecordForce.peaks_time[2]
 
     #zeroes load cell measurement
             
     def tare():
-        if gui_main_object.ignoreserial == False:
+        if self.gui_main_object.ignoreserial == False:
             print("Tare")
             RecordForce.ser.flush()#wait until all data is written
             
@@ -467,17 +468,17 @@ class RecordForce(tk.Frame,PassIn):
             RecordForce.ser.write(tare.encode()) #sends 't' to arduino, telling it to tare
             time.sleep(0.3)#wait x seconds for Arduino to tare load cell (for smoothing)
         else:
-            print("\nYou hit the 'tare' button while gui_main_object.ignoreserial == True.\nLoadcell cannot be tared because it is neither connected nor sought.")
+            print("\nYou hit the 'tare' button while self.gui_main_object.ignoreserial == True.\nLoadcell cannot be tared because it is neither connected nor sought.")
             RecordForce.message_connectArduino()
             
     def message_connectArduino():
-        #print("\nYou hit the 'tare' button while gui_main_object.ignoreserial == True.\nLoadcell cannot be tared because it is neither connected nor sought.\n\nConnect an arduino.\nFlash Ardunio with serialConnection_v11.ino(&+).\n\nIn StemBerry header variables:\ngui_main_object.ignoreserial = False.\nMatch dev_manual port ID with ID on Arduino IDE.\n\nSigned, Clayton Bennett, August 25, 2022.")
-        print("\n\nConnect an arduino.\nFlash Ardunio with serialConnection_v11.ino(&+).\n\nIn StemBerry header variables:\ngui_main_object.ignoreserial = False.\nMatch dev_manual port ID with ID on Arduino IDE.\n\nSigned, Clayton Bennett, August 25, 2022.")
+        #print("\nYou hit the 'tare' button while self.gui_main_object.ignoreserial == True.\nLoadcell cannot be tared because it is neither connected nor sought.\n\nConnect an arduino.\nFlash Ardunio with serialConnection_v11.ino(&+).\n\nIn StemBerry header variables:\nself.gui_main_object.ignoreserial = False.\nMatch dev_manual port ID with ID on Arduino IDE.\n\nSigned, Clayton Bennett, August 25, 2022.")
+        print("\n\nConnect an arduino.\nFlash Ardunio with serialConnection_v11.ino(&+).\n\nIn StemBerry header variables:\nself.gui_main_object.ignoreserial = False.\nMatch dev_manual port ID with ID on Arduino IDE.\n\nSigned, Clayton Bennett, August 25, 2022.")
 
     def on_show_frame_RecordForce(self, event):
         #Flip to data collection screen, GUI variables
-        if (gui_main_object.varietyname.get()!="" or gui_main_object.plotname.get()!="") and (gui_main_object.passfillednames_checkbox.get()==1): # checks if a varietyname or plotname has been given
-            RecordForce.nameFresh(gui_main_object.varietyname.get(),gui_main_object.plotname.get()) # if so, autopopulate the basic filestructure
-        filename_force = nameBlackBox("",gui_main_object.filename_force.get())
-        gui_main_object.filename_force.set(filename_force)
-        gui_main_object.currentdirection.set("") # so that sortClicks will funtion properly, if a new name is assigned # this is non-deal coding
+        if (self.gui_main_object.varietyname.get()!="" or self.gui_main_object.plotname.get()!="") and (self.gui_main_object.passfillednames_checkbox.get()==1): # checks if a varietyname or plotname has been given
+            RecordForce.nameFresh(self.gui_main_object.varietyname.get(),self.gui_main_object.plotname.get()) # if so, autopopulate the basic filestructure
+        filename_force = socem25.core.main_funcs.nameBlackBox("",self.gui_main_object.filename_force.get())
+        self.gui_main_object.filename_force.set(filename_force)
+        self.gui_main_object.currentdirection.set("") # so that sortClicks will funtion properly, if a new name is assigned # this is non-deal coding

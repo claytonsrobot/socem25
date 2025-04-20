@@ -13,8 +13,8 @@ Add shortcuts to imports and exports to central drectories?
 import time
 import os
 from pathlib import Path
-from src import environment
-from src.directories import Directories 
+from socem25.core import environment
+from socem25.core.directories import Directories 
 from pprint import pprint
 import shutil
 import sys

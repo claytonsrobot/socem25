@@ -8,7 +8,7 @@ project_root = os.path.abspath(os.path.join(script_dir, "../../"))
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.helpers.toml_utils import import_toml
+from socem25.core.helpers.toml_utils import import_toml
 
 # Path to the configuration file
 CONFIG_FILE = os.path.join(script_dir, "update_desktop_ini_config.toml")

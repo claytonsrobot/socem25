@@ -2,8 +2,8 @@ import serial
 #from serial import Serial
 # from serial import *
 import serial.tools.list_ports # need this
-from src.pass_in import PassIn
-from src.configuration import Config
+from socem25.core.pass_in import PassIn
+from socem25.core.configuration import Config
 
 class SerialConnection(PassIn):
     # Determine Arduino serial port address

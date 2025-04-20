@@ -1,6 +1,6 @@
 # __main__.py
-from shell.shell import SocemCLI
-from src.directories import Directories
+from socem25.shell.shell import SocemCLI
+from socem25.core.directories import Directories
 def cli_entry():
     #try:
     if True:

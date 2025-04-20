@@ -3,9 +3,9 @@ import os
 import sys
 import tkinter as tk
 import time
-from src.environment import Env
+from socem25.core.environment import Env
 
-from gui.gui_main import SocemGuiMain
+from socem25.gui.gui_main import SocemGuiMain
 
 
 ''' Initialize Class Objects'''
@@ -64,7 +64,7 @@ def showErrors(self):
     self.gui_error_report_object.showErrors2(self.gui_main_object.frames[self.gui_error_report_object]) # display errors in lists
 
 def update_filename_preTest(self):
-    filename_preTest = nameBlackBox("preTest",self.gui_main_object.filename_preTest.get())
+    filename_preTest = self.nameBlackBox("preTest",self.gui_main_object.filename_preTest.get())
     self.gui_main_object.filename_preTest.set(filename_preTest)
     filename_all = filename_preTest.replace("preTest","all")
     self.gui_main_object.filename_all.set(filename_all)

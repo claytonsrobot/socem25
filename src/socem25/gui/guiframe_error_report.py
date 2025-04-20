@@ -1,7 +1,7 @@
 import tkinter as tk
 
-#from gui.gui_main import SocemGuiMain
-from src.pass_in import PassIn
+#from socem25.gui.gui_main import SocemGuiMain
+from socem25.core.pass_in import PassIn
 # error page for displaying errors
 class ErrorReport(tk.Frame,PassIn):
 

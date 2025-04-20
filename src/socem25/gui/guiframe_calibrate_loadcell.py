@@ -1,7 +1,7 @@
 import tkinter as tk
-from src.configuration import Config
-from gui.gui_main import RepeatPageButtons
-#from gui.gui_main import SocemGuiMain
+from socem25.core.configuration import Config
+from socem25.gui.gui_main import RepeatPageButtons
+#from socem25.gui.gui_main import SocemGuiMain
 
 # Load cell calibration page 
 class Calibrate(tk.Frame,):

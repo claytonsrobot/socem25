@@ -13,17 +13,17 @@ https://medium.com/@noransaber685/simple-guide-to-creating-a-command-line-interf
 import cmd2
 import os
 import pprint
-#from src import stemberry
-import src.main_funcs
-#from src.hidden_prints import HiddenPrints
+#from socem25.core import stemberry
+import socem25.core.main_funcs
+#from socem25.core.hidden_prints import HiddenPrints
 import time
 from datetime import datetime
 #import subprocess
 #from sparklines import sparklines
 #import gui_customtk_basic
-from src.filemanagement import DirectoryControl
-from src import filemanagement as fm
-from src.environment import Env
+from socem25.core.filemanagement import DirectoryControl
+from socem25.core import filemanagement as fm
+from socem25.core.environment import Env
 #import copy
 import importlib
 import ast
@@ -33,15 +33,15 @@ import sys
 #print(sys.path)
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from tests import Test
-from src.helpers import toml_utils # pleae migrate the json-handler.py
+from socem25.core.helpers import toml_utils # pleae migrate the json-handler.py
 
-from src.directories import Directories
+from socem25.core.directories import Directories
 try:
     import psutil # overkill
 except:
     pass
 
-#from src.datapoint import DataPoint
+#from socem25.core.datapoint import DataPoint
 
 
 

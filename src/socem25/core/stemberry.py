@@ -90,9 +90,9 @@ Notes:
 '''
 
 '''Local libraries'''
-#import src.serial
-from gui.gui_main import SocemGuiMain
-from src.directories import Directories
+#import socem25.core.serial
+from socem25.gui.gui_main import SocemGuiMain
+from socem25.core.directories import Directories
 
 ''' Libraries '''
 import tkinter as tk

@@ -2,8 +2,8 @@ import tkinter as tk
 import PIL.ImageTk
 import PIL.Image
 
-#from gui.gui_main import SocemGuiMain
-from src.pass_in import PassIn
+#from socem25.gui.gui_main import SocemGuiMain
+from socem25.core.pass_in import PassIn
 # Guide page 
 class Guide(tk.Frame,PassIn):
 

@@ -2,10 +2,10 @@ from itertools import zip_longest
 import matplotlib.pyplot as plt
 import numpy as np
 
-import src.cursor
-#from gui.gui_main import SocemGuiMain
-from src.pass_in import PassIn
-from src.configuration import Config
+import socem25.core.cursor
+#from socem25.gui.gui_main import SocemGuiMain
+from socem25.core.pass_in import PassIn
+from socem25.core.configuration import Config
 
 ''' Figure Interation classes '''
 class SnaptoCursor(PassIn):
@@ -202,7 +202,7 @@ def choosePeaks(xData, forcePushed, xCut, variety_plotname_detail, encoderWorked
     else:
         ax.set_xlabel('Time (sec)')
             
-    cursor = src.cursor.Cursor(ax) # create snap cursor object
+    cursor = socem25.core.cursor.Cursor(ax) # create snap cursor object
     cursorMove = fig.canvas.mpl_connect('motion_notify_event', cursor.mouse_move) # update snap cursor upon mouse movement
     
     closeplt = False
