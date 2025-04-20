@@ -15,7 +15,7 @@ class DataFeed(PassIn):
         frame = RecordForce.container
         RecordForce.datafeed_frame
         print("frame = ",frame)
-        if Config.visualizeDatastream == True:# data displayed in scrollbars (default)
+        if self.config_object.get("visualizeDatastream") == True:# data displayed in scrollbars (default)
             # Displays incoming data
             # scroll = tk.Scrollbar(RecordForce.datafeed_frame)
             scroll = tk.Scrollbar(frame)# what is this? TK!
@@ -51,7 +51,7 @@ class DataFeed(PassIn):
 
         '''Scrollbars Options'''
         # if scrollbars option = on:
-        if Config.visualizeDatastream == True:
+        if self.config_object.get("visualizeDatastream") == True:
             try: # puts data on GUI display by default (user can turn off)
                 
                 RecordForce.Dislist.insert(END, str(self.gui_main_object.distanceTraveled[i]))# inserts at end of listbox to actually display

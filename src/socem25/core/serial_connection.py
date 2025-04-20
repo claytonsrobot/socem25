@@ -14,9 +14,9 @@ class SerialConnection(PassIn):
             dev = ports[0].device
         except:
             #dev = '/dev/ttyACM0' # only works on pi
-            dev = Config.dev_guess # based on operating system
-        if Config.dev_manualOverride == True:
-            dev = Config.dev_manual # manual override
+            dev = self.config_object.get("dev_guess") # based on operating system
+        if self.config_object.get("dev_manualOverride") == True:
+            dev = self.config_object.get("dev_manual") # manual override
         try:
             ser = serial.Serial(dev, 115200, timeout=4,writeTimeout = 2,) # 1 second timeout
             #print(type(ser))

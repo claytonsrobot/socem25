@@ -42,7 +42,7 @@ class SnaptoCursor(PassIn):
 ''' Peak click plotter methods'''
 def initialPlot(self,distanceTraveled, forcePushed, timeElapsed, encoderWorked, variety_plotname_detail, documentationFolder,averageVelocity):
     fig, ax = plt.subplots()
-    encoderWorked = Config.encoderWorked_override 
+    encoderWorked = self.config_object.get("encoderWorked_override") 
     ''' vertical lines, for suggesting edge effect regions for forward tests '''
     if encoderWorked == True:  
         start = 50 # cm , cut off 1st 50cm = 20" usually #

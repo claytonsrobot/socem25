@@ -176,9 +176,9 @@ class SocemGuiMain(PassIn, tk.Frame):
         self.startRange1.set(50)
         self.startRange2.set(150) 
         self.startRange3.set(250) # centimeters
-        self.stemheight.set(Config.default_stemheight) # cm
-        self.barbottom.set(round(self.stemheight.get()*Config.initial_barbottomOverStemheight_coeff,3)) # cm
-        self.barmiddle.set(round(self.barbottom.get()+Config.barradius,3)) # cm
+        self.stemheight.set(self.config_object.get("default_stemheight")) # cm
+        self.barbottom.set(round(self.stemheight.get()*initial_barbottomOverStemheight_coeff,3)) # cm
+        self.barmiddle.set(round(self.barbottom.get()+self.config_object.get("barradius"),3)) # cm
         self.passfillednames_checkbox.set(1)
         self.timestring.set(time.strftime("%H%M"))
         self.currentdirection.set("")
@@ -192,8 +192,8 @@ class SocemGuiMain(PassIn, tk.Frame):
         self.cell1Diameter3.set(0),self.cell2Diameter3.set(0),self.cell3Diameter3.set(0),self.cell4Diameter3.set(0),self.cell5Diameter3.set(0),self.cell6Diameter3.set(0),self.cell7Diameter3.set(0),self.cell8Diameter3.set(0),self.cell9Diameter3.set(0)
         self.cell1Diameter4.set(0),self.cell2Diameter4.set(0),self.cell3Diameter4.set(0),self.cell4Diameter4.set(0),self.cell5Diameter4.set(0),self.cell6Diameter4.set(0),self.cell7Diameter4.set(0),self.cell8Diameter4.set(0),self.cell9Diameter4.set(0)
 
-        if Config.autopopulatestemcount == True:
-            self.cell1Count.set(Config.defaultstemcount),self.cell2Count.set(Config.defaultstemcount),self.cell3Count.set(Config.defaultstemcount),self.cell4Count.set(Config.defaultstemcount),self.cell5Count.set(Config.defaultstemcount),self.cell6Count.set(Config.defaultstemcount),self.cell7Count.set(Config.defaultstemcount),self.cell8Count.set(Config.defaultstemcount),self.cell9Count.set(Config.defaultstemcount)
+        if self.config_object.get("autopopulatestemcount") == True:
+            self.cell1Count.set(self.config_object.get("defaultstemcount")),self.cell2Count.set(self.config_object.get("defaultstemcount")),self.cell3Count.set(self.config_object.get("defaultstemcount")),self.cell4Count.set(self.config_object.get("defaultstemcount")),self.cell5Count.set(self.config_object.get("defaultstemcount")),self.cell6Count.set(self.config_object.get("defaultstemcount")),self.cell7Count.set(self.config_object.get("defaultstemcount")),self.cell8Count.set(self.config_object.get("defaultstemcount")),self.cell9Count.set(self.config_object.get("defaultstemcount"))
         ''' end '''
 
 

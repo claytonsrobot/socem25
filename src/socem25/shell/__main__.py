@@ -5,7 +5,7 @@ def cli_entry():
     #try:
     if True:
         # Launch the cmd2 terminal
-        Directories.initilize_program_dir()
+        Directories.initialize_program_dir()
         app = SocemCLI()
         app.run()
     #except Exception as e:

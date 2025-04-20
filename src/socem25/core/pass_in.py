@@ -12,6 +12,16 @@ class PassIn:
         self.gui_error_report_object = object()
         self.gui_calibrate_object = object()
         self.backup_object = object()
+        self.config_object = object()
+
+    
+    @classmethod
+    def pass_in_gui_record_force_object(cls,gui_record_force_object):
+        cls.gui_record_force_object = gui_record_force_object
+
+    @classmethod
+    def pass_in_gui_initial_inputs_object(cls,gui_initial_inputs_object):
+        cls.gui_initial_inputs_object = gui_initial_inputs_object
 
     @classmethod
     def pass_in_gui_final_inputs_object(cls,gui_final_inputs_object):
@@ -21,13 +31,6 @@ class PassIn:
     def pass_in_gui_peak_clicks_object(cls,gui_peak_clicks_object):
         cls.gui_peak_clicks_object = gui_peak_clicks_object
 
-    @classmethod
-    def pass_in_gui_record_force_object(cls,gui_record_force_object):
-        cls.gui_record_force_object = gui_record_force_object
-
-    @classmethod
-    def pass_in_gui_initial_inputs_object(cls,gui_initial_inputs_object):
-        cls.gui_initial_inputs_object = gui_initial_inputs_object
     
     @classmethod
     def pass_in_gui_calibrate_object(cls,gui_calibrate_object):
@@ -48,4 +51,10 @@ class PassIn:
     @classmethod
     def pass_in_backup_object(cls,backup_object):
         cls.backup_object = backup_object
+
+    @classmethod
+    def pass_in_config_object(cls,config_object):
+        cls.config_object = config_object
+
+    
 

@@ -89,21 +89,21 @@ class InitialInputs(PassIn, tk.Frame):
     def height70percent(self, stemheight):
         coeff = 0.7
         self.gui_main_object.barbottom.set(round(coeff*stemheight,3))
-        self.gui_main_object.barmiddle.set(round(self.gui_main_object.barbottom.get()+Config.barradius,3))
+        self.gui_main_object.barmiddle.set(round(self.gui_main_object.barbottom.get()+self.config_object.get("barradius"),3))
         print("70%: stemheight",self.gui_main_object.stemheight.get(),"cm, barheight = ",self.gui_main_object.barmiddle.get(),"cm, barbottom = ",self.gui_main_object.barbottom.get(),"cm")
     def height80percent(self, stemheight):
         coeff = 0.8
         self.gui_main_object.barbottom.set(round(coeff*stemheight,3))
-        self.gui_main_object.barmiddle.set(round(self.gui_main_object.barbottom.get()+Config.barradius,3))
+        self.gui_main_object.barmiddle.set(round(self.gui_main_object.barbottom.get()+self.config_object.get("barradius"),3))
         print("80%: stemheight",self.gui_main_object.stemheight.get(),"cm, barheight = ",self.gui_main_object.barmiddle.get(),"cm, barbottom = ",self.gui_main_object.barbottom.get(),"cm")
     def height90percent(self, stemheight):
         coeff = 0.9
         self.gui_main_object.barbottom.set(round(coeff*stemheight,3))
-        self.gui_main_object.barmiddle.set(round(self.gui_main_object.barbottom.get()+Config.barradius,3))
+        self.gui_main_object.barmiddle.set(round(self.gui_main_object.barbottom.get()+self.config_object.get("barradius"),3))
         print("90%: stemheight",self.gui_main_object.stemheight.get(),"cm, barheight = ",self.gui_main_object.barmiddle.get(),"cm, barbottom = ",self.gui_main_object.barbottom.get(),"cm")
     
     def savePreTestInputs(self):
-        self.gui_main_object.barbottom.set(round(self.gui_main_object.barmiddle.get()-Config.barradius,3)) # cm
+        self.gui_main_object.barbottom.set(round(self.gui_main_object.barmiddle.get()-self.config_object.get("barradius"),3)) # cm
         print(str(int(self.gui_main_object.barbottom.get()/self.gui_main_object.stemheight.get()*100)),"%: stemheight",self.gui_main_object.stemheight.get(),"cm, barheight = ",self.gui_main_object.barmiddle.get(),"cm, barbottom = ",self.gui_main_object.barbottom.get(),"cm")
 
         variety, plot, stemheight, barbottom, barmiddle, startRange1, startRange2, startRange3 = ['variety'], ['plot'], ['stemheight(cm)'], ['barbottom(cm)'], ['barmiddle(cm)'], ['startRange1(cm)'], ['startRange2(cm)'], ['startRange3(cm)']

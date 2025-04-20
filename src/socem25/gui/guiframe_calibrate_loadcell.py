@@ -33,7 +33,7 @@ class Calibrate(tk.Frame,):
 
         kg = tk.Label(self, text = "kg", font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=140,y=183)
 
-        self.force = self.knownWeight.get() * Config.convert_KgToN # convert known weight kg to N
+        self.force = self.knownWeight.get() * self.config_object.get("convert_KgToN") # convert known weight kg to N
         self.strWeight = str('%.3f' % self.force) # store as string
         self.strForce = tk.StringVar() # for displaying & updating on GUI
         self.strForce.set(self.strWeight) # initial value = self.knownWeight
@@ -50,7 +50,7 @@ class Calibrate(tk.Frame,):
     
         self.calibra = tk.DoubleVar() 
         #self.calibra.set(199750) # initial calibration num. Has been working well. AB.
-        self.calibra.set(Config.calibrationFactor) # initial calibration num. Has been working well. AB.
+        self.calibra.set(self.config_object.get("calibrationFactor")) # initial calibration num. Has been working well. AB.
         #self.calibra.set(1997500) # death to the infidels. CB.
         self.factor = self.calibra.get() 
         self.calibra_entry = tk.Entry(self, textvariable=self.calibra, font = ("arial", 14, "bold"), width= 10, bg="white", fg="gray1")

@@ -293,7 +293,7 @@ class FinalInputs(PassIn, tk.Frame):
         
     def compileNineCellData(self):
         socem25.core.main_funcs.createBackupFile() # fix below # numbers are for lbs, not newtons
-        if Config.importFileDataTF == True:
+        if self.config_object.get("importFileDataTF") == True:
             socem25.core.main_funcs.importFileData()
         self.gui_main_object.peaks_force = [self.gui_main_object.peak_force_cell1, self.gui_main_object.peak_force_cell2, self.gui_main_object.peak_force_cell3, self.gui_main_object.peak_force_cell4, self.gui_main_object.peak_force_cell5, self.gui_main_object.peak_force_cell6, self.gui_main_object.peak_force_cell7, self.gui_main_object.peak_force_cell8, self.gui_main_object.peak_force_cell9]
         self.gui_main_object.peaks_distance = [self.gui_main_object.peak_distance_cell1, self.gui_main_object.peak_distance_cell2, self.gui_main_object.peak_distance_cell3, self.gui_main_object.peak_distance_cell4, self.gui_main_object.peak_distance_cell5, self.gui_main_object.peak_distance_cell6, self.gui_main_object.peak_distance_cell7, self.gui_main_object.peak_distance_cell8, self.gui_main_object.peak_distance_cell9]
@@ -318,17 +318,17 @@ class FinalInputs(PassIn, tk.Frame):
         FinalInputs.saveEIs()
         FinalInputs.save_compiled()
         time.sleep(1) # pause x seconds
-        if Config.refreshAllAuto == True:
+        if self.config_object.get("refreshAllAuto") == True:
             self.gui_main_object.refreshAll() # refresh all variables 
         #except:
         #else:
         #    print("The nine cell scheme requires exactly 9 clips, 3 from each side hit.")
         
     
-    def calculateEI(peak_force, stemheight, barbottom, stemcount):
+    def calculateEI(self,peak_force, stemheight, barbottom, stemcount):
         #try:
         #if stemcount > 0:
-        stemspacing_average = 1/(stemcount/Config.barlength)
+        stemspacing_average = 1/(stemcount/self.config_object.get("barlength"))
         EI_fullcontact = socem25.core.physics.ei_interaction_error_management.EI_Interaction(peak_force, stemheight, barbottom,stemspacing_average) # uses clicked forces (Y axis), force bar height, horizontal plot heights, and count density
         EI_nocontact = socem25.core.physics.ei_no_interaction_error_management.ei_calc_no(peak_force, stemheight, barbottom, stemspacing_average) # the x value of the click does nothing other than find the nearest height from horz. It is not factored in to the number of beams or the character of the beams. 
         EI_intermediatecontact = (EI_fullcontact + EI_nocontact)/2

@@ -1796,7 +1796,7 @@ class SocemCLI(PavlovCLI):
 if __name__=='__main__':
     app = SocemCLI()
     app.onecmd_plus_hooks("test")
-    Directories.initilize_program_dir()
+    Directories.initialize_program_dir()
     app.initialize_scene_object()
     Directories.initialize_startup_project()
     app.cmdloop()
