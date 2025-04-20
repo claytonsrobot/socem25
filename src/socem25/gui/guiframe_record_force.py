@@ -17,6 +17,8 @@ class RecordForce(PassIn, tk.Frame):
         PassIn.__init__(self, parent)
         # Initialize tk.Frame
         tk.Frame.__init__(self, parent)
+        self.controller = controller
+        self.parent = parent
 
         self.peaks_force = []
         self.peaks_distance = []

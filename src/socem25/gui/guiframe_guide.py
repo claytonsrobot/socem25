@@ -15,6 +15,8 @@ class Guide(PassIn, tk.Frame):
         PassIn.__init__(self, parent)
         # Initialize tk.Frame
         tk.Frame.__init__(self, parent)
+        self.controller = controller
+        self.parent = parent
 
         pageButtons = RepeatPageButtons.showButtons(self, parent, controller)
 

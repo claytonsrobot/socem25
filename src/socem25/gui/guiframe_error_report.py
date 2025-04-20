@@ -10,6 +10,8 @@ class ErrorReport(PassIn, tk.Frame):
         PassIn.__init__(self, parent)
         # Initialize tk.Frame
         tk.Frame.__init__(self, parent)
+        self.controller = controller
+        self.parent = parent
 
     def run(self):
         # button that returns to Geo. Inputs page

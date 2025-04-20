@@ -9,6 +9,8 @@ class StemCountClassic(PassIn, tk.Frame):
         PassIn.__init__(self, parent)
         # Initialize tk.Frame
         tk.Frame.__init__(self, parent)
+        self.controller = controller
+        self.parent = parent
         
         header_label = tk.Label(self, text = "STEM COUNT INITIAL INPUT", font = ("arial", 17, "bold"), fg = "gray3", bg="ghost white")
         construction_label = tk.Label(self, text = "Under Construction.\nWill allow user to input sample density data before pushing SOCEM,\nrather than use the nine-cell post test count input fields.", font = ("arial", 17, "bold"), fg = "red4", bg="ghost white")

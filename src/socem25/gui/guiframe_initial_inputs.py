@@ -16,6 +16,8 @@ class InitialInputs(PassIn, tk.Frame):
         PassIn.__init__(self, parent)
         # Initialize tk.Frame
         tk.Frame.__init__(self, parent)
+        self.controller = controller
+        self.parent = parent
     # Once the program launches, the InitialInput screen will be shown for the first time, prompting serial connection
         try:
             self.gui_record_force_object.ser = SC.serial_connect()

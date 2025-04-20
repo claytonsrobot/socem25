@@ -16,20 +16,43 @@ class SocemGuiMain(PassIn, tk.Frame):
         PassIn.__init__(self, parent)
         # Initialize tk.Frame
         tk.Frame.__init__(self, parent)
+        self.controller = controller
+        self.parent = parent
 
-    def run(self,*args, **kwargs):
-        tk.Tk.__init__(self, *args, **kwargs)
-
+    def this_is_done_in__main__(self,*args, **kwargs):
+        tk.Tk.__init__(self,*args, **kwargs)
+    def run(self):
+        
         self.initialize_tk_vars_gui_main()
         self.refresh_tk_vars_gui_main()
         
+        # Frame setup code (menus, containers, etc.)
         container = tk.Frame(self)
         container.pack(side='top', fill='both',expand = True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
+         # Set the container to the frame's container (needed for the menu setup)
+        self.container = container
+              
+        self.frames = {}# empty dictionary
+        for F in (self.gui_initial_inputs_object, self.gui_record_force_object, self.gui_final_inputs_object, self.gui_calibrate_object, self.gui_guide_object, self.gui_error_report_object, self.gui_stem_count_classic_object):# must put all pages in here
+            frame = F(container, self)
+            print(f"frame = {frame}")
+            self.frames[F] = frame
+            frame.grid(row=0, column=0, sticky='nsew')
+            frame.configure(background = 'ghost white')
         
+        self.show_frame(self.gui_initial_inputs_object)
+        self.configure_top_menu()
+
+    def show_frame(self,cont):
+        frame = self.frames[cont]
+        frame.tkraise()
+        frame.event_generate("<<ShowFrame>>") # event
+
+    def configure_top_menu(self):
         # top menu configuration
-        menubar = tk.Menu(container)
+        menubar = tk.Menu(self.container)
         filemenu = tk.Menu(menubar, tearoff=0)
         datamenu = tk.Menu(menubar, tearoff=0)
         pagemenu = tk.Menu(menubar, tearoff=0)
@@ -53,17 +76,7 @@ class SocemGuiMain(PassIn, tk.Frame):
         menubar.add_cascade(label="Pages", menu=pagemenu)
         menubar.add_cascade(label="Livestream Data Recording", menu=datamenu)
         
-        tk.Tk.config(self, menu=menubar)                
-        self.frames = {}# empty dictionary
-
-        for F in (self.gui_initial_inputs_object, self.gui_record_force_object, self.gui_final_inputs_object, self.gui_calibrate_object, self.gui_guide_object, self.gui_error_report_object, self.gui_stem_count_classic_object):# must put all pages in here
-            frame = F(container, self)
-            print(f"frame = {frame}")
-            self.frames[F] = frame
-            frame.grid(row=0, column=0, sticky='nsew')
-            frame.configure(background = 'ghost white')
-        
-        self.show_frame(self.gui_initial_inputs_object)
+        tk.Tk.config(self, menu=menubar)  
         
     def initialize_tk_vars_gui_main(self):
         self.filename_force = tk.StringVar()
@@ -87,6 +100,7 @@ class SocemGuiMain(PassIn, tk.Frame):
         self.cell1Diameter2,self.cell2Diameter2,self.cell3Diameter2,self.cell4Diameter2,self.cell5Diameter2,self.cell6Diameter2,self.cell7Diameter2,self.cell8Diameter2,self.cell9Diameter2 =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
         self.cell1Diameter3,self.cell2Diameter3,self.cell3Diameter3,self.cell4Diameter3,self.cell5Diameter3,self.cell6Diameter3,self.cell7Diameter3,self.cell8Diameter3,self.cell9Diameter3 =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
         self.cell1Diameter4,self.cell2Diameter4,self.cell3Diameter4,self.cell4Diameter4,self.cell5Diameter4,self.cell6Diameter4,self.cell7Diameter4,self.cell8Diameter4,self.cell9Diameter4 =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
+    
     def initialize_nine_cell_vars(self):
         '''For generic and nine-cell assessment GUI vars, initialize ''' 
         # for nine cell assessment, save state
@@ -182,10 +196,7 @@ class SocemGuiMain(PassIn, tk.Frame):
             self.cell1Count.set(Config.defaultstemcount),self.cell2Count.set(Config.defaultstemcount),self.cell3Count.set(Config.defaultstemcount),self.cell4Count.set(Config.defaultstemcount),self.cell5Count.set(Config.defaultstemcount),self.cell6Count.set(Config.defaultstemcount),self.cell7Count.set(Config.defaultstemcount),self.cell8Count.set(Config.defaultstemcount),self.cell9Count.set(Config.defaultstemcount)
         ''' end '''
 
-    def show_frame(cont):
-        frame = SocemGUI.frames[cont]
-        frame.tkraise()
-        frame.event_generate("<<ShowFrame>>") # event
+
 
 # buttons that are the same for each page
 #'''
