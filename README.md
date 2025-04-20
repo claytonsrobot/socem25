@@ -12,6 +12,14 @@ An Arduino unit is connected via USB, to pass the live data feed to the Rasperry
 > cd socem25 
 > poetry install
 > poetry run python -m src
+> poetry run python run.py --mode shell
+> poetry run python run.py --mode gui
+> poetry run python run.py --mode api
+> poetry run python -m socem25.shell.main
+> poetry run python -m socem25.gui.main
+> poetry run python -m socem25.api.main
+
 
 # Shell functionality
 > poetry run python -m shell
+

@@ -1,0 +1,23 @@
+socem25/
+│
+├── pyproject.toml
+├── README.md
+├── .gitignore
+├── .env
+├── requirements.txt  # optionally generated from poetry/pip
+│
+├── src/
+│   └── socem25/       # actual package name here
+│       ├── __init__.py
+│       ├── shell/
+│       ├── gui/
+│       └── core/       # or `utils`, `models`, etc.
+│
+├── tests/
+│   ├── __init__.py
+│   ├── test_shell.py
+│   └── test_gui.py
+│
+├── scripts/           # CLI or setup scripts
+├── .pyinstaller/      # config, if you're packaging
+└── .venv/             # local virtualenv (ignored by VCS)

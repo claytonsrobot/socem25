@@ -18,10 +18,41 @@ dependencies = [
     "python-dateutil (>=2.9.0.post0,<3.0.0)",
     "matplotlib (>=3.10.1,<4.0.0)",
     "xlsxwriter (>=3.2.2,<4.0.0)",
-    "toml (>=0.10.2,<0.11.0)"
+    "toml (>=0.10.2,<0.11.0)",
+    "pandas (>=2.2.3,<3.0.0)"
 ]
-
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.optional-dependencies]
+dev = ["pytest", "black", "mypy", "ruff"]
+gui = ["pyqt5"]
+cli = ["cmd2"]
+
+[project.scripts]
+socem = "socem25.run:main"
+socem-cli = "socem25.shell.main:cli"
+socem-gui = "socem25.gui.main:run_gui"
+#socem-api = "uvicorn socem25.api.main:app"
+socem-api = "socem25.api.__main__:run"
+
+[flake8]
+exclude = [".venv", "build", "dist", ".git", "__pycache__"]
+max-line-length = 88
+
+[tool.black]
+line-length = 88
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "B"]
+ignore = ["E203", "E266", "E501"]
+exclude = ["tests/fixtures/*"]
