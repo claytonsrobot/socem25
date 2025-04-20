@@ -11,17 +11,15 @@ from socem25.core.configuration import Config
 from socem25.gui.gui_main import RepeatPageButtons
 from socem25.core.pass_in import PassIn
 
-class FinalInputs(tk.Frame,PassIn):
-    @classmethod
-    def pass_in_GUI(cls,GUI):
-        cls.GUI = GUI
-
-    def __init__(self): # automatically runs
-        #self.nope = "nope"
-        tk.Tk.__init__()
-        PassIn.__init__()
-
-        self.run()
+class FinalInputs(PassIn, tk.Frame):
+    def __init__(self, parent, controller):
+        # Call PassIn's constructor with parent
+        PassIn.__init__(self, parent)
+        # Initialize tk.Frame
+        tk.Frame.__init__(self, parent)
+        
+        #self.run()
+    
     def run(self, parent, controller): # automatically runs
         FinalInputs.mass1 = [] # TypeError: 'float' object is not iterable
         FinalInputs.mass2 = []

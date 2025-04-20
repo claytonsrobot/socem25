@@ -10,20 +10,22 @@ from socem25.core.pass_in import PassIn
 import socem25.core.main_funcs
 
 # Data collection page
-class RecordForce(tk.Frame,PassIn):
-    def __init__(self, parent, controller):# automatically runs
 
-        RecordForce.peaks_force = []
-        RecordForce.peaks_distance = []
-        RecordForce.peaks_time = []
+class RecordForce(PassIn, tk.Frame):
+    def __init__(self, parent, controller):
+        # Call PassIn's constructor with parent
+        PassIn.__init__(self, parent)
+        # Initialize tk.Frame
+        tk.Frame.__init__(self, parent)
+
+        self.peaks_force = []
+        self.peaks_distance = []
+        self.peaks_time = []
         
         self.legends = []
-        
-        tk.Frame.__init__(self, parent)
-        PassIn.__init__()
-        self.controller = controller # fuck?
+        self.controller = controller # confusion artifact, transcend
 
-        RecordForce.container = tk.Frame(self)
+        self.container = tk.Frame(self)
         
         ''' GUI design, non-frame '''
         pageButtons = RepeatPageButtons.showButtons(self, parent, controller)

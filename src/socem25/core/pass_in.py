@@ -1,4 +1,18 @@
 class PassIn:
+    def __init__(self, parent=None):
+        # Initialize the parent if needed
+        if parent is not None:
+            self.parent = parent
+        
+        # Initialize attributes
+        self.gui_initial_inputs_object = object()
+        self.gui_record_force_object = object()
+        self.gui_final_inputs_object = object()
+        self.gui_peak_clicks_object = object()
+        self.gui_error_report_object = object()
+        self.gui_calibrate_object = object()
+        self.backup_object = object()
+
     @classmethod
     def pass_in_gui_final_inputs_object(cls,gui_final_inputs_object):
         cls.gui_final_inputs_object = gui_final_inputs_object
@@ -35,12 +49,3 @@ class PassIn:
     def pass_in_backup_object(cls,backup_object):
         cls.backup_object = backup_object
 
-
-    def __init__(self):
-        self.gui_initial_inputs_object = object()
-        self.gui_record_force_object = object()
-        self.gui_final_inputs_object = object()
-        self.gui_peak_clicks_object = object()
-        self.gui_error_report_object = object()
-        self.gui_calibrate_object = object()
-        self.backup_object = object()

@@ -5,7 +5,7 @@ import PIL.Image
 #from socem25.gui.gui_main import SocemGuiMain
 from socem25.core.pass_in import PassIn
 # Guide page 
-class Guide(tk.Frame,PassIn):
+class Guide(PassIn, tk.Frame):
 
     # this is actually passed
     gui_main_object = object()  

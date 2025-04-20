@@ -3,12 +3,15 @@ import tkinter as tk
 #from socem25.gui.gui_main import SocemGuiMain
 from socem25.core.pass_in import PassIn
 # error page for displaying errors
-class ErrorReport(tk.Frame,PassIn):
 
-    def __init__(self, parent, controller): # automatically runs
+class ErrorReport(PassIn, tk.Frame):
+    def __init__(self, parent, controller):
+        # Call PassIn's constructor with parent
+        PassIn.__init__(self, parent)
+        # Initialize tk.Frame
         tk.Frame.__init__(self, parent)
-        PassIn.__init__()
 
+    def run(self):
         # button that returns to Geo. Inputs page
         initialInputs_button = tk.Button(self, text ="Initial\nInputs", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:self.gui_main_object.show_frame(self.gui_initial_inputs_object))
         initialInputs_button.place(x = 675, y = 316)
@@ -32,8 +35,8 @@ class ErrorReport(tk.Frame,PassIn):
         self.ErrorCodeList.delete(0, 'end')
         self.ErrorDesc.delete(0, 'end')
 
-        for e in range(len(gui_main_object.errorCodes)):
-            self.ErrorCodeList.insert(END, gui_main_object.errorCodes[e])# inserts at end of listbox to actually display
+        for e in range(len(self.gui_main_object.errorCodes)):
+            self.ErrorCodeList.insert(END, self.gui_main_object.errorCodes[e])# inserts at end of listbox to actually display
             self.ErrorCodeList.see(END)# makes sure listbox is at end so it displays live data
-            self.ErrorDesc.insert(END, gui_main_object.errors[e])
+            self.ErrorDesc.insert(END, self.gui_main_object.errors[e])
             self.ErrorDesc.see(END)

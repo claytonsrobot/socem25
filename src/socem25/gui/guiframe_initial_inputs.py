@@ -9,17 +9,20 @@ from socem25.gui.gui_main import RepeatPageButtons
 from socem25.core.configuration import Config
 import socem25.core.main_funcs
 #Home page
-class InitialInputs(tk.Frame,PassIn):
-    def __init__(self, parent, controller): # automatically runs
-        # Once the program launches, the InitialInput screen will be shown for the first time, prompting serial connection
+
+class InitialInputs(PassIn, tk.Frame):
+    def __init__(self, parent, controller):
+        # Call PassIn's constructor with parent
+        PassIn.__init__(self, parent)
+        # Initialize tk.Frame
+        tk.Frame.__init__(self, parent)
+    # Once the program launches, the InitialInput screen will be shown for the first time, prompting serial connection
         try:
             self.gui_record_force_object.ser = SC.serial_connect()
         except:
             self.gui_main_object.ignoreserial = True
             print("Serial not connected.")
         
-        tk.Frame.__init__(self, parent)
-        PassIn.__init__()
         
         ''' GUI design, non-frame '''
         pageButtons = RepeatPageButtons.showButtons(self, parent, controller)

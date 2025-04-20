@@ -9,14 +9,13 @@ from socem25.core.configuration import Config
 from socem25.core.pass_in import PassIn
 '''Classes, Tkinter GUI'''
 # GUI overarching class
-class SocemGuiMain(tk.Tk,PassIn):
 
-    def __init__(self, *args, **kwargs):# automatically runs
-        self.nope = "nope"
-        PassIn.__init__()
-    
-    def pass_from_gui_main_object(self,other_class):
-        other_class.gui_main_object = self
+class SocemGuiMain(PassIn, tk.Frame):
+    def __init__(self, parent, controller):
+        # Call PassIn's constructor with parent
+        PassIn.__init__(self, parent)
+        # Initialize tk.Frame
+        tk.Frame.__init__(self, parent)
 
     def run(self,*args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)

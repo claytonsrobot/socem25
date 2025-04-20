@@ -5,13 +5,14 @@ import tkinter as tk
 import time
 from socem25.core.environment import Env
 
-from socem25.gui.gui_main import SocemGuiMain
-
+def wake_gui():
+    from socem25.gui.gui_main import SocemGuiMain
+    return SocemGuiMain
 
 ''' Initialize Class Objects'''
 def initialize_gui_main_object():
-    gui_main_object = SocemGuiMain()
-    return gui_main_object
+    SocemGuiMain = wake_gui()
+    return SocemGuiMain() # gui_main_object
 
 ''' Methods'''
 def overwriteGuard(filename):# prevents overwriting by checking if filename already exists in saving folder

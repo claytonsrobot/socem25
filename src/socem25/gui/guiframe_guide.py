@@ -2,13 +2,21 @@ import tkinter as tk
 import PIL.ImageTk
 import PIL.Image
 
-from gui_main import SocemGuiMain
+from socem25.gui.gui_main import RepeatPageButtons
+from socem25.core.pass_in import PassIn
+import socem25.core.main_funcs
+
+
 # Guide page 
-class Guide(tk.Frame):
-    def __init__(self, parent, controller): # automatically runs
+
+class Guide(PassIn, tk.Frame):
+    def __init__(self, parent, controller):
+        # Call PassIn's constructor with parent
+        PassIn.__init__(self, parent)
+        # Initialize tk.Frame
         tk.Frame.__init__(self, parent)
 
-        pageButtons = repeatPageButtons.showButtons(self, parent, controller)
+        pageButtons = RepeatPageButtons.showButtons(self, parent, controller)
 
         # button that enters Calibrate page/class
         calibrate_button = tk.Button(self, text = "Calibrate\nForce\nSensor", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2", command=lambda:gui_main_object.show_frame(Calibrate)) #tares/zeros load cell
