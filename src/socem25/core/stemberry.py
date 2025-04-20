@@ -89,36 +89,33 @@ Notes:
 - save as separate CSV files, then as one combined XLSX file with multiple pages
 '''
 
-'''Local libraries'''
-#import socem25.core.serial
-from socem25.gui.gui_main import SocemGuiMain
-from socem25.core.directories import Directories
 
 ''' Libraries '''
 import tkinter as tk
 #from multiprocessing import Process
-
-import matplotlib
-from matplotlib import style
-matplotlib.use("TkAgg")
-#from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
-#from matplotlib.figure import Figure
-#import matplotlib.pyplot as plt
-
-import os
-import platform
-
-#import peakutils
-#from PeakUtils.Plot import plot as pplot
 import math
 #import struct # what is this?
 #import datetime
 from datetime import date
 import time
 # import xlsxwriter # csv now, xlsxwriter not used
+import matplotlib
+from matplotlib import style
+matplotlib.use("TkAgg")
+#from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+#from matplotlib.figure import Figure
+#import matplotlib.pyplot as plt
+import os
+import platform
+
+'''Local libraries'''
+#import socem25.core.serial
+from socem25.gui.gui_main import SocemGuiMain
+from socem25.core.directories import Directories
+#import peakutils
+#from PeakUtils.Plot import plot as pplot
 
 ''' Global Variables --> Config'''
-
 operator = 'Clayton Bennett'
 location = 'EP425' # 'Kambitsch Farm'
 coordinates = '46.592516,-116.946268'

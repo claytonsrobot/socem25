@@ -1,16 +1,3 @@
-[equations]
-#directory = os.path.dirname(__file__)
-#operatingsystem = platform.system() #determine OS
-## use or sys.plaform instead of platform.system, to avoid importing platform
-#print("operatingsystem =",operatingsystem)
-#print("os.getlogin() =",os.getlogin())
-#print("operator =",operator)
-#print("location =",location)
-#today = date.today()
-#datestring = today.strftime("%b-%d-%Y")
-#inchonvert = (((math.pi*(0.764))*31.4136)/359) # converts displacement to inches, wheel diameter = 31.4136
-"today" = "date.today()"
-
 [config]
 "operator" = "Clayton Bennett"
 "location" = "EP425" # "Kambitsch Farm"
@@ -42,6 +29,8 @@
 "visualizeDatastream" = false #true #set to live graph for data display
 #"vis" = "s" # legacy
 "vis" = "nope" # 
+wheel diameter = 31.4136
+
 
 [notes]
 ## visualizeDatastream ( search: "def datafeed(" ) is broken right now. Refer to earlier versions (pre v65)for reference of how Bebee left it.
