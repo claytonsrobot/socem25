@@ -13,7 +13,8 @@ https://medium.com/@noransaber685/simple-guide-to-creating-a-command-line-interf
 import cmd2
 import os
 import pprint
-from src import stemberry
+#from src import stemberry
+import src.main_funcs
 #from src.hidden_prints import HiddenPrints
 import time
 from datetime import datetime
@@ -22,7 +23,7 @@ from datetime import datetime
 #import gui_customtk_basic
 from src.filemanagement import DirectoryControl
 from src import filemanagement as fm
-from src import environment
+from src.environment import Env
 #import copy
 import importlib
 import ast
@@ -704,7 +705,7 @@ class PavlovCLI(cmd2.Cmd):
         print("I suggest you take a walk and do some breathing exercises.")
 
     def do_skipinterface(self,line):
-        "Skip interface (3), use direct json file. Rather than editing defaults with a GUI."
+        "Skip interface (3), use direct json file. Rather than editing defaults with a gui_main_object."
         #try:
         self.user_input_object.pull_config_input_object(self.config_input_object)
         if self.config_input_object.grouping_algorithm == "group-by-text":
@@ -1008,12 +1009,12 @@ class PavlovCLI(cmd2.Cmd):
     ## import freesimplegui as psg
     # def do_gui(self,line):
     #     """
-    #     Launch GUI. Futurework.
+    #     Launch gui_main_object. Futurework.
     #     Defaults to developer mode. Dependency: PySimpleGui. Secondary: TKinter.
     #     For basic mode, use flag: -b. For developer mode, use flag: -d
     #     """
-    #     print("Starting the GUI.")
-    #     print("To continue using the CLI, quit the GUI.")
+    #     print("Starting the gui_main_object.")
+    #     print("To continue using the CLI, quit the gui_main_object.")
     #     try:
     #         app = gui_customtk_basic.App()
     #         app.pass_in_cli_object(self)
@@ -1031,7 +1032,7 @@ class PavlovCLI(cmd2.Cmd):
     
     
     def do_guic(self,line):
-        "Wokin progress. Run classic developer mode FreeSimpleGUI."
+        "Wokin progress. Run classic developer mode FreeSimplegui_main_object."
         if not(self.scene_object is None) and not(self.user_input_object is None): 
             from gui import Gui
             interface_object = Gui()
@@ -1042,7 +1043,7 @@ class PavlovCLI(cmd2.Cmd):
         else:
             print("Scene and User Input objets do not exist yet.\nHint: 1, 2")
     def do_guics(self,line):
-        "Wokin progress. Run classic simple mode FreeSimpleGUI."
+        "Wokin progress. Run classic simple mode FreeSimplegui_main_object."
         if not(self.scene_object is None) and not(self.user_input_object is None): 
             from gui_simple import Gui
             interface_object = Gui()

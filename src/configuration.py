@@ -1,12 +1,19 @@
+"""
+Title: configuration.py
+Author: Clayton Bennett
+Created 18 April 2025
+"""
+
 import platform
 import toml
-
-import src.toml_utils
-
 from pprint import pprint
 
+import src.helpers.toml_utils
 from src.directories import Directories
+
 class Config:
+    defaultstemcount = 25
+    autopopulatestemcount = False
     def __init__(self):
         pass
     def load_config(self):
@@ -15,7 +22,6 @@ class Config:
         pass
     def load_config_from_project(self):
         pass
-
 
 def define_and_load_default_config_input(self):
     "config_input.define_and_load_default_config_input()"
@@ -36,4 +42,4 @@ def expressions(self):
     #today = date.today()
     #datestring = today.strftime("%b-%d-%Y")
     #inchonvert = (((math.pi*(0.764))*31.4136)/359) # converts displacement to inches, wheel diameter = 31.4136
-    "today" = "date.today()"
+    today = date.today()

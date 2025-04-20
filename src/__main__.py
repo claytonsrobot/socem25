@@ -1,5 +1,6 @@
 # __main__.py
-from src import stemberry
+#from src import stemberry
+import src.main_funcs
 from pprint import pprint as pprint
 def cli_entry():
     try:

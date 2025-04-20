@@ -1,17 +1,18 @@
 import tkinter as tk
 
-from gui.gui_main import SocemGUI
+#from gui.gui_main import SocemGuiMain
+from src.pass_in import PassIn
 # error page for displaying errors
-class ErrorReport(tk.Frame):
+class ErrorReport(tk.Frame,PassIn):
 
     def __init__(self, parent, controller): # automatically runs
         tk.Frame.__init__(self, parent)
 
         # button that returns to Geo. Inputs page
-        initialInputs_button = tk.Button(self, text ="Initial\nInputs", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:GUI.show_frame(InitialInputs))
+        initialInputs_button = tk.Button(self, text ="Initial\nInputs", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:self.gui_main_object.show_frame(self.gui_initial_inputs_object))
         initialInputs_button.place(x = 675, y = 316)
         # button that returns to RecordForce page
-        recordForce_button = tk.Button(self, text = "Record\nForce",font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:GUI.show_frame(RecordForce))
+        recordForce_button = tk.Button(self, text = "Record\nForce",font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:self.gui_main_object.show_frame(self.gui_record_force_object))
         recordForce_button.place(x = 675, y = 225)
         
         scroll = tk.Scrollbar(self)
@@ -30,8 +31,8 @@ class ErrorReport(tk.Frame):
         self.ErrorCodeList.delete(0, 'end')
         self.ErrorDesc.delete(0, 'end')
 
-        for e in range(len(GUI.errorCodes)):
-            self.ErrorCodeList.insert(END, GUI.errorCodes[e])# inserts at end of listbox to actually display
+        for e in range(len(gui_main_object.errorCodes)):
+            self.ErrorCodeList.insert(END, gui_main_object.errorCodes[e])# inserts at end of listbox to actually display
             self.ErrorCodeList.see(END)# makes sure listbox is at end so it displays live data
-            self.ErrorDesc.insert(END, GUI.errors[e])
+            self.ErrorDesc.insert(END, gui_main_object.errors[e])
             self.ErrorDesc.see(END)

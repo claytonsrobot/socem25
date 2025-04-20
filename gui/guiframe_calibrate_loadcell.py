@@ -1,8 +1,8 @@
 import tkinter as tk
 
-from gui.gui_main import SocemGUI
+#from gui.gui_main import SocemGuiMain
 # Load cell calibration page 
-class Calibrate(tk.Frame):
+class Calibrate(tk.Frame,):
     
     def __init__(self, parent, controller): # automatically runs
         
@@ -126,9 +126,9 @@ class Calibrate(tk.Frame):
                 try: #make sure serial data can be read/is there
                     ser_bytes = RecordForce.ser.readline()
                 except:
-                    GUI.errors.append('serial read')
+                    gui_main_object.errors.append('serial read')
                     eCode = 'e8'
-                    GUI.errorCodes.append(eCode)
+                    gui_main_object.errorCodes.append(eCode)
                     print("eCode = "+eCode)
                     #popup("serial read")
                     

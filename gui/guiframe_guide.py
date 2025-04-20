@@ -2,24 +2,16 @@ import tkinter as tk
 import PIL.ImageTk
 import PIL.Image
 
-#from gui.gui_main import SocemGuiMain
-from src.pass_in import PassIn
+from gui_main import SocemGuiMain
 # Guide page 
-class Guide(tk.Frame,PassIn):
-
-    # this is actually passed
-    gui_main_object = object()  
-    def pass_in_gui_main_object(self,gui_main_object):
-        print("Overriding a passin function. Guide.pass_in_gui_main_object()")
-        self.gui_main_object = gui_main_object
-
+class Guide(tk.Frame):
     def __init__(self, parent, controller): # automatically runs
         tk.Frame.__init__(self, parent)
 
         pageButtons = repeatPageButtons.showButtons(self, parent, controller)
 
         # button that enters Calibrate page/class
-        calibrate_button = tk.Button(self, text = "Calibrate\nForce\nSensor", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2", command=lambda:self.gui_main_object.show_frame(Calibrate)) #tares/zeros load cell
+        calibrate_button = tk.Button(self, text = "Calibrate\nForce\nSensor", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2", command=lambda:gui_main_object.show_frame(Calibrate)) #tares/zeros load cell
         calibrate_button.place(x = 510, y = 340)
         
         # instruction steps:

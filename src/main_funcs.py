@@ -1,18 +1,25 @@
 import os
-import pandas as pd
+#import pandas as pd
 import sys
 import tkinter as tk
+import time
+from src.environment import Env
 
-from gui.gui_main import SocemGUI
+from gui.gui_main import SocemGuiMain
+
+
+''' Initialize Class Objects'''
+def initialize_gui_main_object():
+    gui_main_object = SocemGuiMain()
+    return gui_main_object
 
 ''' Methods'''
-
 def overwriteGuard(filename):# prevents overwriting by checking if filename already exists in saving folder
         return os.path.exists(filename) # True = already exits, False = doesn't exist
     
 def overwriteGuardPage(filename):# prevents overwriting by checking if filename already exists in saving folder
-        #return os.path.exists(filename) # True = already exits, False = doesn't exist
-        return False # force override
+    #return os.path.exists(filename) # True = already exits, False = doesn't exist
+    return False # force override
     
 def data_display(visual): #changes display method    #DELETE?
     global visualizeDatastream
@@ -27,14 +34,14 @@ def popup(error):
     E_label.pack(side="top", fill="x", pady=10)               
     popup.mainloop()
 
-def popup_chooseFolder():
+def popup_chooseFolder(self):
     popup_chooseFolder = tk.Tk()
     popup_chooseFolder.wm_title("Choose Folder")
     E_label = tk.Label(popup_chooseFolder, text="Paste file output directory here.", font=("arial", 12, "bold"))
     #E_label.pack(side="top", fill="x", pady=10)
     E_label.grid(row=0, column=1)
-    #GUI.addressInput.set("")
-    folder_entry = tk.Entry(popup_chooseFolder, textvariable=GUI.addressInput, font = ("arial", 11, "bold"), width= 70, bg="white", fg="gray1")
+    #self.gui_main_object.addressInput.set("")
+    folder_entry = tk.Entry(popup_chooseFolder, textvariable=self.gui_main_object.addressInput, font = ("arial", 11, "bold"), width= 70, bg="white", fg="gray1")
     folder_entry.grid(row=1, column=1)
     save_button = tk.Button(popup_chooseFolder,text = "Save", font = ("arial", 14, "bold"), height = 1, width = 6, fg = "ghost white", bg = "dodgerblue3",command=lambda:updateAddress())
     save_button.grid(row=2, column=1)
@@ -45,22 +52,22 @@ def popup_chooseFolder():
     barset_frame.place(x = 340, y = 230)
     ''' ''
 
-def updateAddress():
+def updateAddress(self):
     print("updateAddress is broken. Please develop.")
-    print("GUI.addressInput.get() = ",GUI.addressInput.get())
-    print("GUI.address = ",GUI.address)
-    #GUI.address = GUI.addressInput.get() # broken right now
-    #print("GUI.address = ",GUI.address)
+    print("self.gui_main_object.addressInput.get() = ",self.gui_main_object.addressInput.get())
+    print("self.gui_main_object.address = ",self.gui_main_object.address)
+    #self.gui_main_object.address = self.gui_main_object.addressInput.get() # broken right now
+    #print("self.gui_main_object.address = ",self.gui_main_object.address)
 
-def showErrors():
-    GUI.show_frame(ErrorReport) # show Error Report page
-    ErrorReport.showErrors2(GUI.frames[ErrorReport]) # display errors in lists
+def showErrors(self):
+    self.gui_main_object.show_frame(self.gui_error_report_object) # show Error Report page
+    self.gui_error_report_object.showErrors2(self.gui_main_object.frames[ErrorReport-->self.gui_error_report_object]) # display errors in lists
 
-def update_filename_preTest():
-    filename_preTest = nameBlackBox("preTest",GUI.filename_preTest.get())
-    GUI.filename_preTest.set(filename_preTest)
+def update_filename_preTest(self):
+    filename_preTest = nameBlackBox("preTest",self.gui_main_object.filename_preTest.get())
+    self.gui_main_object.filename_preTest.set(filename_preTest)
     filename_all = filename_preTest.replace("preTest","all")
-    GUI.filename_all.set(filename_all)
+    self.gui_main_object.filename_all.set(filename_all)
 
 def testForNineCellFilename(): # used to identify when nine-cell force, distance, and time data exists, and passes it to state data.
     # the purpose of this is to avoid reopening CSV files in order to assess nine-cell data
@@ -70,38 +77,38 @@ def testForNineCellFilename(): # used to identify when nine-cell force, distance
     # EI cannot be assessed for non-nine cell, because counts don't exist
     # if box not checked, post test frame goes to single input for stem count, one number, with another number for range distance of count
     # # Assessment is trigged at save state button push
-    #ninecellfilename = GUI.varietyname.get()+","+GUI.plotname.get()+"_"
-    ninecellfilename = GUI.varietyname.get()+","+GUI.plotname.get()
+    #ninecellfilename = self.gui_main_object.varietyname.get()+","+self.gui_main_object.plotname.get()+"_"
+    ninecellfilename = self.gui_main_object.varietyname.get()+","+self.gui_main_object.plotname.get()
     ninecellfilename_side1 = ninecellfilename+"_side1"
     ninecellfilename_side2 = ninecellfilename+"_side2"
     ninecellfilename_side3 = ninecellfilename+"_side3"
     ninecellfilename_forward = ninecellfilename+"_foward"
-    currentFilename_force = GUI.filename_force.get()
+    currentFilename_force = self.gui_main_object.filename_force.get()
     # create GUI variable, for handling without reopening CSV's
     #if (currentFilename_force == ninecellfilename_side1):
-    if (GUI.currentdirection.get() == "side1"):
-        GUI.forcePushed_side1 = GUI.forcePushed
-        GUI.distanceTraveled_side1 = GUI.distanceTraveled
-        GUI.timeElapsed_side1 = GUI.timeElapsed
+    if (self.gui_main_object.currentdirection.get() == "side1"):
+        self.gui_main_object.forcePushed_side1 = self.gui_main_object.forcePushed
+        self.gui_main_object.distanceTraveled_side1 = self.gui_main_object.distanceTraveled
+        self.gui_main_object.timeElapsed_side1 = self.gui_main_object.timeElapsed
         #if (currentFilename_force == ninecellfilename_side2):
-    if (GUI.currentdirection.get() == "side2"):
-        GUI.forcePushed_side2 = GUI.forcePushed
-        GUI.distanceTraveled_side2 = GUI.distanceTraveled
-        GUI.timeElapsed_side2 = GUI.timeElapsed
+    if (self.gui_main_object.currentdirection.get() == "side2"):
+        self.gui_main_object.forcePushed_side2 = self.gui_main_object.forcePushed
+        self.gui_main_object.distanceTraveled_side2 = self.gui_main_object.distanceTraveled
+        self.gui_main_object.timeElapsed_side2 = self.gui_main_object.timeElapsed
         #if (currentFilename_force == ninecellfilename_side3):
-    if (GUI.currentdirection.get() == "side3"):
-        GUI.forcePushed_side3 = GUI.forcePushed
-        GUI.distanceTraveled_side3 = GUI.distanceTraveled
-        GUI.timeElapsed_side3 = GUI.timeElapsed
+    if (self.gui_main_object.currentdirection.get() == "side3"):
+        self.gui_main_object.forcePushed_side3 = self.gui_main_object.forcePushed
+        self.gui_main_object.distanceTraveled_side3 = self.gui_main_object.distanceTraveled
+        self.gui_main_object.timeElapsed_side3 = self.gui_main_object.timeElapsed
         #if (currentFilename_force == ninecellfilename_forward):
-    if (GUI.currentdirection.get() == "forward"):
-        GUI.forcePushed_forward = GUI.forcePushed
-        GUI.distanceTraveled_forward = GUI.distanceTraveled
-        GUI.timeElapsed_forward = GUI.timeElapsed
+    if (self.gui_main_object.currentdirection.get() == "forward"):
+        self.gui_main_object.forcePushed_forward = self.gui_main_object.forcePushed
+        self.gui_main_object.distanceTraveled_forward = self.gui_main_object.distanceTraveled
+        self.gui_main_object.timeElapsed_forward = self.gui_main_object.timeElapsed
     
 
 
-def rename(filename): #if filename already exists - prompt user to rename
+def rename(self,filename): #if filename already exists - prompt user to rename
     popup = tk.Tk()
     popup.wm_title('Prompt Rename')
     renameIt = tk.Label(popup, text = 'Filename\n"{}"\nalready exists in the saving location.\nPlease rename and press Save.'.format(filename), font = ('arial', 10, 'bold'))
@@ -114,24 +121,24 @@ def rename(filename): #if filename already exists - prompt user to rename
     overwrite_button.pack(side='top', fill='both', ipadx=10,ipady=1)
 
     popup.mainloop()
-def renamePage(filename):
+def renamePage(self,filename):
     print("Please develop, prevent pages from being overwritten in the filename_all spreadsheet")
     
-def incrementRename(filename):
+def incrementRename(self,filename):
     print("please develop, auto modify filename")
     
-def overwrite(filename):
+def overwrite(self,filename):
     print("please develop, overwrite filename")
         
 #closes GUI (from file menubar)
-def close():
+def close(self):
     createBackupFile()
     python = sys.executable
     os.execl(python, python, * sys.argv)
 
 
 
-def incrementName(filename):
+def incrementName(self,filename):
         hyphen = "_"
         # determine last few characters from a filename
         def incrementvars(filename):
@@ -149,7 +156,7 @@ def incrementName(filename):
             return filename, lastchar, secondtolastchar, thirdtolastchar, lastcharandsecondtolastchar
 
         if filename == "": # default, if user tried to increment without inputting any varietyname, plotname, or filename
-            filename = datestring+","+GUI.timestring.get()
+            filename = Env.datestring+","+self.gui_main_object.timestring.get()
             
         lastchar, secondtolastchar, thirdtolastchar, lastcharandsecondtolastchar = incrementvars(filename)
         filename, lastchar, secondtolastchar, thirdtolastchar, lastcharandsecondtolastchar = hyphencheck(filename,hyphen,lastchar, secondtolastchar, thirdtolastchar, lastcharandsecondtolastchar)
@@ -169,7 +176,7 @@ def incrementName(filename):
         else:
             newName = str(filename+"_1")
         return newName
-        #GUI.filename_force.set(newName)
+        #self.gui_main_object.filename_force.set(newName)
     
 ''' Edge cases: Filenaming '''
 def nameDirectionScrub(filename):
@@ -186,47 +193,47 @@ def nameDirectionScrub(filename):
         filename=filename.replace("_postTest","")
     return filename
 
-def nameMissing(varietyname,plotname):
+def nameMissing(self,varietyname,plotname):
     if varietyname == "":
-        varietyname = datestring
+        varietyname = Env.datestring
     if plotname == "":
-        plotname = GUI.timestring.get() # plotname = GUI.timestring.get() # if you want the timestring (serving at plotname) to not change...but then it will never change
+        plotname = self.gui_main_object.timestring.get() # plotname = self.gui_main_object.timestring.get() # if you want the timestring (serving at plotname) to not change...but then it will never change
     return varietyname, plotname
 
-def nameBlackBox(direction,filename):
-    varietyname = GUI.varietyname.get()
-    plotname = GUI.plotname.get()
-    check=GUI.passfillednames_checkbox.get()
-    if GUI.filename_force.get()=="" and check==1 and direction=='':
+def nameBlackBox(self,direction,filename):
+    varietyname = self.gui_main_object.varietyname.get()
+    plotname = self.gui_main_object.plotname.get()
+    check=self.gui_main_object.passfillednames_checkbox.get()
+    if self.gui_main_object.filename_force.get()=="" and check==1 and direction=='':
         varietyname, plotname = nameMissing(varietyname, plotname)
         #print(varietyname, plotname)
         filename = str(varietyname+str(",")+plotname)
-    elif GUI.filename_force.get()=="" and check==1 and direction!='':
+    elif self.gui_main_object.filename_force.get()=="" and check==1 and direction!='':
         varietyname, plotname = nameMissing(varietyname, plotname)
         filename = str(varietyname+str(",")+plotname+"_"+direction)
-    elif GUI.filename_force.get()=="" and check==0 and direction !='':
-        filename = datestring+","+time.strftime("%H%M")+"_"+direction
-    elif GUI.filename_force.get()!="" and check==1 and direction !='':
+    elif self.gui_main_object.filename_force.get()=="" and check==0 and direction !='':
+        filename = Env.datestring+","+time.strftime("%H%M")+"_"+direction
+    elif self.gui_main_object.filename_force.get()!="" and check==1 and direction !='':
         varietyname, plotname = nameMissing(varietyname, plotname)
         filename = str(varietyname+str(",")+plotname+str("_")+direction)
-    elif GUI.filename_force.get()!="" and check==0 and direction !='':
+    elif self.gui_main_object.filename_force.get()!="" and check==0 and direction !='':
         if ("side1" in filename) or ("side2" in filename) or ("side3" in filename) or ("forward" in filename) or ("postTest" in filename):
-            filename = nameDirectionScrub(GUI.filename_force.get())
+            filename = nameDirectionScrub(self.gui_main_object.filename_force.get())
             filename = filename+"_"+direction
         else:
             filename = filename+"_"+direction
-    elif GUI.filename_force.get()=="" and check==0 and direction =='':
-        filename = datestring+","+time.strftime("%H%M")
-    elif GUI.filename_force.get()!="" and check==1 and direction =='':
+    elif self.gui_main_object.filename_force.get()=="" and check==0 and direction =='':
+        filename = Env.datestring+","+time.strftime("%H%M")
+    elif self.gui_main_object.filename_force.get()!="" and check==1 and direction =='':
         varietyname, plotname = nameMissing(varietyname, plotname)
         filename = str(varietyname+str(",")+plotname)
-    elif GUI.filename_force.get()!="" and check==0 and direction =='':
+    elif self.gui_main_object.filename_force.get()!="" and check==0 and direction =='':
         if ("side1" in filename) or ("side2" in filename) or ("side3" in filename) or ("forward" in filename) or ("postTest" in filename):
-            filename = nameDirectionScrub(GUI.filename_force.get())
+            filename = nameDirectionScrub(self.gui_main_object.filename_force.get())
             filename = filename
         else:
             filename = filename
-    #GUI.filename_postTest.set(filename_postTest)
+    #self.gui_main_object.filename_postTest.set(filename_postTest)
     return filename
 ''' end: Edge cases: Filenaming '''
 

@@ -82,7 +82,7 @@ class GUI(tk.Tk):
 
     @classmethod
 
-    def pass_in_FinalInputs(cls,FinalInputs):
+    def pass_in_gui_final_inputs_object(cls,FinalInputs):
 
         cls.FinalInputs = FinalInputs
 
@@ -120,9 +120,9 @@ class GUI(tk.Tk):
 
   
 
-        GUI.initializeVarsGUI()
+        gui_main_object.initializeVarsGUI()
 
-        GUI.refreshAll()
+        gui_main_object.refreshAll()
 
         container = tk.Frame(self)
 
@@ -154,17 +154,17 @@ class GUI(tk.Tk):
 
         filemenu.add_command(label="Exit", command = lambda:close())
 
-        pagemenu.add_command(label="Guide", command=lambda:GUI.show_frame(Guide))
+        pagemenu.add_command(label="Guide", command=lambda:gui_main_object.show_frame(Guide))
 
-        pagemenu.add_command(label="Initial Inputs", command=lambda:GUI.show_frame(InitialInputs))
+        pagemenu.add_command(label="Initial Inputs", command=lambda:gui_main_object.show_frame(InitialInputs))
 
-        pagemenu.add_command(label="Record Force", command=lambda:GUI.show_frame(RecordForce))
+        pagemenu.add_command(label="Record Force", command=lambda:gui_main_object.show_frame(RecordForce))
 
-        pagemenu.add_command(label="Post Test Inputs", command=lambda:GUI.show_frame(self.FinalInputs))
+        pagemenu.add_command(label="Post Test Inputs", command=lambda:gui_main_object.show_frame(self.FinalInputs))
 
-        pagemenu.add_command(label="Calibrate", command=lambda:GUI.show_frame(Calibrate))
+        pagemenu.add_command(label="Calibrate", command=lambda:gui_main_object.show_frame(Calibrate))
 
-        pagemenu.add_command(label="Stem Count PreTest, Classic", command=lambda:GUI.show_frame(StemCountClassic))
+        pagemenu.add_command(label="Stem Count PreTest, Classic", command=lambda:gui_main_object.show_frame(StemCountClassic))
 
         datamenu.add_command(label="Data Feed Display, On", command = lambda:data_display(True))
 
@@ -180,7 +180,7 @@ class GUI(tk.Tk):
 
         tk.Tk.config(self, menu=menubar)                
 
-        GUI.frames = {}# empty dictionary
+        gui_main_object.frames = {}# empty dictionary
 
   
 
@@ -194,49 +194,49 @@ class GUI(tk.Tk):
 
             frame.configure(background = 'ghost white')
 
-        GUI.show_frame(InitialInputs)
+        gui_main_object.show_frame(InitialInputs)
 
     def initializeVarsGUI():
 
-        GUI.filename_force = tk.StringVar()
+        gui_main_object.filename_force = tk.StringVar()
 
-        GUI.filename_preTest = tk.StringVar()
+        gui_main_object.filename_preTest = tk.StringVar()
 
-        GUI.filename_postTest = tk.StringVar()
+        gui_main_object.filename_postTest = tk.StringVar()
 
-        GUI.filename_all = tk.StringVar()
+        gui_main_object.filename_all = tk.StringVar()
 
-        GUI.varietyname = tk.StringVar()
+        gui_main_object.varietyname = tk.StringVar()
 
-        GUI.plotname = tk.StringVar()
+        gui_main_object.plotname = tk.StringVar()
 
-        GUI.stemheight = tk.DoubleVar()
+        gui_main_object.stemheight = tk.DoubleVar()
 
-        GUI.currentdirection = tk.StringVar()#
+        gui_main_object.currentdirection = tk.StringVar()#
 
-        GUI.barmiddle = tk.DoubleVar() #
+        gui_main_object.barmiddle = tk.DoubleVar() #
 
-        GUI.barbottom = tk.DoubleVar() #
+        gui_main_object.barbottom = tk.DoubleVar() #
 
-        GUI.passfillednames_checkbox = tk.IntVar() # revert
+        gui_main_object.passfillednames_checkbox = tk.IntVar() # revert
 
-        GUI.timestring = tk.StringVar()
+        gui_main_object.timestring = tk.StringVar()
 
-        GUI.startRange1, GUI.startRange2, GUI.startRange3 = tk.DoubleVar(),  tk.DoubleVar(),  tk.DoubleVar() # cm = tk.StringVar()
+        gui_main_object.startRange1, gui_main_object.startRange2, gui_main_object.startRange3 = tk.DoubleVar(),  tk.DoubleVar(),  tk.DoubleVar() # cm = tk.StringVar()
 
-        GUI.addressInput = tk.StringVar()
+        gui_main_object.addressInput = tk.StringVar()
 
-        GUI.cell1Mass,GUI.cell2Mass,GUI.cell3Mass,GUI.cell4Mass,GUI.cell5Mass,GUI.cell6Mass,GUI.cell7Mass,GUI.cell8Mass,GUI.cell9Mass =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
+        gui_main_object.cell1Mass,gui_main_object.cell2Mass,gui_main_object.cell3Mass,gui_main_object.cell4Mass,gui_main_object.cell5Mass,gui_main_object.cell6Mass,gui_main_object.cell7Mass,gui_main_object.cell8Mass,gui_main_object.cell9Mass =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
 
-        GUI.cell1Count,GUI.cell2Count,GUI.cell3Count,GUI.cell4Count,GUI.cell5Count,GUI.cell6Count,GUI.cell7Count,GUI.cell8Count,GUI.cell9Count =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
+        gui_main_object.cell1Count,gui_main_object.cell2Count,gui_main_object.cell3Count,gui_main_object.cell4Count,gui_main_object.cell5Count,gui_main_object.cell6Count,gui_main_object.cell7Count,gui_main_object.cell8Count,gui_main_object.cell9Count =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
 
-        GUI.cell1Diameter1,GUI.cell2Diameter1,GUI.cell3Diameter1,GUI.cell4Diameter1,GUI.cell5Diameter1,GUI.cell6Diameter1,GUI.cell7Diameter1,GUI.cell8Diameter1,GUI.cell9Diameter1 =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
+        gui_main_object.cell1Diameter1,gui_main_object.cell2Diameter1,gui_main_object.cell3Diameter1,gui_main_object.cell4Diameter1,gui_main_object.cell5Diameter1,gui_main_object.cell6Diameter1,gui_main_object.cell7Diameter1,gui_main_object.cell8Diameter1,gui_main_object.cell9Diameter1 =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
 
-        GUI.cell1Diameter2,GUI.cell2Diameter2,GUI.cell3Diameter2,GUI.cell4Diameter2,GUI.cell5Diameter2,GUI.cell6Diameter2,GUI.cell7Diameter2,GUI.cell8Diameter2,GUI.cell9Diameter2 =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
+        gui_main_object.cell1Diameter2,gui_main_object.cell2Diameter2,gui_main_object.cell3Diameter2,gui_main_object.cell4Diameter2,gui_main_object.cell5Diameter2,gui_main_object.cell6Diameter2,gui_main_object.cell7Diameter2,gui_main_object.cell8Diameter2,gui_main_object.cell9Diameter2 =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
 
-        GUI.cell1Diameter3,GUI.cell2Diameter3,GUI.cell3Diameter3,GUI.cell4Diameter3,GUI.cell5Diameter3,GUI.cell6Diameter3,GUI.cell7Diameter3,GUI.cell8Diameter3,GUI.cell9Diameter3 =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
+        gui_main_object.cell1Diameter3,gui_main_object.cell2Diameter3,gui_main_object.cell3Diameter3,gui_main_object.cell4Diameter3,gui_main_object.cell5Diameter3,gui_main_object.cell6Diameter3,gui_main_object.cell7Diameter3,gui_main_object.cell8Diameter3,gui_main_object.cell9Diameter3 =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
 
-        GUI.cell1Diameter4,GUI.cell2Diameter4,GUI.cell3Diameter4,GUI.cell4Diameter4,GUI.cell5Diameter4,GUI.cell6Diameter4,GUI.cell7Diameter4,GUI.cell8Diameter4,GUI.cell9Diameter4 =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
+        gui_main_object.cell1Diameter4,gui_main_object.cell2Diameter4,gui_main_object.cell3Diameter4,gui_main_object.cell4Diameter4,gui_main_object.cell5Diameter4,gui_main_object.cell6Diameter4,gui_main_object.cell7Diameter4,gui_main_object.cell8Diameter4,gui_main_object.cell9Diameter4 =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
 
   
 
@@ -244,83 +244,83 @@ class GUI(tk.Tk):
 
         # may as well keep everything here, for fun
 
-        GUI.errors = [] # for tracking errors
+        gui_main_object.errors = [] # for tracking errors
 
-        GUI.errorCodes = [] # for tracking errors
+        gui_main_object.errorCodes = [] # for tracking errors
 
-        GUI.ignoreserial = ignoreserial
+        gui_main_object.ignoreserial = ignoreserial
 
-        GUI.address = address
-
-  
-
-        GUI.forcePushed = []
-
-        GUI.distanceTraveled = []
-
-        GUI.timeElapsed = []
-
-        GUI.travelvelocity = []
-
-        GUI.samplingrate = []
+        gui_main_object.address = address
 
   
 
-        GUI.forcePushed_side1 = []
+        gui_main_object.forcePushed = []
 
-        GUI.forcePushed_side2 = []
+        gui_main_object.distanceTraveled = []
 
-        GUI.forcePushed_side3 = []
+        gui_main_object.timeElapsed = []
 
-        GUI.forcePushed_forward = []
+        gui_main_object.travelvelocity = []
 
-        GUI.distanceTraveled_side1 = []
-
-        GUI.distanceTraveled_side2 = []
-
-        GUI.distanceTraveled_side3 = []
-
-        GUI.distanceTraveled_forward = []
-
-        GUI.timeElapsed_side1 = []
-
-        GUI.timeElapsed_side2 = []
-
-        GUI.timeElapsed_side3 = []
-
-        GUI.timeElapsed_forward =  []
-
-        GUI.peaks_force_side1 = []
-
-        GUI.peaks_force_side2 = []        
-
-        GUI.peaks_force_side3 = []
-
-        GUI.peaks_force_forward = []
-
-        GUI.peaks_distance_side1 = []
-
-        GUI.peaks_distance_side2 = []        
-
-        GUI.peaks_distance_side3 = []
-
-        GUI.peaks_distance_forward = []
-
-        GUI.peaks_time_side1 = []
-
-        GUI.peaks_time_side2 = []        
-
-        GUI.peaks_time_side3 = []
-
-        GUI.peaks_time_forward = []
+        gui_main_object.samplingrate = []
 
   
 
-        GUI.peaks_force = []
+        gui_main_object.forcePushed_side1 = []
 
-        GUI.peaks_distance = []
+        gui_main_object.forcePushed_side2 = []
 
-        GUI.peaks_time = []
+        gui_main_object.forcePushed_side3 = []
+
+        gui_main_object.forcePushed_forward = []
+
+        gui_main_object.distanceTraveled_side1 = []
+
+        gui_main_object.distanceTraveled_side2 = []
+
+        gui_main_object.distanceTraveled_side3 = []
+
+        gui_main_object.distanceTraveled_forward = []
+
+        gui_main_object.timeElapsed_side1 = []
+
+        gui_main_object.timeElapsed_side2 = []
+
+        gui_main_object.timeElapsed_side3 = []
+
+        gui_main_object.timeElapsed_forward =  []
+
+        gui_main_object.peaks_force_side1 = []
+
+        gui_main_object.peaks_force_side2 = []        
+
+        gui_main_object.peaks_force_side3 = []
+
+        gui_main_object.peaks_force_forward = []
+
+        gui_main_object.peaks_distance_side1 = []
+
+        gui_main_object.peaks_distance_side2 = []        
+
+        gui_main_object.peaks_distance_side3 = []
+
+        gui_main_object.peaks_distance_forward = []
+
+        gui_main_object.peaks_time_side1 = []
+
+        gui_main_object.peaks_time_side2 = []        
+
+        gui_main_object.peaks_time_side3 = []
+
+        gui_main_object.peaks_time_forward = []
+
+  
+
+        gui_main_object.peaks_force = []
+
+        gui_main_object.peaks_distance = []
+
+        gui_main_object.peaks_time = []
 
   
 
@@ -332,73 +332,73 @@ class GUI(tk.Tk):
 
   
 
-        GUI.stemcounts = []
+        gui_main_object.stemcounts = []
 
   
 
-        GUI.peak_force_cell1, GUI.peak_force_cell2, GUI.peak_force_cell3, GUI.peak_force_cell4, GUI.peak_force_cell5, GUI.peak_force_cell6, GUI.peak_force_cell7, GUI.peak_force_cell8, GUI.peak_force_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+        gui_main_object.peak_force_cell1, gui_main_object.peak_force_cell2, gui_main_object.peak_force_cell3, gui_main_object.peak_force_cell4, gui_main_object.peak_force_cell5, gui_main_object.peak_force_cell6, gui_main_object.peak_force_cell7, gui_main_object.peak_force_cell8, gui_main_object.peak_force_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
 
-        GUI.peak_distance_cell1, GUI.peak_distance_cell2, GUI.peak_distance_cell3, GUI.peak_distance_cell4, GUI.peak_distance_cell5, GUI.peak_distance_cell6, GUI.peak_distance_cell7, GUI.peak_distance_cell8, GUI.peak_distance_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+        gui_main_object.peak_distance_cell1, gui_main_object.peak_distance_cell2, gui_main_object.peak_distance_cell3, gui_main_object.peak_distance_cell4, gui_main_object.peak_distance_cell5, gui_main_object.peak_distance_cell6, gui_main_object.peak_distance_cell7, gui_main_object.peak_distance_cell8, gui_main_object.peak_distance_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
 
-        GUI.peak_time_cell1, GUI.peak_time_cell2, GUI.peak_time_cell3, GUI.peak_time_cell4, GUI.peak_time_cell5, GUI.peak_time_cell6, GUI.peak_time_cell7, GUI.peak_time_cell8, GUI.peak_time_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+        gui_main_object.peak_time_cell1, gui_main_object.peak_time_cell2, gui_main_object.peak_time_cell3, gui_main_object.peak_time_cell4, gui_main_object.peak_time_cell5, gui_main_object.peak_time_cell6, gui_main_object.peak_time_cell7, gui_main_object.peak_time_cell8, gui_main_object.peak_time_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
 
   
 
-        GUI.data_preTest,GUI.data_recordForce,GUI.data_postTest,GUI.data_peaks,GUI.data_EI = [],[],[],[],[]
+        gui_main_object.data_preTest,gui_main_object.data_recordForce,gui_main_object.data_postTest,gui_main_object.data_peaks,gui_main_object.data_EI = [],[],[],[],[]
 
     def refreshAll(): #clear_all(self)?
 
-        GUI.filename_force.set("")
+        gui_main_object.filename_force.set("")
 
-        GUI.filename_preTest.set("")
+        gui_main_object.filename_preTest.set("")
 
-        GUI.filename_postTest.set("")
+        gui_main_object.filename_postTest.set("")
 
-        GUI.filename_all.set("")
+        gui_main_object.filename_all.set("")
 
-        GUI.varietyname.set("")
+        gui_main_object.varietyname.set("")
 
-        GUI.plotname.set("")
+        gui_main_object.plotname.set("")
 
-        GUI.startRange1.set(50)
+        gui_main_object.startRange1.set(50)
 
-        GUI.startRange2.set(150)
+        gui_main_object.startRange2.set(150)
 
-        GUI.startRange3.set(250) # centimeters
+        gui_main_object.startRange3.set(250) # centimeters
 
-        GUI.stemheight.set(default_stemheight) # cm
+        gui_main_object.stemheight.set(default_stemheight) # cm
 
-        GUI.barbottom.set(round(GUI.stemheight.get()*initial_barbottomOverStemheight_coeff,3)) # cm
+        gui_main_object.barbottom.set(round(gui_main_object.stemheight.get()*initial_barbottomOverStemheight_coeff,3)) # cm
 
-        GUI.barmiddle.set(round(GUI.barbottom.get()+barradius,3)) # cm
+        gui_main_object.barmiddle.set(round(gui_main_object.barbottom.get()+barradius,3)) # cm
 
-        GUI.passfillednames_checkbox.set(1)
+        gui_main_object.passfillednames_checkbox.set(1)
 
-        GUI.timestring.set(time.strftime("%H%M"))
+        gui_main_object.timestring.set(time.strftime("%H%M"))
 
-        GUI.currentdirection.set("")
+        gui_main_object.currentdirection.set("")
 
-        GUI.addressInput.set("")
+        gui_main_object.addressInput.set("")
 
         ''' Set post test variables for mass, count, and diameter'''
 
-        GUI.cell1Mass.set(0),GUI.cell2Mass.set(0),GUI.cell3Mass.set(0),GUI.cell4Mass.set(0),GUI.cell5Mass.set(0),GUI.cell6Mass.set(0),GUI.cell7Mass.set(0),GUI.cell8Mass.set(0),GUI.cell9Mass.set(0)
+        gui_main_object.cell1Mass.set(0),gui_main_object.cell2Mass.set(0),gui_main_object.cell3Mass.set(0),gui_main_object.cell4Mass.set(0),gui_main_object.cell5Mass.set(0),gui_main_object.cell6Mass.set(0),gui_main_object.cell7Mass.set(0),gui_main_object.cell8Mass.set(0),gui_main_object.cell9Mass.set(0)
 
-        GUI.cell1Count.set(0),GUI.cell2Count.set(0),GUI.cell3Count.set(0),GUI.cell4Count.set(0),GUI.cell5Count.set(0),GUI.cell6Count.set(0),GUI.cell7Count.set(0),GUI.cell8Count.set(0),GUI.cell9Count.set(0)
+        gui_main_object.cell1Count.set(0),gui_main_object.cell2Count.set(0),gui_main_object.cell3Count.set(0),gui_main_object.cell4Count.set(0),gui_main_object.cell5Count.set(0),gui_main_object.cell6Count.set(0),gui_main_object.cell7Count.set(0),gui_main_object.cell8Count.set(0),gui_main_object.cell9Count.set(0)
 
-        GUI.cell1Diameter1.set(0),GUI.cell2Diameter1.set(0),GUI.cell3Diameter1.set(0),GUI.cell4Diameter1.set(0),GUI.cell5Diameter1.set(0),GUI.cell6Diameter1.set(0),GUI.cell7Diameter1.set(0),GUI.cell8Diameter1.set(0),GUI.cell9Diameter1.set(0)
+        gui_main_object.cell1Diameter1.set(0),gui_main_object.cell2Diameter1.set(0),gui_main_object.cell3Diameter1.set(0),gui_main_object.cell4Diameter1.set(0),gui_main_object.cell5Diameter1.set(0),gui_main_object.cell6Diameter1.set(0),gui_main_object.cell7Diameter1.set(0),gui_main_object.cell8Diameter1.set(0),gui_main_object.cell9Diameter1.set(0)
 
-        GUI.cell1Diameter2.set(0),GUI.cell2Diameter2.set(0),GUI.cell3Diameter2.set(0),GUI.cell4Diameter2.set(0),GUI.cell5Diameter2.set(0),GUI.cell6Diameter2.set(0),GUI.cell7Diameter2.set(0),GUI.cell8Diameter2.set(0),GUI.cell9Diameter2.set(0)
+        gui_main_object.cell1Diameter2.set(0),gui_main_object.cell2Diameter2.set(0),gui_main_object.cell3Diameter2.set(0),gui_main_object.cell4Diameter2.set(0),gui_main_object.cell5Diameter2.set(0),gui_main_object.cell6Diameter2.set(0),gui_main_object.cell7Diameter2.set(0),gui_main_object.cell8Diameter2.set(0),gui_main_object.cell9Diameter2.set(0)
 
-        GUI.cell1Diameter3.set(0),GUI.cell2Diameter3.set(0),GUI.cell3Diameter3.set(0),GUI.cell4Diameter3.set(0),GUI.cell5Diameter3.set(0),GUI.cell6Diameter3.set(0),GUI.cell7Diameter3.set(0),GUI.cell8Diameter3.set(0),GUI.cell9Diameter3.set(0)
+        gui_main_object.cell1Diameter3.set(0),gui_main_object.cell2Diameter3.set(0),gui_main_object.cell3Diameter3.set(0),gui_main_object.cell4Diameter3.set(0),gui_main_object.cell5Diameter3.set(0),gui_main_object.cell6Diameter3.set(0),gui_main_object.cell7Diameter3.set(0),gui_main_object.cell8Diameter3.set(0),gui_main_object.cell9Diameter3.set(0)
 
-        GUI.cell1Diameter4.set(0),GUI.cell2Diameter4.set(0),GUI.cell3Diameter4.set(0),GUI.cell4Diameter4.set(0),GUI.cell5Diameter4.set(0),GUI.cell6Diameter4.set(0),GUI.cell7Diameter4.set(0),GUI.cell8Diameter4.set(0),GUI.cell9Diameter4.set(0)
+        gui_main_object.cell1Diameter4.set(0),gui_main_object.cell2Diameter4.set(0),gui_main_object.cell3Diameter4.set(0),gui_main_object.cell4Diameter4.set(0),gui_main_object.cell5Diameter4.set(0),gui_main_object.cell6Diameter4.set(0),gui_main_object.cell7Diameter4.set(0),gui_main_object.cell8Diameter4.set(0),gui_main_object.cell9Diameter4.set(0)
 
   
 
         if autopopulatestemcount == True:
 
-            GUI.cell1Count.set(defaultstemcount),GUI.cell2Count.set(defaultstemcount),GUI.cell3Count.set(defaultstemcount),GUI.cell4Count.set(defaultstemcount),GUI.cell5Count.set(defaultstemcount),GUI.cell6Count.set(defaultstemcount),GUI.cell7Count.set(defaultstemcount),GUI.cell8Count.set(defaultstemcount),GUI.cell9Count.set(defaultstemcount)
+            gui_main_object.cell1Count.set(defaultstemcount),gui_main_object.cell2Count.set(defaultstemcount),gui_main_object.cell3Count.set(defaultstemcount),gui_main_object.cell4Count.set(defaultstemcount),gui_main_object.cell5Count.set(defaultstemcount),gui_main_object.cell6Count.set(defaultstemcount),gui_main_object.cell7Count.set(defaultstemcount),gui_main_object.cell8Count.set(defaultstemcount),gui_main_object.cell9Count.set(defaultstemcount)
 
         ''' end '''
 
@@ -406,111 +406,111 @@ class GUI(tk.Tk):
 
         # may as well keep everything here, for fun
 
-        GUI.errors = [] # for tracking errors
+        gui_main_object.errors = [] # for tracking errors
 
-        GUI.errorCodes = [] # for tracking errors
-
-  
-
-        GUI.forcePushed = []
-
-        GUI.distanceTraveled = []
-
-        GUI.timeElapsed = []
+        gui_main_object.errorCodes = [] # for tracking errors
 
   
 
-        GUI.forcePushed_side1 = []
+        gui_main_object.forcePushed = []
 
-        GUI.forcePushed_side2 = []
+        gui_main_object.distanceTraveled = []
 
-        GUI.forcePushed_side3 = []
-
-        GUI.forcePushed_forward = []
-
-        GUI.distanceTraveled_side1 = []
-
-        GUI.distanceTraveled_side2 = []
-
-        GUI.distanceTraveled_side3 = []
-
-        GUI.distanceTraveled_forward = []
-
-        GUI.timeElapsed_side1 = []
-
-        GUI.timeElapsed_side2 = []
-
-        GUI.timeElapsed_side3 = []
-
-        GUI.timeElapsed_forward =  []
-
-        GUI.peaks_force_side1 = []
-
-        GUI.peaks_force_side2 = []        
-
-        GUI.peaks_force_side3 = []
-
-        GUI.peaks_force_forward = []
-
-        GUI.peaks_distance_side1 = []
-
-        GUI.peaks_distance_side2 = []        
-
-        GUI.peaks_distance_side3 = []
-
-        GUI.peaks_distance_forward = []
-
-        GUI.peaks_time_side1 = []
-
-        GUI.peaks_time_side2 = []        
-
-        GUI.peaks_time_side3 = []
+        gui_main_object.timeElapsed = []
 
   
 
-        GUI.peaks_force = []
+        gui_main_object.forcePushed_side1 = []
 
-        GUI.peaks_distance = []
+        gui_main_object.forcePushed_side2 = []
 
-        GUI.peaks_time = []
+        gui_main_object.forcePushed_side3 = []
+
+        gui_main_object.forcePushed_forward = []
+
+        gui_main_object.distanceTraveled_side1 = []
+
+        gui_main_object.distanceTraveled_side2 = []
+
+        gui_main_object.distanceTraveled_side3 = []
+
+        gui_main_object.distanceTraveled_forward = []
+
+        gui_main_object.timeElapsed_side1 = []
+
+        gui_main_object.timeElapsed_side2 = []
+
+        gui_main_object.timeElapsed_side3 = []
+
+        gui_main_object.timeElapsed_forward =  []
+
+        gui_main_object.peaks_force_side1 = []
+
+        gui_main_object.peaks_force_side2 = []        
+
+        gui_main_object.peaks_force_side3 = []
+
+        gui_main_object.peaks_force_forward = []
+
+        gui_main_object.peaks_distance_side1 = []
+
+        gui_main_object.peaks_distance_side2 = []        
+
+        gui_main_object.peaks_distance_side3 = []
+
+        gui_main_object.peaks_distance_forward = []
+
+        gui_main_object.peaks_time_side1 = []
+
+        gui_main_object.peaks_time_side2 = []        
+
+        gui_main_object.peaks_time_side3 = []
 
   
 
-        GUI.stemcounts = []
+        gui_main_object.peaks_force = []
+
+        gui_main_object.peaks_distance = []
+
+        gui_main_object.peaks_time = []
 
   
 
-        GUI.peak_force_cell1, GUI.peak_force_cell2, GUI.peak_force_cell3, GUI.peak_force_cell4, GUI.peak_force_cell5, GUI.peak_force_cell6, GUI.peak_force_cell7, GUI.peak_force_cell8, GUI.peak_force_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
-
-        GUI.peak_distance_cell1, GUI.peak_distance_cell2, GUI.peak_distance_cell3, GUI.peak_distance_cell4, GUI.peak_distance_cell5, GUI.peak_distance_cell6, GUI.peak_distance_cell7, GUI.peak_distance_cell8, GUI.peak_distance_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
-
-        GUI.peak_time_cell1, GUI.peak_time_cell2, GUI.peak_time_cell3, GUI.peak_time_cell4, GUI.peak_time_cell5, GUI.peak_time_cell6, GUI.peak_time_cell7, GUI.peak_time_cell8, GUI.peak_time_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
-
-        GUI.peak_EI_fullcontact_cell1, GUI.peak_EI_fullcontact_cell2, GUI.peak_EI_fullcontact_cell3, GUI.peak_EI_fullcontact_cell4, GUI.peak_EI_fullcontact_cell5, GUI.peak_EI_fullcontact_cell6, GUI.peak_EI_fullcontact_cell7, GUI.peak_EI_fullcontact_cell8, GUI.peak_EI_fullcontact_cell9 = [],[],[],[],[],[],[],[],[]
-
-        GUI.peak_EI_intermediatecontact_cell1, GUI.peak_EI_intermediatecontact_cell2, GUI.peak_EI_intermediatecontact_cell3, GUI.peak_EI_intermediatecontact_cell4, GUI.peak_EI_intermediatecontact_cell5, GUI.peak_EI_intermediatecontact_cell6, GUI.peak_EI_intermediatecontact_cell7, GUI.peak_EI_intermediatecontact_cell8, GUI.peak_EI_intermediatecontact_cell9 = [],[],[],[],[],[],[],[],[]
-
-        GUI.peak_EI_nocontact_cell1, GUI.peak_EI_nocontact_cell2, GUI.peak_EI_nocontact_cell3, GUI.peak_EI_nocontact_cell4, GUI.peak_EI_nocontact_cell5, GUI.peak_EI_nocontact_cell6, GUI.peak_EI_nocontact_cell7, GUI.peak_EI_nocontact_cell8, GUI.peak_EI_nocontact_cell9 = [],[],[],[],[],[],[],[],[]
+        gui_main_object.stemcounts = []
 
   
 
-        GUI.peaks_time_forward = []
+        gui_main_object.peak_force_cell1, gui_main_object.peak_force_cell2, gui_main_object.peak_force_cell3, gui_main_object.peak_force_cell4, gui_main_object.peak_force_cell5, gui_main_object.peak_force_cell6, gui_main_object.peak_force_cell7, gui_main_object.peak_force_cell8, gui_main_object.peak_force_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
 
-        GUI.EI_fullcontact = []
+        gui_main_object.peak_distance_cell1, gui_main_object.peak_distance_cell2, gui_main_object.peak_distance_cell3, gui_main_object.peak_distance_cell4, gui_main_object.peak_distance_cell5, gui_main_object.peak_distance_cell6, gui_main_object.peak_distance_cell7, gui_main_object.peak_distance_cell8, gui_main_object.peak_distance_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
 
-        GUI.EI_intermediatecontact = []
+        gui_main_object.peak_time_cell1, gui_main_object.peak_time_cell2, gui_main_object.peak_time_cell3, gui_main_object.peak_time_cell4, gui_main_object.peak_time_cell5, gui_main_object.peak_time_cell6, gui_main_object.peak_time_cell7, gui_main_object.peak_time_cell8, gui_main_object.peak_time_cell9 = 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
 
-        GUI.EI_nocontact = []
+        gui_main_object.peak_EI_fullcontact_cell1, gui_main_object.peak_EI_fullcontact_cell2, gui_main_object.peak_EI_fullcontact_cell3, gui_main_object.peak_EI_fullcontact_cell4, gui_main_object.peak_EI_fullcontact_cell5, gui_main_object.peak_EI_fullcontact_cell6, gui_main_object.peak_EI_fullcontact_cell7, gui_main_object.peak_EI_fullcontact_cell8, gui_main_object.peak_EI_fullcontact_cell9 = [],[],[],[],[],[],[],[],[]
 
-        GUI.AvgEI_intermediatecontact = []
+        gui_main_object.peak_EI_intermediatecontact_cell1, gui_main_object.peak_EI_intermediatecontact_cell2, gui_main_object.peak_EI_intermediatecontact_cell3, gui_main_object.peak_EI_intermediatecontact_cell4, gui_main_object.peak_EI_intermediatecontact_cell5, gui_main_object.peak_EI_intermediatecontact_cell6, gui_main_object.peak_EI_intermediatecontact_cell7, gui_main_object.peak_EI_intermediatecontact_cell8, gui_main_object.peak_EI_intermediatecontact_cell9 = [],[],[],[],[],[],[],[],[]
+
+        gui_main_object.peak_EI_nocontact_cell1, gui_main_object.peak_EI_nocontact_cell2, gui_main_object.peak_EI_nocontact_cell3, gui_main_object.peak_EI_nocontact_cell4, gui_main_object.peak_EI_nocontact_cell5, gui_main_object.peak_EI_nocontact_cell6, gui_main_object.peak_EI_nocontact_cell7, gui_main_object.peak_EI_nocontact_cell8, gui_main_object.peak_EI_nocontact_cell9 = [],[],[],[],[],[],[],[],[]
 
   
 
-        GUI.data_preTest,GUI.data_recordForce,GUI.data_postTest,GUI.data_peaks,GUI.data_EI = [],[],[],[],[]
+        gui_main_object.peaks_time_forward = []
+
+        gui_main_object.EI_fullcontact = []
+
+        gui_main_object.EI_intermediatecontact = []
+
+        gui_main_object.EI_nocontact = []
+
+        gui_main_object.AvgEI_intermediatecontact = []
+
+  
+
+        gui_main_object.data_preTest,gui_main_object.data_recordForce,gui_main_object.data_postTest,gui_main_object.data_peaks,gui_main_object.data_EI = [],[],[],[],[]
 
     def show_frame(cont):
 
-        frame = GUI.frames[cont]
+        frame = gui_main_object.frames[cont]
 
         frame.tkraise()
 
@@ -530,13 +530,13 @@ class repeatPageButtons:
 
     def showButtons(self, parent, controller):
 
-        guide_button = tk.Button(self, text = "Guide", font = ("arial", 14, "bold"), height = 2, width = 8, fg = "ghost white", bg = "gray2",command=lambda:GUI.show_frame(Guide))
+        guide_button = tk.Button(self, text = "Guide", font = ("arial", 14, "bold"), height = 2, width = 8, fg = "ghost white", bg = "gray2",command=lambda:gui_main_object.show_frame(Guide))
 
-        initialInputs_button = tk.Button(self, text = "Initial\nInputs", font = ("arial", 14, "bold"), height = 2, width = 8, fg = "ghost white", bg = "gray2",command=lambda:GUI.show_frame(InitialInputs))
+        initialInputs_button = tk.Button(self, text = "Initial\nInputs", font = ("arial", 14, "bold"), height = 2, width = 8, fg = "ghost white", bg = "gray2",command=lambda:gui_main_object.show_frame(InitialInputs))
 
-        recordForce_button = tk.Button(self, text = "Record\nForce", font = ("arial", 14, "bold"), height = 2, width = 8, fg = "ghost white", bg = "gray2",command=lambda:GUI.show_frame(RecordForce))
+        recordForce_button = tk.Button(self, text = "Record\nForce", font = ("arial", 14, "bold"), height = 2, width = 8, fg = "ghost white", bg = "gray2",command=lambda:gui_main_object.show_frame(RecordForce))
 
-        postInputs_button = tk.Button(self, text = "Post Test\nInputs", font = ("arial", 14, "bold"), height = 2, width = 8, fg = "ghost white", bg = "gray2",command=lambda:GUI.show_frame(FinalInputs))
+        postInputs_button = tk.Button(self, text = "Post Test\nInputs", font = ("arial", 14, "bold"), height = 2, width = 8, fg = "ghost white", bg = "gray2",command=lambda:gui_main_object.show_frame(FinalInputs))
 
   
 
@@ -632,14 +632,14 @@ class GUI(tk.Tk, GetterSetterMixin):
 Then, instead of manually declaring each attribute at the top, do something like:
 
 ```python
-GUI.register_attribute("Menu")
-GUI.register_attribute("Calibrate")
-GUI.register_attribute("cell_mass_dict", dict())
-GUI.register_attribute("peak_data_dict", dict())
-GUI.register_attribute("peak_data_object", Peak())
-GUI.register_attribute("raw_data_object", Raw())
-GUI.register_attribute("cell_data_object", Cell())
-GUI.register_attribute("raw_data_dict", dict())
+gui_main_object.register_attribute("Menu")
+gui_main_object.register_attribute("Calibrate")
+gui_main_object.register_attribute("cell_mass_dict", dict())
+gui_main_object.register_attribute("peak_data_dict", dict())
+gui_main_object.register_attribute("peak_data_object", Peak())
+gui_main_object.register_attribute("raw_data_object", Raw())
+gui_main_object.register_attribute("cell_data_object", Cell())
+gui_main_object.register_attribute("raw_data_dict", dict())
 ```
 
 ---
@@ -648,12 +648,12 @@ GUI.register_attribute("raw_data_dict", dict())
 
 ```python
 # Get values
-menu_val = GUI.get("Menu")
-mass_dict = GUI.get("cell_mass_dict")
+menu_val = gui_main_object.get("Menu")
+mass_dict = gui_main_object.get("cell_mass_dict")
 
 # Set values
-GUI.set("Menu", some_menu_object)
-GUI.set("cell_mass_dict", {"cell1": 1.0, "cell2": 2.0})
+gui_main_object.set("Menu", some_menu_object)
+gui_main_object.set("cell_mass_dict", {"cell1": 1.0, "cell2": 2.0})
 ```
 
 ---
@@ -689,7 +689,7 @@ def __setattr__(self, name, value):
         super().__setattr__(name, value)
 ```
 
-Now you can do: `GUI.Menu = some_obj`
+Now you can do: `gui_main_object.Menu = some_obj`
 
 ---
 
@@ -699,7 +699,7 @@ Now you can do: `GUI.Menu = some_obj`
     
 - 🪄 **Clean**: Only need to `register_attribute` once.
     
-- 📚 **Introspectable**: Use `GUI.all_attributes()` to view all.
+- 📚 **Introspectable**: Use `gui_main_object.all_attributes()` to view all.
     
 - 💥 **Safe**: Avoids setting unexpected attributes.
     
@@ -745,7 +745,7 @@ python
 
 CopyEdit
 
-`import tkinter as tk from gui.guiframe_final_inputs import FinalInputs from utils.getter_setter_mixin import GetterSetterMixin  class GUI(tk.Tk, GetterSetterMixin):      @classmethod     def initialize_class_attributes(cls):         from src.models import Peak, Raw, Cell          cls.register_attribute("Menu")         cls.register_attribute("Calibrate")         cls.register_attribute("cell_mass_dict", dict())         cls.register_attribute("peak_data_dict", dict())         cls.register_attribute("peak_data_object", Peak())         cls.register_attribute("raw_data_object", Raw())         cls.register_attribute("cell_data_object", Cell())         cls.register_attribute("raw_data_dict", dict())         cls.register_attribute("FinalInputs")      @classmethod     def pass_in_FinalInputs(cls, FinalInputsClass):         cls.set("FinalInputs", FinalInputsClass)      def __init__(self, *args, **kwargs):         super().__init__(*args, **kwargs)         GUI.initialize_class_attributes()         self.nope = "nope"  # Debug/test flag      def run(self, *args, **kwargs):         GUI.initializeVarsGUI()         GUI.refreshAll()          container = tk.Frame(self)         container.pack(side='top', fill='both', expand=True)         container.grid_rowconfigure(0, weight=1)         container.grid_columnconfigure(0, weight=1)          menubar = self._build_menu(container)         self.config(menu=menubar)          GUI.frames = {}         for F in (InitialInputs, RecordForce, FinalInputs, Calibrate, Guide, ErrorReport, StemCountClassic):             frame = F(container, self)             self.frames[F] = frame             frame.grid(row=0, column=0, sticky='nsew')             frame.configure(background='ghost white')          GUI.show_frame(InitialInputs)      def _build_menu(self, container):         menubar = tk.Menu(container)          filemenu = tk.Menu(menubar, tearoff=0)         filemenu.add_command(label='Serial Reconnect', command=lambda: serial_reconnect())         filemenu.add_command(label='Choose Output Folder', command=lambda: popup_chooseFolder())         filemenu.add_command(label='Errors', command=lambda: showErrors())         filemenu.add_command(label='Save State', command=lambda: createBackupFile())         filemenu.add_command(label='Restore State', command=lambda: restoreState())         filemenu.add_command(label="Exit", command=lambda: close())         menubar.add_cascade(label='File', menu=filemenu)          pagemenu = tk.Menu(menubar, tearoff=0)         pagemenu.add_command(label="Guide", command=lambda: GUI.show_frame(Guide))         pagemenu.add_command(label="Initial Inputs", command=lambda: GUI.show_frame(InitialInputs))         pagemenu.add_command(label="Record Force", command=lambda: GUI.show_frame(RecordForce))         pagemenu.add_command(label="Post Test Inputs", command=lambda: GUI.show_frame(GUI.get("FinalInputs")))         pagemenu.add_command(label="Calibrate", command=lambda: GUI.show_frame(Calibrate))         pagemenu.add_command(label="Stem Count PreTest, Classic", command=lambda: GUI.show_frame(StemCountClassic))         menubar.add_cascade(label="Pages", menu=pagemenu)          datamenu = tk.Menu(menubar, tearoff=0)         datamenu.add_command(label="Data Feed Display, On", command=lambda: data_display(True))         datamenu.add_command(label="Data Feed Display, Off", command=lambda: data_display(False))         menubar.add_cascade(label="Livestream Data Recording", menu=datamenu)          return menubar    @staticmethod     def show_frame(cont):         frame = GUI.frames[cont]         frame.tkraise()         frame.event_generate("<<ShowFrame>>")`
+`import tkinter as tk from gui.guiframe_final_inputs import FinalInputs from utils.getter_setter_mixin import GetterSetterMixin  class GUI(tk.Tk, GetterSetterMixin):      @classmethod     def initialize_class_attributes(cls):         from src.models import Peak, Raw, Cell          cls.register_attribute("Menu")         cls.register_attribute("Calibrate")         cls.register_attribute("cell_mass_dict", dict())         cls.register_attribute("peak_data_dict", dict())         cls.register_attribute("peak_data_object", Peak())         cls.register_attribute("raw_data_object", Raw())         cls.register_attribute("cell_data_object", Cell())         cls.register_attribute("raw_data_dict", dict())         cls.register_attribute("FinalInputs")      @classmethod     def pass_in_gui_final_inputs_object(cls, FinalInputsClass):         cls.set("FinalInputs", FinalInputsClass)      def __init__(self, *args, **kwargs):         super().__init__(*args, **kwargs)         gui_main_object.initialize_class_attributes()         self.nope = "nope"  # Debug/test flag      def run(self, *args, **kwargs):         gui_main_object.initializeVarsGUI()         gui_main_object.refreshAll()          container = tk.Frame(self)         container.pack(side='top', fill='both', expand=True)         container.grid_rowconfigure(0, weight=1)         container.grid_columnconfigure(0, weight=1)          menubar = self._build_menu(container)         self.config(menu=menubar)          gui_main_object.frames = {}         for F in (InitialInputs, RecordForce, FinalInputs, Calibrate, Guide, ErrorReport, StemCountClassic):             frame = F(container, self)             self.frames[F] = frame             frame.grid(row=0, column=0, sticky='nsew')             frame.configure(background='ghost white')          gui_main_object.show_frame(InitialInputs)      def _build_menu(self, container):         menubar = tk.Menu(container)          filemenu = tk.Menu(menubar, tearoff=0)         filemenu.add_command(label='Serial Reconnect', command=lambda: serial_reconnect())         filemenu.add_command(label='Choose Output Folder', command=lambda: popup_chooseFolder())         filemenu.add_command(label='Errors', command=lambda: showErrors())         filemenu.add_command(label='Save State', command=lambda: createBackupFile())         filemenu.add_command(label='Restore State', command=lambda: restoreState())         filemenu.add_command(label="Exit", command=lambda: close())         menubar.add_cascade(label='File', menu=filemenu)          pagemenu = tk.Menu(menubar, tearoff=0)         pagemenu.add_command(label="Guide", command=lambda: gui_main_object.show_frame(Guide))         pagemenu.add_command(label="Initial Inputs", command=lambda: gui_main_object.show_frame(InitialInputs))         pagemenu.add_command(label="Record Force", command=lambda: gui_main_object.show_frame(RecordForce))         pagemenu.add_command(label="Post Test Inputs", command=lambda: gui_main_object.show_frame(gui_main_object.get("FinalInputs")))         pagemenu.add_command(label="Calibrate", command=lambda: gui_main_object.show_frame(Calibrate))         pagemenu.add_command(label="Stem Count PreTest, Classic", command=lambda: gui_main_object.show_frame(StemCountClassic))         menubar.add_cascade(label="Pages", menu=pagemenu)          datamenu = tk.Menu(menubar, tearoff=0)         datamenu.add_command(label="Data Feed Display, On", command=lambda: data_display(True))         datamenu.add_command(label="Data Feed Display, Off", command=lambda: data_display(False))         menubar.add_cascade(label="Livestream Data Recording", menu=datamenu)          return menubar    @staticmethod     def show_frame(cont):         frame = gui_main_object.frames[cont]         frame.tkraise()         frame.event_generate("<<ShowFrame>>")`
 
 ---
 
@@ -757,7 +757,7 @@ python
 
 CopyEdit
 
-`mass_vars = {f"cell{i}Mass": tk.DoubleVar() for i in range(1, 10)} for name, var in mass_vars.items():     GUI.register_attribute(name, var)`
+`mass_vars = {f"cell{i}Mass": tk.DoubleVar() for i in range(1, 10)} for name, var in mass_vars.items():     gui_main_object.register_attribute(name, var)`
 
 We can do this during a **Phase 2 refactor**, converting those attribute blocks into dictionary-driven logic with concise loops. Let me know when you're ready to go there.
 
@@ -834,7 +834,7 @@ python
 
 CopyEdit
 
-`import tkinter as tk from gui.guiframe_final_inputs import FinalInputs from utils.getset_mixin import GetterSetterMixin  # import the mixin  # Example dependencies used in GUI from yourmodule.peak import Peak from yourmodule.raw import Raw from yourmodule.cell import Cell  class GUI(tk.Tk, GetterSetterMixin):      @classmethod     def initialize_class_attributes(cls):         # Register core object-level attributes         cls.register_attribute("Menu")         cls.register_attribute("Calibrate")         cls.register_attribute("cell_mass_dict", dict())         cls.register_attribute("peak_data_dict", dict())         cls.register_attribute("peak_data_object", Peak())         cls.register_attribute("raw_data_object", Raw())         cls.register_attribute("cell_data_object", Cell())         cls.register_attribute("raw_data_dict", dict())         cls.register_attribute("FinalInputs", None)  # this is dynamic      @classmethod     def pass_in_FinalInputs(cls, final_inputs_class):         cls.set("FinalInputs", final_inputs_class)      def __init__(self, *args, **kwargs):         super().__init__(*args, **kwargs)         self.nope = "nope"      def activate_getters_and_setters(self):         for attr in self.all_attributes():             print(f"{attr} = {self.get(attr)}")      def run(self, *args, **kwargs):         tk.Tk.__init__(self, *args, **kwargs)         self.initializeVarsGUI()         self.refreshAll()          container = tk.Frame(self)         container.pack(side='top', fill='both', expand=True)         container.grid_rowconfigure(0, weight=1)         container.grid_columnconfigure(0, weight=1)          # Menus         menubar = tk.Menu(container)         filemenu = tk.Menu(menubar, tearoff=0)         datamenu = tk.Menu(menubar, tearoff=0)         pagemenu = tk.Menu(menubar, tearoff=0)          filemenu.add_command(label='Serial Reconnect', command=serial_reconnect)         filemenu.add_command(label='Choose Output Folder', command=popup_chooseFolder)         filemenu.add_command(label='Errors', command=showErrors)         filemenu.add_command(label='Save State', command=createBackupFile)         filemenu.add_command(label='Restore State', command=restoreState)         filemenu.add_command(label='Exit', command=close)          pagemenu.add_command(label="Guide", command=lambda: self.show_frame(Guide))         pagemenu.add_command(label="Initial Inputs", command=lambda: self.show_frame(InitialInputs))         pagemenu.add_command(label="Record Force", command=lambda: self.show_frame(RecordForce))         pagemenu.add_command(label="Post Test Inputs", command=lambda: self.show_frame(self.get("FinalInputs")))         pagemenu.add_command(label="Calibrate", command=lambda: self.show_frame(Calibrate))         pagemenu.add_command(label="Stem Count PreTest, Classic", command=lambda: self.show_frame(StemCountClassic))          datamenu.add_command(label="Data Feed Display, On", command=lambda: data_display(True))         datamenu.add_command(label="Data Feed Display, Off", command=lambda: data_display(False))          menubar.add_cascade(label='File', menu=filemenu)         menubar.add_cascade(label='Pages', menu=pagemenu)         menubar.add_cascade(label='Livestream Data Recording', menu=datamenu)          self.config(menu=menubar)          # Load frames         self.frames = {}         for F in (InitialInputs, RecordForce, FinalInputs, Calibrate, Guide, ErrorReport, StemCountClassic):             frame = F(container, self)             self.frames[F] = frame             frame.grid(row=0, column=0, sticky='nsew')             frame.configure(background='ghost white')          self.show_frame(InitialInputs)      def show_frame(self, cont):         frame = self.frames[cont]         frame.tkraise()         frame.event_generate("<<ShowFrame>>")      # The methods initializeVarsGUI and refreshAll stay unchanged for now`
+`import tkinter as tk from gui.guiframe_final_inputs import FinalInputs from utils.getset_mixin import GetterSetterMixin  # import the mixin  # Example dependencies used in GUI from yourmodule.peak import Peak from yourmodule.raw import Raw from yourmodule.cell import Cell  class GUI(tk.Tk, GetterSetterMixin):      @classmethod     def initialize_class_attributes(cls):         # Register core object-level attributes         cls.register_attribute("Menu")         cls.register_attribute("Calibrate")         cls.register_attribute("cell_mass_dict", dict())         cls.register_attribute("peak_data_dict", dict())         cls.register_attribute("peak_data_object", Peak())         cls.register_attribute("raw_data_object", Raw())         cls.register_attribute("cell_data_object", Cell())         cls.register_attribute("raw_data_dict", dict())         cls.register_attribute("FinalInputs", None)  # this is dynamic      @classmethod     def pass_in_gui_final_inputs_object(cls, final_inputs_class):         cls.set("FinalInputs", final_inputs_class)      def __init__(self, *args, **kwargs):         super().__init__(*args, **kwargs)         self.nope = "nope"      def activate_getters_and_setters(self):         for attr in self.all_attributes():             print(f"{attr} = {self.get(attr)}")      def run(self, *args, **kwargs):         tk.Tk.__init__(self, *args, **kwargs)         self.initializeVarsGUI()         self.refreshAll()          container = tk.Frame(self)         container.pack(side='top', fill='both', expand=True)         container.grid_rowconfigure(0, weight=1)         container.grid_columnconfigure(0, weight=1)          # Menus         menubar = tk.Menu(container)         filemenu = tk.Menu(menubar, tearoff=0)         datamenu = tk.Menu(menubar, tearoff=0)         pagemenu = tk.Menu(menubar, tearoff=0)          filemenu.add_command(label='Serial Reconnect', command=serial_reconnect)         filemenu.add_command(label='Choose Output Folder', command=popup_chooseFolder)         filemenu.add_command(label='Errors', command=showErrors)         filemenu.add_command(label='Save State', command=createBackupFile)         filemenu.add_command(label='Restore State', command=restoreState)         filemenu.add_command(label='Exit', command=close)          pagemenu.add_command(label="Guide", command=lambda: self.show_frame(Guide))         pagemenu.add_command(label="Initial Inputs", command=lambda: self.show_frame(InitialInputs))         pagemenu.add_command(label="Record Force", command=lambda: self.show_frame(RecordForce))         pagemenu.add_command(label="Post Test Inputs", command=lambda: self.show_frame(self.get("FinalInputs")))         pagemenu.add_command(label="Calibrate", command=lambda: self.show_frame(Calibrate))         pagemenu.add_command(label="Stem Count PreTest, Classic", command=lambda: self.show_frame(StemCountClassic))          datamenu.add_command(label="Data Feed Display, On", command=lambda: data_display(True))         datamenu.add_command(label="Data Feed Display, Off", command=lambda: data_display(False))          menubar.add_cascade(label='File', menu=filemenu)         menubar.add_cascade(label='Pages', menu=pagemenu)         menubar.add_cascade(label='Livestream Data Recording', menu=datamenu)          self.config(menu=menubar)          # Load frames         self.frames = {}         for F in (InitialInputs, RecordForce, FinalInputs, Calibrate, Guide, ErrorReport, StemCountClassic):             frame = F(container, self)             self.frames[F] = frame             frame.grid(row=0, column=0, sticky='nsew')             frame.configure(background='ghost white')          self.show_frame(InitialInputs)      def show_frame(self, cont):         frame = self.frames[cont]         frame.tkraise()         frame.event_generate("<<ShowFrame>>")      # The methods initializeVarsGUI and refreshAll stay unchanged for now`
 
 ---
 
@@ -846,7 +846,7 @@ python
 
 CopyEdit
 
-`GUI.initialize_class_attributes()`
+`gui_main_object.initialize_class_attributes()`
 
 This can be done at module load time or before `run()`.
 
@@ -860,7 +860,7 @@ python
 
 CopyEdit
 
-`GUI.cell1Mass = tk.DoubleVar() GUI.cell2Mass = tk.DoubleVar() ...`
+`gui_main_object.cell1Mass = tk.DoubleVar() gui_main_object.cell2Mass = tk.DoubleVar() ...`
 
 **Do this**:
 
@@ -868,7 +868,7 @@ python
 
 CopyEdit
 
-`GUI.register_attribute("cellMassVars", {f"cell{i}": tk.DoubleVar() for i in range(1, 10)})`
+`gui_main_object.register_attribute("cellMassVars", {f"cell{i}": tk.DoubleVar() for i in range(1, 10)})`
 
 Then access like:
 
@@ -876,7 +876,7 @@ python
 
 CopyEdit
 
-`GUI.get("cellMassVars")["cell1"].set(42.0)`
+`gui_main_object.get("cellMassVars")["cell1"].set(42.0)`
 
 Much more scalable and clean.
 
@@ -948,7 +948,7 @@ Thanks for the clear direction — I’ll now refactor `FinalInputs` as a full f
     
 - Cleaning up any tightly coupled logic.
     
-- Preparing it for interop with `GUI.get()` / `GUI.set()`.
+- Preparing it for interop with `gui_main_object.get()` / `gui_main_object.set()`.
     
 
 Since you haven’t pasted the original `FinalInputs` class yet, I’ll reconstruct a plausible version based on typical structure (and your earlier GUI code context). Once I have your real version, I’ll adjust accordingly.
@@ -1022,7 +1022,7 @@ class FinalInputs(tk.Frame, GetterSetterMixin):
         self.feedback_label.config(text="✅ Final inputs saved.")
 
         # Optionally pass back to GUI
-        GUI.set("final_input_data", {
+        gui_main_object.set("final_input_data", {
             "operator": FinalInputs.get("operator_name").get(),
             "notes": FinalInputs.get("notes"),
             "quality": FinalInputs.get("sample_quality").get(),
@@ -1045,7 +1045,7 @@ class FinalInputs(tk.Frame, GetterSetterMixin):
 |`initialize_class_attributes()`|Centralized state definition using `tk.StringVar()` etc.|
 |Separation of UI + Logic|UI creation in `_build_ui()`, data sync in `save_inputs()`.|
 |`<<ShowFrame>>` event|Lets the GUI update/reset data every time frame is shown.|
-|`GUI.set()` / `GUI.get()` ready|Final data can now be accessed by GUI for storage, display, export.|
+|`gui_main_object.set()` / `gui_main_object.get()` ready|Final data can now be accessed by GUI for storage, display, export.|
 
 ---
 
@@ -2601,7 +2601,7 @@ import tkinter as tk
 import PIL.ImageTk
 import PIL.Image
 
-from gui_main import SocemGUI
+from gui_main import SocemGuiMain
 ## Guide page 
 class Guide(tk.Frame):
     def __init__(self, parent, controller): # automatically runs
@@ -2610,7 +2610,7 @@ class Guide(tk.Frame):
         pageButtons = repeatPageButtons.showButtons(self, parent, controller)
 
         # button that enters Calibrate page/class
-        calibrate_button = tk.Button(self, text = "Calibrate\nForce\nSensor", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2", command=lambda:GUI.show_frame(Calibrate)) #tares/zeros load cell
+        calibrate_button = tk.Button(self, text = "Calibrate\nForce\nSensor", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2", command=lambda:gui_main_object.show_frame(Calibrate)) #tares/zeros load cell
         calibrate_button.place(x = 510, y = 340)
         
         # instruction steps:
@@ -2661,7 +2661,7 @@ To enhance the `Guide` class while retaining its current functionality, we'll fo
 import tkinter as tk
 import PIL.ImageTk
 import PIL.Image
-from gui_main import SocemGUI
+from gui_main import SocemGuiMain
 from src.directories import Directories  # For access to directories, if needed
 
 class Guide(tk.Frame):
@@ -2696,7 +2696,7 @@ class Guide(tk.Frame):
         # Button that enters the Calibrate page/class
         calibrate_button = tk.Button(self, text="Calibrate\nForce\nSensor", font=("arial", 16, "bold"),
                                      height=3, width=8, fg="ghost white", bg="gray2",
-                                     command=lambda: GUI.show_frame(Calibrate))  # Tares/zeros load cell
+                                     command=lambda: gui_main_object.show_frame(Calibrate))  # Tares/zeros load cell
         calibrate_button.place(x=510, y=340)
 
     def create_guide_instructions(self):
@@ -3095,7 +3095,7 @@ StemBerry V.105
 Last updated: 10/16/2022
 Dev: Clayton Bennett
 OG dev: Austin Bebee
-Description: SOCEM GUI. Connect RPi to Arduino, collect raw data. Save text inputs.
+Description: SOCEM gui_main_object. Connect RPi to Arduino, collect raw data. Save text inputs.
 
 Contents (in order):s
 - Library imports
@@ -3117,7 +3117,7 @@ V19
     - Rip out defunct calculations
     - Clean up code, specifically by organizing statements of place for tkinter items
 V37
-    - Dial in functionality with pretty new GUI.
+    - Dial in functionality with pretty new gui_main_object.
     - barbottom (not barmiddle) set to 70%-90% of stem height
 V42
     - Develop top level methods
@@ -3139,7 +3139,7 @@ V84
     - The way peak clicks are handled and saved was moved to the inside of the choose peaks code, becuase plt.show() won't give up.
     - Shut down plt.show after CSV file is saved.
 V88
-    - GUI.filename_force updated on page change to either record force frame or final inputs page
+    - gui_main_object.filename_force updated on page change to either record force frame or final inputs page
     - nameBlackBox updated to remove excess hyphen when direction ==''
     - XLSX compilation file functional, currently set to seek force and EI files
     - EI calcualtion works - only needs 1 file for all four nine-cell-scheme tests. 
@@ -3150,7 +3150,7 @@ V90
 V92
     - Trigger peak selection for all tests, with the assessAllTests boolean.
     - Noticed that encoderWorked_override is poorly implemented. No reason to fix now, but, should be alterable as opposed to needing manual suppression through commenting
-    - GUI.currentdirection.get() set to "" on_frame_show RecordForce.
+    - gui_main_object.currentdirection.get() set to "" on_frame_show RecordForce.
 V94
     - Changed mass measurement from kg to gramsa
     - Fixed all time units to be (sec), not (s) or (seconds), and certainly not (ms)
@@ -3171,7 +3171,7 @@ Fix:
 - move header variable inputs
 - make directory inputtable using dropdown menu item and textbox
 - upgrade tkinter items to CustomTkinter
-- PRIORITY: CREATE BASE NAME FROM VARIABLE AND PLOT: GUI.filename_force.get() is getting dangerous.
+- PRIORITY: CREATE BASE NAME FROM VARIABLE AND PLOT: gui_main_object.filename_force.get() is getting dangerous.
      
 Notes:
 - exec() is your friend. Use is to run multiple lines of code which you can copy and paste into a shell, using triple '  commenting
@@ -3180,7 +3180,7 @@ Notes:
 
 '''Local libraries'''
 #import src.serial
-from gui.gui_main import SocemGUI
+from gui.gui_main import SocemGuiMain
 from src.directories import Directories
 
 ''' Libraries '''
@@ -3427,7 +3427,7 @@ from serial import Serial
 ### from serial import *
 import serial.tools.list_ports # need this
 
-from gui.gui_main import SocemGUI
+from gui.gui_main import SocemGuiMain
 
 ### Determine Arduino serial port address
 def serial_connect():
@@ -3446,15 +3446,15 @@ def serial_connect():
         print("dev = "+dev)
         ser.reset_input_buffer()  
         #ser.isOpen()
-        #GUI.ignoreserial = False
+        #gui_main_object.ignoreserial = False
         return ser # this is the only spot it should be called ser, not RecordForce.ser
     
     except:
-        GUI.ignoreserial = True
+        gui_main_object.ignoreserial = True
         error = 'serial connection never established'
         eCode = 'e1' # eCode = e1
-        GUI.errors.append(error) # append error label
-        GUI.errorCodes.append(eCode) # append error code
+        gui_main_object.errors.append(error) # append error label
+        gui_main_object.errorCodes.append(eCode) # append error code
         #popup('serial connection')
         print("eCode = "+eCode)
 
@@ -3462,19 +3462,19 @@ def serial_connect():
 def serial_reconnect():
     print("serial_reconnect()")
     try:
-    #if GUI.ignoreserial == False:
-        GUI.ignoreserial = False
+    #if gui_main_object.ignoreserial == False:
+        gui_main_object.ignoreserial = False
         try:
             RecordForce.ser.close()
-            GUI.ignoreserial = False
+            gui_main_object.ignoreserial = False
         except:
-            GUI.ignoreserial = True
+            gui_main_object.ignoreserial = True
         RecordForce.ser = serial_connect()
         
     except:
     #else:
-        GUI.ignoreserial = True
-        print("\nYou hit the 'serial_reconnect' dropdown menu item while GUI.ignoreserial == True.\nSerial cannot be reconnected because\neither an arduino is not connected to your computer\nor the arduino is not sought by StemBerry.")
+        gui_main_object.ignoreserial = True
+        print("\nYou hit the 'serial_reconnect' dropdown menu item while gui_main_object.ignoreserial == True.\nSerial cannot be reconnected because\neither an arduino is not connected to your computer\nor the arduino is not sought by StemBerry.")
         RecordForce.message_connectArduino()
 
 
@@ -3487,7 +3487,7 @@ Here's the refactored version of your code, including modular structure, improve
 # Last updated: 10/16/2022
 # Developer: Clayton Bennett
 # Original Developer: Austin Bebee
-# Description: SOCEM GUI. Connect Raspberry Pi to Arduino, collect raw data, and save text inputs.
+# Description: SOCEM gui_main_object. Connect Raspberry Pi to Arduino, collect raw data, and save text inputs.
 # Contains:
 # - Library imports
 # - Global Variables
@@ -3496,7 +3496,7 @@ Here's the refactored version of your code, including modular structure, improve
 # - Main function to execute the program
 
 ''' Local libraries '''
-from gui.gui_main import SocemGUI
+from gui.gui_main import SocemGuiMain
 from src.directories import Directories
 
 ''' Standard Libraries '''
@@ -3556,13 +3556,13 @@ def serial_reconnect():
     Attempts to reconnect the serial connection if it has been lost.
     """
     try:
-        if GUI.ignoreserial is False:
+        if gui_main_object.ignoreserial is False:
             RecordForce.ser.close()
             RecordForce.ser = serial_connect()
-            GUI.ignoreserial = False
+            gui_main_object.ignoreserial = False
     except Exception as e:
         print(f"Error during serial reconnect: {e}")
-        GUI.ignoreserial = True
+        gui_main_object.ignoreserial = True
 
 ''' Data Collection Function '''
 def run_data_collection(self, ser):
@@ -3699,7 +3699,7 @@ Sure! Here's the refactored version of the `serial.py` code, following similar p
 import serial
 from serial import Serial
 import serial.tools.list_ports
-from gui.gui_main import SocemGUI
+from gui.gui_main import SocemGuiMain
 
 def serial_connect():
     """
@@ -3739,7 +3739,7 @@ def serial_reconnect():
         None
     """
     try:
-        if GUI.ignoreserial is False:
+        if gui_main_object.ignoreserial is False:
             # Close the existing connection if it's open
             RecordForce.ser.close()  
             print("Existing serial connection closed.")
@@ -3748,13 +3748,13 @@ def serial_reconnect():
             RecordForce.ser = serial_connect()
 
             # If successful, reset the ignore serial flag
-            GUI.ignoreserial = False
+            gui_main_object.ignoreserial = False
             print("Reconnection successful.")
         else:
             print("No active serial connection to close.")
     except Exception as e:
         print(f"Error during serial reconnection: {e}")
-        GUI.ignoreserial = True  # Update the GUI state to ignore serial operations
+        gui_main_object.ignoreserial = True  # Update the GUI state to ignore serial operations
         print("Failed to reconnect serial. Ignoring serial connection.")
 
 
@@ -3895,7 +3895,7 @@ poetry add cmd2
 # ChatGPT Integer Title: Shell Command-Line Interface for SOCEM Package
 
 import cmd2
-from gui.gui_main import SocemGUI
+from gui.gui_main import SocemGuiMain
 from src.directories import Directories
 import serial
 from serial import Serial
@@ -3905,7 +3905,7 @@ import math
 class SOCEMShell(cmd2.Cmd):
     """
     SOCEMShell is a command-line interface (CLI) for interacting with the SOCEM package.
-    It allows users to access different functionalities without using the GUI.
+    It allows users to access different functionalities without using the gui_main_object.
     """
     intro = 'Welcome to the SOCEM command-line interface. Type help or ? to list commands.'
     prompt = '(socem) '
@@ -3928,7 +3928,7 @@ class SOCEMShell(cmd2.Cmd):
         """Stop data collection."""
         print("Stopping data collection...")
         # Assuming there's a global or static variable to control collection
-        GUI.collect = False
+        gui_main_object.collect = False
 
     # Command to reconnect the serial port
     def do_reconnect_serial(self, arg):
@@ -3976,11 +3976,11 @@ class SOCEMShell(cmd2.Cmd):
         print("Attempting to reconnect...")
         try:
             # Close the existing serial connection if it exists
-            if hasattr(GUI, 'ser') and GUI.ser.is_open:
-                GUI.ser.close()
+            if hasattr(GUI, 'ser') and gui_main_object.ser.is_open:
+                gui_main_object.ser.close()
             ser = self.connect_to_serial()
             if ser:
-                GUI.ser = ser  # Assuming GUI stores the serial connection object
+                gui_main_object.ser = ser  # Assuming GUI stores the serial connection object
                 print("Reconnection successful.")
             else:
                 print("Error: Could not reconnect to the serial device.")
@@ -3988,7 +3988,7 @@ class SOCEMShell(cmd2.Cmd):
             print(f"Reconnection failed: {e}")
 
     def run_data_collection(self, ser):
-        """Runs the data collection loop, similar to the RecordForce functionality in the GUI."""
+        """Runs the data collection loop, similar to the RecordForce functionality in the gui_main_object."""
         print("Data collection started...")
         i = 0
         string = list()
@@ -4043,7 +4043,7 @@ if __name__ == '__main__':
     
     - `do_start_data_collection(self, arg)`: Starts data collection by connecting to the serial device and then running the data collection loop.
         
-    - `do_stop_data_collection(self, arg)`: Stops the data collection by setting a flag in `GUI.collect`.
+    - `do_stop_data_collection(self, arg)`: Stops the data collection by setting a flag in `gui_main_object.collect`.
         
     - `do_reconnect_serial(self, arg)`: Reconnects to the serial device if the connection is lost.
         

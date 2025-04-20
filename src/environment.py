@@ -5,26 +5,32 @@ Created: 23 July 2024
 '''
 import platform
 import sys
-def windows():
-    if 'win' in platform.platform().lower():
-        windows=True
-    else:
-        windows=False
-    return windows
+from datetime import date
 
-def pyinstaller():
-    if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-        pyinstaller = True
-    else:
-        pyinstaller = False
-    return pyinstaller
+class Env():
+    today = date.today()
+    datestring = today.strftime("%b-%d-%Y")
+    def windows():
+        if 'win' in platform.platform().lower():
+            windows=True
+        else:
+            windows=False
+        return windows
 
-def frozen():
-    if getattr(sys, 'frozen', True):
-        frozen = True
-    else:
-        frozen = False
-    return frozen
+    def pyinstaller():
+        if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+            pyinstaller = True
+        else:
+            pyinstaller = False
+        return pyinstaller
 
-def get_operatingsystem():
-    return platform.system() #determine OS
+    def frozen():
+        if getattr(sys, 'frozen', True):
+            frozen = True
+        else:
+            frozen = False
+        return frozen
+
+    def get_operatingsystem():
+        return platform.system() #determine OS
+
