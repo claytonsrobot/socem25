@@ -109,22 +109,58 @@ class Directories:
             print(f"[Directories] File does not exist: {filepath}")
             raise SystemExit
         return True
-def bless_this_mess():
+
+
+def get_device_connection_details(dev_manual=None, directory=None):
+    """
+    Determines the correct file path and device port based on the operating system.
+    Automatically adjusts for Windows, Linux (Raspberry Pi), and other OS.
+
+    Parameters:
+    - dev_manual (str): Optional manual device port override (default: None)
+    - directory (str): Base directory for file storage (default: None)
+
+    Returns:
+    - address (str): The directory path for storing data
+    - dev_guess (str): The device port for serial communication (e.g., COMx, /dev/ttyACM0)
+    """
+    if directory is None:
+        directory = os.getcwd()  # Use current working directory if not provided
+
+    # Default device port if no manual override is provided
+    dev_guess = None
+
     if socem25.core.environment.get_operatingsystem() == 'Windows':
-        if os.getlogin() == 'clayt':
+        # Windows-specific logic
+        if os.getlogin() == 'clayt':  # Check for user-specific path on Windows
             address = r'C:\Users\clayton\OneDrive - University of Idaho\AqMEQ\SOCEM\Data - Instron and SOCEM - 2020, 2021\SOCEM_DATA_2021'
-            dev_guess = 'COM3' # manual override, windows 10 OS
+            dev_guess = 'COM3'  # Manual override for Windows OS
         else:
-            #dev_manualOverride = False
-            address = directory + '/SOCEM_data'
+            # For other Windows users, set a default address and create directory if needed
+            address = os.path.join(directory, 'SOCEM_data')
             if not os.path.exists(address):
-                os.makedirs(address) 
+                os.makedirs(address)
+
     elif socem25.core.environment.get_operatingsystem() == 'Linux':
-        dev_guess = '/dev/ttyACM0' # manual override raspian OS
+        # Linux (Raspberry Pi) specific logic
+        dev_guess = '/dev/ttyACM0'  # Default serial port for Raspberry Pi
         address = '/home/pi/Desktop/SOCEM_data_2022'
+
     else:
-        address = directory + '/SOCEM_data'
-        dev_guess = dev_manual
-        dev_manualOverride = False
+        # Fallback for other operating systems
+        address = os.path.join(directory, 'SOCEM_data')
+        dev_guess = dev_manual if dev_manual else '/dev/ttyUSB0'  # Use provided manual port or default
         if not os.path.exists(address):
             os.makedirs(address)
+
+    return address, dev_guess
+
+if __name__ == "__main__":
+    # For Windows with manual override (if needed)
+    address, dev_guess = get_device_connection_details(dev_manual='COM3')
+
+    # For Linux (Raspberry Pi)
+    address, dev_guess = get_device_connection_details()
+
+    print(f"Address: {address}")
+    print(f"Device Port: {dev_guess}")
