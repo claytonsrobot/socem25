@@ -1,4 +1,5 @@
 # config_global.py
-from configuration import Config
+from config_manager import Config
+#from configuration import Config
 
 CONFIG = Config()

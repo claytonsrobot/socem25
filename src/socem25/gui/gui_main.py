@@ -5,7 +5,6 @@ import time
 from socem25.core.serial_connection import SerialConnection as SC #import serial_reconnect
 import socem25.core.main_funcs
 from socem25.core.userclicks import PeakClick 
-from socem25.core.configuration import Config
 from socem25.core.pass_in import PassIn
 '''Classes, Tkinter GUI'''
 # GUI overarching class

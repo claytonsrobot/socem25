@@ -2,7 +2,10 @@
 import tkinter as tk
 from socem25.gui.gui_main import SocemGuiMain
 from socem25.core.directories import Directories
-from socem25.core.configuration import Config
+if False:
+    from socem25.core.configuration import Config
+else:
+    from socem25.core.config_manager import Config
 def cli_entry():
     parent = tk.Tk()
     controller = None

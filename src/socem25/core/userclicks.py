@@ -6,7 +6,6 @@ import os
 import socem25.core.cursor
 #from socem25.gui.gui_main import SocemGuiMain
 from socem25.core.pass_in import PassIn
-from socem25.core.configuration import Config
 
 ''' Figure Interation classes '''
 class SnaptoCursor(PassIn):

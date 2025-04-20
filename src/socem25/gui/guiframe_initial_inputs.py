@@ -6,7 +6,7 @@ import tkinter as tk
 from socem25.core.pass_in import PassIn
 from socem25.core.serial_connection import SerialConnection as SC
 from socem25.gui.gui_main import RepeatPageButtons
-from socem25.core.configuration import Config
+
 import socem25.core.main_funcs
 #Home page
 

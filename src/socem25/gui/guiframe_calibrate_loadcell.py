@@ -1,5 +1,4 @@
 import tkinter as tk
-from socem25.core.configuration import Config
 from socem25.gui.gui_main import RepeatPageButtons
 #from socem25.gui.gui_main import SocemGuiMain
 
