@@ -14,103 +14,101 @@ from socem25.core.directories import Directories
 import os
 import inspect
 from socem25.core.helpers import toml_utils
-import socem25.core.environment as environment
+import socem25.core.environment
 
 class Directories:
     "from socem25.core.directories import Directories"
+
     program = None
     project = None
-    configs = None
-    exports = None
-    imports = None
-    groupings = None
+    root = None
+    config_entry_filepath = "./projects/default-project.toml"
 
-    """ setters """
+    # ----- Setters -----
     @classmethod
-    def set_program_dir(cls,path):
-        cls.program = path
+    def set_program_dir(cls, path):
+        cls.program = os.path.normpath(path)
+
     @classmethod
-    def set_project_dir(cls,path):
-        # if a legitimate full path is not provided, assume that the project directory is within the program\projects\ directory
+    def set_project_dir(cls, path):
         if os.path.isdir(path):
-            cls.project = path
+            cls.project = os.path.normpath(path)
         else:
-            relative_path =  cls.get_program_dir()+"\\projects\\"+path
+            # assume it's a project name, not a full path
+            relative_path = os.path.join(cls.program, "projects", path)
             if os.path.isdir(relative_path):
-                cls.project = relative_path
-        print(f"Project directory set: {cls.project}")
+                cls.project = os.path.normpath(relative_path)
+        print(f"[Directories] Project directory set: {cls.project}")
 
-    """ getters """
+    # ----- Getters -----
     @classmethod
     def get_program_dir(cls):
         return cls.program
-    @classmethod
-    def get_program_dir(cls):
-        return cls.program
+
     @classmethod
     def get_project_dir(cls):
         return cls.project
+
     @classmethod
     def get_config_dir(cls):
-        return cls.get_project_dir()+"\\configs\\"
+        return os.path.join(cls.project, "configs")
+
     @classmethod
     def get_export_dir(cls):
-        return cls.get_project_dir()+"\\exports\\"
+        return os.path.join(cls.project, "exports")
+
     @classmethod
     def get_import_dir(cls):
-        if environment.vercel==False:
-            return cls.get_project_dir()+"\\imports\\"
-        elif environment.vercel==True: # web app, blob
-            print("\nYou have not yet built a web app, last I checked.\nAnd yet, environmental.vercel==True")
-            pass
-        return cls.get_project_dir()+"\\imports\\"
+        return os.path.join(cls.project, "imports")
+
     @classmethod
     def get_groupings_dir(cls):
-        return cls.get_config_dir()+"\\groupings\\"
+        return os.path.join(cls.get_config_dir(), "groupings")
+
     @classmethod
     def get_intermediate_group_structure_export_dir(cls):
-        return cls.get_groupings_dir()+"\\intermediate_group_structure_export\\"
+        return os.path.join(cls.get_groupings_dir(), "intermediate_group_structure_export")
+
     @classmethod
     def get_group_by_directory_intermediate_export_json_filepath(cls):
-        return cls.get_intermediate_group_structure_export_dir()+"group_by_directory_intermediate_export.json"
+        return os.path.join(cls.get_intermediate_group_structure_export_dir(), "group_by_directory_intermediate_export.json")
+
     @classmethod
     def get_group_by_spreadsheet_intermediate_export_json_filepath(cls):
-        return cls.get_intermediate_group_structure_export_dir()+"group_by_spreadsheet_intermediate_export.json"
+        return os.path.join(cls.get_intermediate_group_structure_export_dir(), "group_by_spreadsheet_intermediate_export.json")
+
     @classmethod
     def get_group_by_text_intermediate_export_json_filepath(cls):
-        return cls.get_intermediate_group_structure_export_dir()+"group_by_text_intermediate_export.json"
-    
-    # migrated
+        return os.path.join(cls.get_intermediate_group_structure_export_dir(), "group_by_text_intermediate_export.json")
+
+    # ----- Initialization -----
     @classmethod
-    def initilize_program_dir(cls): # called in CLI. Should also be called at other entry points.
+    def initialize_program_dir(cls):
         cls.set_program_dir(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))
-        print(f"cls.get_program_dir() = {cls.get_program_dir()}")
-        #cls.initialize_startup_project()
+        print(f"[Directories] Program directory initialized: {cls.get_program_dir()}")
+
     @classmethod
     def initialize_startup_project(cls):
-        filename_default_project_entry = "./projects/default-project.toml"
-        loaded_entry = toml_utils.load_toml(filename_default_project_entry)
-        cls.set_project_dir(cls.get_program_dir()+"\\projects\\"+loaded_entry["project_directory"])
+        loaded_entry = toml_utils.load_toml(cls.config_entry_filepath)
+        project_folder = loaded_entry["project_directory"]
+        cls.set_project_dir(os.path.join(cls.get_program_dir(), "projects", project_folder))
 
-    """get filepaths"""
+    # ----- Config File Entry -----
     @classmethod
-    def get_config_entry(self): 
-        loaded_config_entry_toml = toml_utils.load_toml(self.config_entry_filepath)
-        config_input_filename = loaded_config_entry_toml["entry"]["config_input_filename"]
-        config_input_path = os.path.normpath(Directories.get_config_dir()+"\\"+config_input_filename)
-        Directories.check_file(config_input_path)
-        return config_input_path
+    def get_config_entry(cls):
+        loaded_entry = toml_utils.load_toml(cls.config_entry_filepath)
+        config_filename = loaded_entry["entry"]["config_input_filename"]
+        config_path = os.path.normpath(os.path.join(cls.get_config_dir(), config_filename))
+        cls.check_file(config_path)
+        return config_path
 
+    # ----- Utility -----
     @staticmethod
     def check_file(filepath):
-        if not(os.path.isfile(filepath)):
-            print(f"The file does not exist: {filepath}")
-            #raise RuntimeError("Stopping execution")
+        if not os.path.isfile(filepath):
+            print(f"[Directories] File does not exist: {filepath}")
             raise SystemExit
-        else:
-            # the file exists
-            return True
-        
+        return True
 def bless_this_mess():
     if socem25.core.environment.get_operatingsystem() == 'Windows':
         if os.getlogin() == 'clayt':
