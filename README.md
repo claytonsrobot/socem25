@@ -18,8 +18,16 @@ An Arduino unit is connected via USB, to pass the live data feed to the Rasperry
 > poetry run python -m socem25.shell.main
 > poetry run python -m socem25.gui.main
 > poetry run python -m socem25.api.main
+> .\run.ps1 shell    # for shell mode
+> .\run.ps1 gui      # for GUI mode
+> .\run.ps1 api      # for API mode
+
 
 
 # Shell functionality
 > poetry run python -m shell
+> run.bat shell    // for shell mode
+> run.bat gui      // for GUI mode
+> run.bat api      // for API mode
+
 
