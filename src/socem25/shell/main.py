@@ -1,3 +1,4 @@
+import os
 from socem25.startup import Startup
 
 def cli():
@@ -5,9 +6,12 @@ def cli():
     app.startup()
 
     # fake CLI loop
-    print("Welcome to the CLI. Loaded projects:", app.services.project_manager.projects)
+    print("Welcome to the CLI. Loaded projects:", [os.path.basename(p) for p in app.services.project_manager.projects])
 
     app.shutdown()
 
-if __name__ == "__main__":
+def main():
     cli()
+
+if __name__ == "__main__":
+    main()

@@ -14,3 +14,6 @@ class Startup:
 
     def shutdown(self):
         self.services.logger.info("System shutting down.")
+
+    def run(self):
+        self.services.wrong # split 

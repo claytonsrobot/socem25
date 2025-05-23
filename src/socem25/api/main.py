@@ -12,8 +12,7 @@ async def lifespan(app: FastAPI):
     yield
     startup.shutdown()
 
-app = FastAPI(lifespan=lifespan)
-
+app = FastAPI(lifespan=lifespan) 
 @app.get("/projects")
 def get_projects():
     startup = app.state.startup

@@ -1,9 +1,15 @@
 import tkinter as tk
 import PIL.ImageTk
 import PIL.Image
+import inspect
+import os
+
+current_file = inspect.getfile(inspect.currentframe())
+current_dir = os.path.dirname(os.path.abspath(current_file))
 
 #from socem25.gui.gui_main import SocemGuiMain
 from socem25.core.pass_in import PassIn
+from socem25.gui.gui_main import RepeatPageButtons
 # Guide page 
 class Guide(PassIn, tk.Frame):
 
@@ -13,22 +19,28 @@ class Guide(PassIn, tk.Frame):
         print("Overriding a passin function. Guide.pass_in_gui_main_object()")
         self.gui_main_object = gui_main_object
 
-    def __init__(self, parent, controller): # automatically runs
+    def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        PassIn.__init__()
+        PassIn.__init__(self)
+        print("Guide initialized!")
+        self.render(parent, controller)
 
-        pageButtons = repeatPageButtons.showButtons(self, parent, controller)
+    def render(self,parent, controller):
+        pageButtons = RepeatPageButtons.showButtons(self, parent, controller)
 
         # button that enters Calibrate page/class
-        calibrate_button = tk.Button(self, text = "Calibrate\nForce\nSensor", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2", command=lambda:self.gui_main_object.show_frame(Calibrate)) #tares/zeros load cell
-        calibrate_button.place(x = 510, y = 340)
+        #calibrate_button = tk.Button(self, text = "Calibrate\nForce\nSensor", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2", command=lambda:self.gui_main_object.show_frame(Calibrate)) #tares/zeros load cell
+        #calibrate_button.place(x = 510, y = 340)
+        #calibrate_button.pack(side="right", padx=20)
         
         # instruction steps:
         '''
         Nine-cell scheme design:
         '''
-        guide_frame = tk.LabelFrame(self, text='Nine-Cell Scheme',font = ("arial", 14, "bold"), width= 10, bg="white", fg="gray1")
-        guide_frame.place(x = 0, y = 20)
+        guide_frame = tk.LabelFrame(self, text='Nine-Cell Scheme', font=("arial", 14, "bold"), width=600, height=300, bg="white", fg="gray1")
+        guide_frame.place(x=0, y=20)
+        guide_frame.pack_propagate(False)  # Prevent frame from resizing to fit tiny width
+
         #guideHeader = tk.Label(self, text = "Nine-cell scheme design", font = ("arial", 17, "bold"), fg = "gray3", bg="ghost white").place(x=350,y=0)
         one = tk.Label(guide_frame, text = '1.  Equalize stem heights', font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").grid(row=0, column=0)
         two = tk.Label(guide_frame, text = '2.  Record Variety and Plot names', font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").grid(row=1, column=0)
@@ -39,11 +51,20 @@ class Guide(PassIn, tk.Frame):
         
         try:
             # SOCEM diagram of use # 
-            load = PIL.Image.open(directory+'/'+'GuideSOCEM_2022.png')
+            image_path = os.path.join(current_dir,'GuideSOCEM_2022_Bennett.png')
+            load = PIL.Image.open(image_path)
             load = load.resize((275,275))
             render = PIL.ImageTk.PhotoImage(load)
             img = tk.Label(self, image=render)
             img.image = render
-            img.place(x = 520, y = 35)
+            img.pack()
+            #img.place(x = 520, y = 35)
         except:
             print("Guide image not found.")
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    dummy_controller = object()  # Replace with your actual controller if needed
+    guide = Guide(root, dummy_controller)
+    guide.pack(fill="both", expand=True)
+    root.mainloop()

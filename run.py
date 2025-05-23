@@ -28,13 +28,13 @@ def main():
 
     # Dispatch
     if mode == "shell":
-        from socem25.shell.main import main as shell_main
+        from src.socem25.shell.main import main as shell_main
         shell_main()
     elif mode == "gui":
-        from socem25.gui.main import main as gui_main
+        from src.socem25.gui.main import main as gui_main
         gui_main()
     elif mode == "api":
-        from socem25.api.main import main as api_main
+        from src.socem25.api.main import main as api_main
         api_main()
     else:
         print(f"Unknown mode '{mode}'")

@@ -253,7 +253,7 @@ class PavlovCLI(cmd2.Cmd):
 
     def do_status(self,line):
         "Get a rough idea of what the program has done so far."
-        print(f"""\
+        msg0 = """\
         Exist:
         scene_object: {self.scene_object != None} :: 1
         style_object: {self.style_object != None} :: 1
@@ -262,7 +262,7 @@ class PavlovCLI(cmd2.Cmd):
         export_control_object: {self.export_control_object != None} :: 4
         pointcloud_bool: {self.pointcloud_bool != None} :: 5
         createFBX_object: {self.createFBX_object != None} :: 6
-        """)
+        """
 
     def do_example(self, line):
         "Show example image of a model."
@@ -1272,7 +1272,7 @@ class PavlovCLI(cmd2.Cmd):
     def do_project(self,args):
         "Manage project directories"
         #print(f"args.sample = {args.sample}")
-        #print(f"args.new = {args.new}")
+        print(f"args.current = {args.current}")
         if args.tree is True:
             fm.tree("./projects/")
 
