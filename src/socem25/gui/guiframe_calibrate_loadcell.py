@@ -1,9 +1,10 @@
 import tkinter as tk
 from socem25.gui.gui_main import RepeatPageButtons
+from socem25.core.pass_in import PassIn
 #from socem25.gui.gui_main import SocemGuiMain
 
 # Load cell calibration page 
-class Calibrate(tk.Frame,):
+class Calibrate(PassIn,tk.Frame):
     
     def __init__(self, parent, controller): # automatically runs
         
@@ -26,8 +27,7 @@ class Calibrate(tk.Frame,):
         testWeight_label.place(x=5,y=183)
         
 
-        self.knownWeight = tk.DoubleVar() # know weight textvariable
-        self.knownWeight.set(0.0) # initially = 1.0 kg (assuming 1.0 kg will be used)
+        self.knownWeight = tk.DoubleVar(value = 0.0) # know weight textvariable
         knownW_entry = tk.Entry(self, textvariable=self.knownWeight, font = ("arial", 14, "bold"), width= 5, bg="white", fg="gray1").place(x = 80, y =183)
 
         kg = tk.Label(self, text = "kg", font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=140,y=183)
@@ -97,7 +97,7 @@ class Calibrate(tk.Frame,):
         self.calibra_entry.insert(0, self.factor)
         return self.factor
 
-    def tare(self):
+    def tare(self,RecordForce):
         RecordForce.ser.flush()#wait until all data is written
         tare = 't'
         RecordForce.ser.write(tare.encode()) #sends 't' to arduino, telling it to tare
@@ -105,7 +105,7 @@ class Calibrate(tk.Frame,):
         time.sleep(0.3)#wait x seconds for Arduino to tare load cell (for smoothing)
        
     def caliFactor(self):
-        self.force = self.knownWeight.get() * convert_KgToN # convert known weight kg to N
+        self.force = self.knownWeight.get() * self.config_object.get("convert_KgToN") # convert known weight kg to N
         self.strW = str('%.3f' % self.force) # store as string
         self.strForce.set(self.strW) # update GUI text
         

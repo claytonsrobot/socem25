@@ -91,14 +91,14 @@ def initialPlot(self,distanceTraveled, forcePushed, timeElapsed, encoderWorked, 
         snap_cursor = SnaptoCursor(ax, timeElapsed, forcePushed) # create snap cursor object
         
     title3 = '\n*click outside plot if red lines good*'
-    fig.suptitle(self.gui_main_object.filename_force.get() + '\nCut off edges: click start x pt, then end x pt.' + title3)
+    fig.suptitle(controller.shared_data["main_frame"]["filename_force"].get() + '\nCut off edges: click start x pt, then end x pt.' + title3)
     #ax.set_title('*click outside plot if red lines good*')
     ax.set_ylabel('Force (N)')
     
     snap = fig.canvas.mpl_connect('motion_notify_event', snap_cursor.mouse_move) # update snap cursor upon mouse movement
 
     xCut = [] # stores where to cut off ends of plot (eliminate edge effects)
-    def click(event): # get x coord once mouse is pressed
+    def click(event,controller): # get x coord once mouse is pressed
         x = event.xdata
         if x is None:
             print('red lines')
@@ -114,13 +114,13 @@ def initialPlot(self,distanceTraveled, forcePushed, timeElapsed, encoderWorked, 
             #fig.canvas.set_window_title('InitialPlot')
             fig.canvas.manager.set_window_title('InitialPlot')
             if encoderWorked == True:
-                savename = self.gui_main_object.filename_force.get() + '_' + str(round(xCut[0],1)) + '-' + str(round(xCut[1],1)) + '_raw.PNG'
+                savename = controller.shared_data["main_frame"]["filename_force"].get() + '_' + str(round(xCut[0],1)) + '-' + str(round(xCut[1],1)) + '_raw.PNG'
             elif encoderWorked == False and distance_referenced_PeakClick == True:
-                savename = self.gui_main_object.filename_force.get() + '_' + str(round(xCut[0],1)) + '-' + str(round(xCut[1],1)) + '_disref' + '_raw.PNG'
+                savename = controller.shared_data["main_frame"]["filename_force"].get() + '_' + str(round(xCut[0],1)) + '-' + str(round(xCut[1],1)) + '_disref' + '_raw.PNG'
             elif encoderWorked == False and distance_referenced_PeakClick == False:
-                savename = self.gui_main_object.filename_force.get() + '_' + str(round(xCut[0],1)) + '-' + str(round(xCut[1],1)) + '_timebased' + '_raw.PNG'
+                savename = controller.shared_data["main_frame"]["filename_force"].get() + '_' + str(round(xCut[0],1)) + '-' + str(round(xCut[1],1)) + '_timebased' + '_raw.PNG'
             else:
-                savename = self.gui_main_object.filename_force.get() + '_' + str(round(xCut[0],1)) + '-' + str(round(xCut[1],1)) + '_else' + '_raw.PNG'
+                savename = controller.shared_data["main_frame"]["filename_force"].get() + '_' + str(round(xCut[0],1)) + '-' + str(round(xCut[1],1)) + '_else' + '_raw.PNG'
             ax.plot([xCut[0],xCut[0]],cutLine, color = 'orange', linewidth=1, linestyle="--") # start cut off line
             ax.plot([xCut[1],xCut[1]], cutLine, color = 'orange', linewidth=1, linestyle="--") # end cut off line
             #print("Initial plot show...")
@@ -160,7 +160,7 @@ def initialPlot(self,distanceTraveled, forcePushed, timeElapsed, encoderWorked, 
 
 ###############################################################################
 
-def choosePeaks(xData, forcePushed, xCut, variety_plotname_detail, encoderWorked, distance_referenced, documentationFolder):
+def choosePeaks(controller, xData, forcePushed, xCut, variety_plotname_detail, encoderWorked, distance_referenced, documentationFolder):
     #please: EMBED THE MATPLOTLIB PLOT INTO A TKINTER WINDOW< WHICH CAB BE A POPUP< LEADING TO POPUP.MAINLOOP()
     encoderWorked = encoderWorked_override
     def nearest_pt(pt): # get nearest dis index to starting pt in disCut
@@ -180,23 +180,14 @@ def choosePeaks(xData, forcePushed, xCut, variety_plotname_detail, encoderWorked
     fig, ax = plt.subplots()
     #fig.canvas.set_window_title('ChoosePeaks')
     fig.canvas.manager.set_window_title('ChoosePeaks')
-    fig.suptitle(self.gui_main_object.filename_force.get() + '\nSelect Force Peaks, *click outside when done*')
-    #fig.suptitle(self.gui_main_object.filename_force.get() + '\nCut off edges: click start x pt, then end x pt.' + title3)
+    fig.suptitle(controller.shared_data["main_frame"]["filename_force"].get() + '\nSelect Force Peaks, *click outside when done*')
+    #fig.suptitle(controller.shared_data["main_frame"]["filename_force"].get() + '\nCut off edges: click start x pt, then end x pt.' + title3)
     #ax.set_title('*click outside when done*')
     ax.plot(xCenter, fCenter) # needed?
     maxPt = max(forcePushed)
     ax.set_xlim(min(xCenter)-5, max(xCenter)+5)
     ax.set_ylabel('Force (Newtons)')
-    ''' # set secondary vertical axis
-    xold = np.asarray(xCenter)
-    xnew = xold*convert_NToLbs
-    def forward(x):
-        return np.interp(x, xold, xnew)
-    def inverse(x):
-        return np.interp(x, xnew, xold)
-    axis_pounds = ax.secondary_yaxis('right', functions=(forward,inverse))
-    axis_pounds.set_ylabel('Force (pounds)')
-    '''
+
     if encoderWorked == True or distance_referenced_PeakClick == True:
         ax.set_xlabel('Distance (cm)')
     else:
@@ -206,7 +197,7 @@ def choosePeaks(xData, forcePushed, xCut, variety_plotname_detail, encoderWorked
     cursorMove = fig.canvas.mpl_connect('motion_notify_event', cursor.mouse_move) # update snap cursor upon mouse movement
     
     closeplt = False
-    def click(event): # get x coord once mouse is pressed
+    def click(event,controller): # get x coord once mouse is pressed
         y, x = event.ydata, event.xdata
         #if y is None and len(peakclick.peaks_force)>2: # requires 3 clicks, or the window wont close
         #if y is None and len(peakclick.peaks_force)>0: # requires 1 click, or the window wont close
@@ -217,11 +208,11 @@ def choosePeaks(xData, forcePushed, xCut, variety_plotname_detail, encoderWorked
             # auto save file
             # example: CF452_24hr_4_23-156_disref_clicks.PNG
             if encoderWorked == True:
-                savename = self.gui_main_object.filename_force.get() + '_' + str(round(xCut[0],1)) + '-' + str(round(xCut[1],1)) + '_clicks.PNG'
+                savename = controller.shared_data["main_frame"]["filename_force"].get() + '_' + str(round(xCut[0],1)) + '-' + str(round(xCut[1],1)) + '_clicks.PNG'
             elif encoderWorked == False and distance_referenced_PeakClick == True:
-                savename = self.gui_main_object.filename_force.get() + '_' + str(round(xCut[0],1)) + '-' + str(round(xCut[1],1)) + '_disref' + '_clicks.PNG'
+                savename = controller.shared_data["main_frame"]["filename_force"].get() + '_' + str(round(xCut[0],1)) + '-' + str(round(xCut[1],1)) + '_disref' + '_clicks.PNG'
             elif encoderWorked == False and distance_referenced_PeakClick == False:
-                savename = self.gui_main_object.filename_force.get() + '_' + str(round(xCut[0],1)) + '-' + str(round(xCut[1],1)) + '_timebased' + '_clicks.PNG'
+                savename = controller.shared_data["main_frame"]["filename_force"].get() + '_' + str(round(xCut[0],1)) + '-' + str(round(xCut[1],1)) + '_timebased' + '_clicks.PNG'
             plt.savefig(documentationFolder + '/' + savename)
             print("choosePeaks: ",savename)
 
@@ -246,7 +237,7 @@ def choosePeaks(xData, forcePushed, xCut, variety_plotname_detail, encoderWorked
                 peakclick.peaks_distance = [0, 0, 0] # might error, if there are not three clicks
                 print("peaks_force =",peakclick.peaks_force)
                 
-            peakclick.saveCSV(self.gui_main_object.filename_force.get(),self.gui_main_object.address)
+            peakclick.saveCSV(controller.shared_data["main_frame"]["filename_force"].get(),self.gui_main_object.address)
             RecordForce.closedplt = True
         else:
             # print('Force clicked = %1.2f at %1.2f' % (y, x)) # hide, CB
@@ -300,8 +291,8 @@ class PeakClick:
             i+=1
         return peaks_time
     
-    # peaks_force,peaks_distance,peaks_time = PeakClick.input(self.gui_main_object.forcePushed,self.gui_main_object.distanceTraveled,self.gui_main_object.timeElapsed,self.gui_main_object.filename_force.get(),self.gui_main_object.address)
-    def peakclick_do(forcePushed,distanceTraveled,timeElapsed,variety_plotname_detail,address,averageVelocity):
+    # peaks_force,peaks_distance,peaks_time = PeakClick.input(self.gui_main_object.forcePushed,self.gui_main_object.distanceTraveled,self.gui_main_object.timeElapsed,controller.shared_data["main_frame"]["filename_force"].get(),self.gui_main_object.address)
+    def peakclick_do(controller,forcePushed,distanceTraveled,timeElapsed,variety_plotname_detail,address,averageVelocity):
         
         #documentationFolder = self.gui_main_object.address + '/' + 'documentation'
         documentationFolder = self.gui_main_object.address # for PNG and raw data to go to the same place.
@@ -312,13 +303,12 @@ class PeakClick:
 
         #print('Encoder? ', encoderWorked)
         #print('max(distanceTraveled) = ', str(max(distanceTraveled)))
-        print(self.gui_main_object.filename_force.get())
-
+        print(controller.shared_data["main_frame"]["filename_force"].get())
         if useInitialPlot_PeackClick == True:
             if encoderWorked == False:
-                xCut, distance_referenced, disNew,i,j = initialPlot(distanceTraveled, forcePushed, timeElapsed, encoderWorked, self.gui_main_object.filename_force.get(), documentationFolder,averageVelocity)
+                xCut, distance_referenced, disNew,i,j = initialPlot(distanceTraveled, forcePushed, timeElapsed, encoderWorked, controller.shared_data["main_frame"]["filename_force"].get(), documentationFolder,averageVelocity)
             elif encoderWorked == True:
-                xCut = initialPlot(distanceTraveled, forcePushed, timeElapsed, encoderWorked,self.gui_main_object.filename_force.get(), documentationFolder,averageVelocity)
+                xCut = initialPlot(distanceTraveled, forcePushed, timeElapsed, encoderWorked,controller.shared_data["main_frame"]["filename_force"].get(), documentationFolder,averageVelocity)
                 distance_referenced_PeakClick = False
         else:
             xCut = [min(distanceTraveled),max(distanceTraveled)]
@@ -327,25 +317,25 @@ class PeakClick:
             
         if encoderWorked == True:
             print('Distance cut at: ', xCut) # cut forcePushed and horz!!! 
-            #peakclick.peaks_force,peakclick.peaks_xaxis = choosePeaks(distanceTraveled, forcePushed, xCut,self.gui_main_object.filename_force.get(),encoderWorked, distance_referenced_PeakClick,documentationFolder)
-            choosePeaks(distanceTraveled, forcePushed, xCut,self.gui_main_object.filename_force.get(),encoderWorked, distance_referenced_PeakClick,documentationFolder) 
+            #peakclick.peaks_force,peakclick.peaks_xaxis = choosePeaks(distanceTraveled, forcePushed, xCut,controller.shared_data["main_frame"]["filename_force"].get(),encoderWorked, distance_referenced_PeakClick,documentationFolder)
+            choosePeaks(distanceTraveled, forcePushed, xCut,controller.shared_data["main_frame"]["filename_force"].get(),encoderWorked, distance_referenced_PeakClick,documentationFolder) 
         elif encoderWorked == False and distance_referenced_PeakClick == True:
             print('troubleshoot702')
             print('Distance cut at: ', xCut)
-            #peakclick.peaks_force,peakclick.peaks_xaxis = choosePeaks(disNew, forcePushed, xCut,self.gui_main_object.filename_force.get(),encoderWorked, distance_referenced_PeakClick, documentationFolder)
-            choosePeaks(disNew, forcePushed, xCut,self.gui_main_object.filename_force.get(),encoderWorked, distance_referenced_PeakClick, documentationFolder)
+            #peakclick.peaks_force,peakclick.peaks_xaxis = choosePeaks(disNew, forcePushed, xCut,controller.shared_data["main_frame"]["filename_force"].get(),encoderWorked, distance_referenced_PeakClick, documentationFolder)
+            choosePeaks(disNew, forcePushed, xCut,controller.shared_data["main_frame"]["filename_force"].get(),encoderWorked, distance_referenced_PeakClick, documentationFolder)
         else: #elif encoderWorked == False and distance_referenced_PeakClick == False: # possible issue dave
             xCut=tCut
             print('Time cut at: ', xCut)
-            #peakclick.peaks_force,peakclick.peaks_xaxis = choosePeaks(timeElapsed, forcePushed, xCut,self.gui_main_object.filename_force.get(),encoderWorked, distance_referenced_PeakClick, documentationFolder)
-            choosePeaks(timeElapsed, forcePushed, xCut,self.gui_main_object.filename_force.get(),encoderWorked, distance_referenced_PeakClick, documentationFolder)
+            #peakclick.peaks_force,peakclick.peaks_xaxis = choosePeaks(timeElapsed, forcePushed, xCut,controller.shared_data["main_frame"]["filename_force"].get(),encoderWorked, distance_referenced_PeakClick, documentationFolder)
+            choosePeaks(timeElapsed, forcePushed, xCut,controller.shared_data["main_frame"]["filename_force"].get(),encoderWorked, distance_referenced_PeakClick, documentationFolder)
 
-        #peakclick.saveCSV(self.gui_main_object.filename_force.get(),self.gui_main_object.address)
+        #peakclick.saveCSV(controller.shared_data["main_frame"]["filename_force"].get(),self.gui_main_object.address)
         #return peakclick.peaks_force,peakclick.peaks_distance,peakclick.peaks_time
 
-    def saveCSV(variety_plotname_detail,address):
+    def saveCSV(controller,variety_plotname_detail,address):
         #print("not yet saved. develop.")
-        filename_peaks_csv = self.gui_main_object.address + "/" + self.gui_main_object.filename_force.get() + "_peaks.csv"
+        filename_peaks_csv = self.gui_main_object.address + "/" + controller.shared_data["main_frame"]["filename_force"].get() + "_peaks.csv"
         ''' write CSV'''
         self.gui_main_object.data_peaks = [peakclick.peaks_force,peakclick.peaks_distance,peakclick.peaks_time]
         RecordForce.peaks_force = peakclick.peaks_force

@@ -68,3 +68,6 @@ if __name__ == "__main__":
     guide = Guide(root, dummy_controller)
     guide.pack(fill="both", expand=True)
     root.mainloop()
+
+
+    

@@ -33,7 +33,8 @@ class RecordForce(PassIn, tk.Frame):
         pageButtons = RepeatPageButtons.showButtons(self, parent, controller)
         title = tk.Label(self, text ="RECORD FORCE", font = ("arial", 17, "bold"), fg = "gray3", bg="ghost white")
         filename_label = tk.Label(self, text = "Filename: ", font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white")
-        filename_entryBox = tk.Entry(self, textvariable=self.gui_main_object.filename_force, font = ("arial", 14, "bold"), width="32", bg="white", fg="gray1")
+        filename_entryBox = tk.Entry(self, textvariable=self.controller.shared_data["main_frame"]["filename_force"]
+, font = ("arial", 14, "bold"), width="32", bg="white", fg="gray1")
         self.checkAutoGraph = tk.IntVar() # on/off control of auto graph after stopping & saving data
         #self.checkAutoGraph.set(1)
         self.checkAutoGraph.set(0)
@@ -61,7 +62,8 @@ class RecordForce(PassIn, tk.Frame):
         side2TestButton = tk.Button(nameset_frame, text = "Side 2", font = ("arial", 16, "bold"), height = 1, width = 6, fg = "ghost white", bg = "red4",command=lambda:self.nameSide2())
         side3TestButton = tk.Button(nameset_frame, text = "Side 3", font = ("arial", 16, "bold"), height = 1, width = 6,fg = "ghost white", bg = "red4",command=lambda:self.nameSide3())
         forwardTestButton = tk.Button(nameset_frame, text = "Forward", font = ("arial", 16, "bold"), height = 1, width = 6, fg = "ghost white", bg = "red4",command=lambda:self.nameForward())
-        increment_button = tk.Button(nameset_frame, text = "+1", font = ("arial", 16, "bold"), height = 1, width = 6, fg = "ghost white", bg = "purple4",command=lambda:self.incrementName_Force(self.gui_main_object.filename_force.get()))
+        increment_button = tk.Button(nameset_frame, text = "+1", font = ("arial", 16, "bold"), height = 1, width = 6, fg = "ghost white", bg = "purple4",command=lambda:self.incrementName_Force(self.controller.shared_data["main_frame"]["filename_force"]
+.get()))
         
         side1TestButton.grid(row=0, column=0)
         side2TestButton.grid(row=1, column=0)
@@ -90,28 +92,42 @@ class RecordForce(PassIn, tk.Frame):
 
     def nameForward(self):
         direction = "forward"
-        filename_force = socem25.core.main_funcs.nameBlackBox(direction,self.gui_main_object.filename_force.get())
-        self.gui_main_object.filename_force.set(filename_force)
-        self.gui_main_object.currentdirection.set(direction)
+        filename_force = socem25.core.main_funcs.nameBlackBox(direction,self.controller.shared_data["main_frame"]["filename_force"]
+.get())
+        self.controller.shared_data["main_frame"]["filename_force"]
+.set(filename_force)
+        self.controller.shared_data["main_frame"]["currentdirection"]
+.set(direction)
     def nameSide1(self):
         direction = "side1"
-        filename_force = socem25.core.main_funcs.nameBlackBox(direction,self.gui_main_object.filename_force.get())
-        self.gui_main_object.filename_force.set(filename_force)
-        self.gui_main_object.currentdirection.set(direction)
+        filename_force = socem25.core.main_funcs.nameBlackBox(direction,self.controller.shared_data["main_frame"]["filename_force"]
+.get())
+        self.controller.shared_data["main_frame"]["filename_force"]
+.set(filename_force)
+        self.controller.shared_data["main_frame"]["currentdirection"]
+.set(direction)
     def nameSide2(self):
         direction = "side2"
-        filename_force = socem25.core.main_funcs.nameBlackBox(direction,self.gui_main_object.filename_force.get())
-        self.gui_main_object.filename_force.set(filename_force)
-        self.gui_main_object.currentdirection.set(direction)
+        filename_force = socem25.core.main_funcs.nameBlackBox(direction,self.controller.shared_data["main_frame"]["filename_force"]
+.get())
+        self.controller.shared_data["main_frame"]["filename_force"]
+.set(filename_force)
+        self.controller.shared_data["main_frame"]["currentdirection"]
+.set(direction)
     def nameSide3(self):
         direction = "side3"
-        filename_force = socem25.core.main_funcs.nameBlackBox(direction,self.gui_main_object.filename_force.get())
-        self.gui_main_object.filename_force.set(filename_force)
-        self.gui_main_object.currentdirection.set(direction)
+        filename_force = socem25.core.main_funcs.nameBlackBox(direction,self.controller.shared_data["main_frame"]["filename_force"]
+.get())
+        self.controller.shared_data["main_frame"]["filename_force"]
+.set(filename_force)
+        self.controller.shared_data["main_frame"]["currentdirection"]
+.set(direction)
     def nameFresh(varietyname,plotname):
         direction = ""
-        filename_force = socem25.core.main_funcs.nameBlackBox(direction,self.gui_main_object.filename_force.get())
-        self.gui_main_object.filename_force.set(filename_force)
+        filename_force = socem25.core.main_funcs.nameBlackBox(direction,self.controller.shared_data["main_frame"]["filename_force"]
+.get())
+        self.controller.shared_data["main_frame"]["filename_force"]
+.set(filename_force)
         set(direction)
     
     def clearDisplay():
@@ -130,7 +146,8 @@ class RecordForce(PassIn, tk.Frame):
         
     def incrementName_Force(self,filename):
         newName = incrementName(filename)
-        self.gui_main_object.filename_force.set(newName)
+        self.controller.shared_data["main_frame"]["filename_force"]
+.set(newName)
     
         
     # calls run function (for collecting Arduino data) to run in backend while GUI runs in frontend     
@@ -263,8 +280,10 @@ class RecordForce(PassIn, tk.Frame):
     def saveForce():
         createBackupFile()
         # force data filename
-        filename_force = self.gui_main_object.filename_force.get()
-        filename_force_csv = self.gui_main_object.address + '/' + (self.gui_main_object.filename_force.get()) + '.csv'
+        filename_force = self.controller.shared_data["main_frame"]["filename_force"]
+.get()
+        filename_force_csv = self.gui_main_object.address + '/' + (self.controller.shared_data["main_frame"]["filename_force"]
+.get()) + '.csv'
         if socem25.core.main_funcs.overwriteGuard(filename_force_csv) == True: # filename already exists, needs to be renamed
             rename(filename_force) # prompt user to rename file
 
@@ -310,7 +329,8 @@ class RecordForce(PassIn, tk.Frame):
             print("filename_force_csv = "+filename_force_csv)
             
             # tell user raw data was saved
-            #print("File saved: "+self.gui_main_object.filename_force.get()+".csv\n")
+            #print("File saved: "+self.controller.shared_data["main_frame"]["filename_force"]
+.get()+".csv\n")
             try:
                 forceSaved_label = tk.Label(RecordForce.msgbox, text = "Force data saved.", font = ("arial", 14, "bold"), fg = "dodgerblue3", bg = "ghost white")
                 #forceSaved_label = tk.Label(RecordForce.msgbox, text = "Force data saved.", font = ("arial", 14, "bold"), fg = "dodgerblue3", bg = "ghost white").grid(row=0, column=0)
@@ -345,7 +365,8 @@ class RecordForce(PassIn, tk.Frame):
         if not plt.get_fignums():#if graph figure was closed, reset legend
             self.legends.clear()
             #print("new fig who dis")
-        self.legends.append(self.gui_main_object.filename_force.get())#add current filename to legend
+        self.legends.append(self.controller.shared_data["main_frame"]["filename_force"]
+.get())#add current filename to legend
         #fig = plt.figure(figsize=(8,4.8)) #fig size control 
         #plots force displacement graph
         print("len(self.gui_main_object.distanceTraveled) = ",len(self.gui_main_object.distanceTraveled))
@@ -363,17 +384,24 @@ class RecordForce(PassIn, tk.Frame):
     def sidehit_peakclick_do():
         RecordForce.peaks_force,RecordForce.peaks_distance,RecordForce.peaks_time= [],[],[]
         # currently only lauches click assessment for side1, side2, side3
-        #print("self.gui_main_object.currentdirection = ",self.gui_main_object.currentdirection.get())
+        #print("self.controller.shared_data["main_frame"]["currentdirection"]
+ = ",self.controller.shared_data["main_frame"]["currentdirection"]
+.get())
         #print("len(self.gui_main_object.forcePushed) = ",len(self.gui_main_object.forcePushed))
-        if (assessAllTests == True) or (self.gui_main_object.currentdirection.get() == "side1") or (self.gui_main_object.currentdirection.get() == "side2") or (self.gui_main_object.currentdirection.get() == "side3"): 
+        if (assessAllTests == True) or (self.controller.shared_data["main_frame"]["currentdirection"]
+.get() == "side1") or (self.controller.shared_data["main_frame"]["currentdirection"]
+.get() == "side2") or (self.controller.shared_data["main_frame"]["currentdirection"]
+.get() == "side3"): 
         #if True:
             if len(self.gui_main_object.forcePushed)>0:
-                variety_plotname_detail = self.gui_main_object.filename_force.get()
+                variety_plotname_detail = self.controller.shared_data["main_frame"]["filename_force"]
+.get()
                 RecordForce.plotshown = True
                 RecordForce.closedplt = False
                 RecordForce.thread3_plotchecker = threading.Thread(target = RecordForce.plotchecker)
                 RecordForce.thread3_plotchecker.start()
-                PeakClick.peakclick_do(self.gui_main_object.forcePushed,self.gui_main_object.distanceTraveled,self.gui_main_object.timeElapsed,self.gui_main_object.filename_force.get(),self.gui_main_object.address,self.gui_main_object.travelvelocity)
+                PeakClick.peakclick_do(self.gui_main_object.forcePushed,self.gui_main_object.distanceTraveled,self.gui_main_object.timeElapsed,self.controller.shared_data["main_frame"]["filename_force"]
+.get(),self.gui_main_object.address,self.gui_main_object.travelvelocity)
                 #RecordForce.peaks_force,RecordForce.peaks_distance,RecordForce.peaks_time = peakclick.peaks_force,peakclick.peaks_distance,peakclick.peaks_time
                 # RecordForce.sortClicks(RecordForce.peaks_force,RecordForce.peaks_distance,RecordForce.peaks_time)
             else:
@@ -394,7 +422,8 @@ class RecordForce(PassIn, tk.Frame):
 
     def sortClicks():
         '''
-        if self.gui_main_object.currentdirection.get() == "side1":
+        if self.controller.shared_data["main_frame"]["currentdirection"]
+.get() == "side1":
             if len(RecordForce.peaks_force) == 3:
                 self.gui_main_object.peak_force_cell1, self.gui_main_object.peak_force_cell2, self.gui_main_object.peak_force_cell3 = RecordForce.peaks_force[0],RecordForce.peaks_force[1],RecordForce.peaks_force[2]
             elif len(RecordForce.peaks_force) == 4:
@@ -414,7 +443,8 @@ class RecordForce(PassIn, tk.Frame):
         # clicks must be done in order
         # only for nine cell
         # cell numbers should be switched to be 123, 456, 789; not 147, 258, 369
-        if self.gui_main_object.currentdirection.get() == "side1":
+        if self.controller.shared_data["main_frame"]["currentdirection"]
+.get() == "side1":
             if len(RecordForce.peaks_force) == 3:
                 self.gui_main_object.peak_force_cell1, self.gui_main_object.peak_force_cell4, self.gui_main_object.peak_force_cell7 = RecordForce.peaks_force[0],RecordForce.peaks_force[1],RecordForce.peaks_force[2]
             elif len(RecordForce.peaks_force) == 4:
@@ -430,7 +460,8 @@ class RecordForce(PassIn, tk.Frame):
                 self.gui_main_object.peak_time_cell1, self.gui_main_object.peak_time_cell4, self.gui_main_object.peak_time_cell7=RecordForce.peaks_time[0],RecordForce.peaks_time[1],RecordForce.peaks_time[2]
             elif len(RecordForce.peaks_time) == 4:
                  self.gui_main_object.peak_time_cell1, self.gui_main_object.peak_time_cell4, self.gui_main_object.peak_time_cell7=RecordForce.peaks_time[1],RecordForce.peaks_time[2],RecordForce.peaks_time[3]
-        elif self.gui_main_object.currentdirection.get() == "side2":
+        elif self.controller.shared_data["main_frame"]["currentdirection"]
+.get() == "side2":
             if len(RecordForce.peaks_force) == 3:
                 self.gui_main_object.peak_force_cell2, self.gui_main_object.peak_force_cell5, self.gui_main_object.peak_force_cell8 = RecordForce.peaks_force[0],RecordForce.peaks_force[1],RecordForce.peaks_force[2]
             elif len(RecordForce.peaks_force) == 4:
@@ -445,7 +476,8 @@ class RecordForce(PassIn, tk.Frame):
                 self.gui_main_object.peak_time_cell2, self.gui_main_object.peak_time_cell5, self.gui_main_object.peak_time_cell8=RecordForce.peaks_time[1],RecordForce.peaks_time[2],RecordForce.peaks_time[3]
             #self.gui_main_object.peak_distance_cell4, self.gui_main_object.peak_distance_cell5, self.gui_main_object.peak_distance_cell6 = RecordForce.peaks_distance[0],RecordForce.peaks_distance[1],RecordForce.peaks_distance[2]
             #self.gui_main_object.peak_time_cell4, self.gui_main_object.peak_time_cell5, self.gui_main_object.peak_time_cell6=RecordForce.peaks_time[0],RecordForce.peaks_time[1],RecordForce.peaks_time[2]
-        elif self.gui_main_object.currentdirection.get() == "side3":
+        elif self.controller.shared_data["main_frame"]["currentdirection"]
+.get() == "side3":
             if len(RecordForce.peaks_force) == 3:
                 self.gui_main_object.peak_force_cell3, self.gui_main_object.peak_force_cell6, self.gui_main_object.peak_force_cell9 = RecordForce.peaks_force[0],RecordForce.peaks_force[1],RecordForce.peaks_force[2]
             elif len(RecordForce.peaks_force) == 4:
@@ -481,8 +513,16 @@ class RecordForce(PassIn, tk.Frame):
 
     def on_show_frame_RecordForce(self, event):
         #Flip to data collection screen, GUI variables
-        if (self.gui_main_object.varietyname.get()!="" or self.gui_main_object.plotname.get()!="") and (self.gui_main_object.passfillednames_checkbox.get()==1): # checks if a varietyname or plotname has been given
-            RecordForce.nameFresh(self.gui_main_object.varietyname.get(),self.gui_main_object.plotname.get()) # if so, autopopulate the basic filestructure
-        filename_force = socem25.core.main_funcs.nameBlackBox("",self.gui_main_object.filename_force.get())
-        self.gui_main_object.filename_force.set(filename_force)
-        self.gui_main_object.currentdirection.set("") # so that sortClicks will funtion properly, if a new name is assigned # this is non-deal coding
+        if (self.controller.shared_data["main_frame"]["varietyname"]
+.get()!="" or self.controller.shared_data["main_frame"]["plotname"]
+.get()!="") and (self.controller.shared_data["main_frame"]["passfillednames_checkbox"]
+.get()==1): # checks if a varietyname or plotname has been given
+            RecordForce.nameFresh(self.controller.shared_data["main_frame"]["varietyname"]
+.get(),self.controller.shared_data["main_frame"]["plotname"]
+.get()) # if so, autopopulate the basic filestructure
+        filename_force = socem25.core.main_funcs.nameBlackBox("",self.controller.shared_data["main_frame"]["filename_force"]
+.get())
+        self.controller.shared_data["main_frame"]["filename_force"]
+.set(filename_force)
+        self.controller.shared_data["main_frame"]["currentdirection"]
+.set("") # so that sortClicks will funtion properly, if a new name is assigned # this is non-deal coding

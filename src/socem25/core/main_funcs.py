@@ -41,8 +41,9 @@ def popup_chooseFolder(self):
     E_label = tk.Label(popup_chooseFolder, text="Paste file output directory here.", font=("arial", 12, "bold"))
     #E_label.pack(side="top", fill="x", pady=10)
     E_label.grid(row=0, column=1)
-    #self.gui_main_object.addressInput.set("")
-    folder_entry = tk.Entry(popup_chooseFolder, textvariable=self.gui_main_object.addressInput, font = ("arial", 11, "bold"), width= 70, bg="white", fg="gray1")
+    #self.controller.shared_data["main_frame"]["addressInput"].set("")
+    folder_entry = tk.Entry(popup_chooseFolder, textvariable=self.controller.shared_data["main_frame"]["addressInput"]
+, font = ("arial", 11, "bold"), width= 70, bg="white", fg="gray1")
     folder_entry.grid(row=1, column=1)
     save_button = tk.Button(popup_chooseFolder,text = "Save", font = ("arial", 14, "bold"), height = 1, width = 6, fg = "ghost white", bg = "dodgerblue3",command=lambda:updateAddress())
     save_button.grid(row=2, column=1)
@@ -55,9 +56,9 @@ def popup_chooseFolder(self):
 
 def updateAddress(self):
     print("updateAddress is broken. Please develop.")
-    print("self.gui_main_object.addressInput.get() = ",self.gui_main_object.addressInput.get())
+    print("self.controller.shared_data['main_frame']['addressInput].get() = ",self.controller.shared_data["main_frame"]["addressInput"].get())
     print("self.gui_main_object.address = ",self.gui_main_object.address)
-    #self.gui_main_object.address = self.gui_main_object.addressInput.get() # broken right now
+    #self.gui_main_object.address = self.controller.shared_data["main_frame"]["addressInput"].get() # broken right now
     #print("self.gui_main_object.address = ",self.gui_main_object.address)
 
 def showErrors(self):
@@ -65,10 +66,10 @@ def showErrors(self):
     self.gui_error_report_object.showErrors2(self.gui_main_object.frames[self.gui_error_report_object]) # display errors in lists
 
 def update_filename_preTest(self):
-    filename_preTest = self.nameBlackBox("preTest",self.gui_main_object.filename_preTest.get())
-    self.gui_main_object.filename_preTest.set(filename_preTest)
+    filename_preTest = self.nameBlackBox("preTest",self.controller.shared_data["main_frame"]["filename_preTest"].get())
+    self.controller.shared_data["main_frame"]["filename_preTest"].set(filename_preTest)
     filename_all = filename_preTest.replace("preTest","all")
-    self.gui_main_object.filename_all.set(filename_all)
+    self.controller.shared_data["main_frame"]["filename_all"].set(filename_all)
 
 def testForNineCellFilename(self): # used to identify when nine-cell force, distance, and time data exists, and passes it to state data.
     # the purpose of this is to avoid reopening CSV files in order to assess nine-cell data
@@ -78,36 +79,35 @@ def testForNineCellFilename(self): # used to identify when nine-cell force, dist
     # EI cannot be assessed for non-nine cell, because counts don't exist
     # if box not checked, post test frame goes to single input for stem count, one number, with another number for range distance of count
     # # Assessment is trigged at save state button push
-    #ninecellfilename = self.gui_main_object.varietyname.get()+","+self.gui_main_object.plotname.get()+"_"
-    ninecellfilename = self.gui_main_object.varietyname.get()+","+self.gui_main_object.plotname.get()
+    #ninecellfilename = self.controller.shared_data["main_frame"]["varietyname"].get()+","+self.controller.shared_data["main_frame"]["plotname"].get()+"_"
+    ninecellfilename = self.controller.shared_data["main_frame"]["varietyname"].get()+","+self.controller.shared_data["main_frame"]["plotname"].get()
     ninecellfilename_side1 = ninecellfilename+"_side1"
     ninecellfilename_side2 = ninecellfilename+"_side2"
     ninecellfilename_side3 = ninecellfilename+"_side3"
     ninecellfilename_forward = ninecellfilename+"_foward"
-    currentFilename_force = self.gui_main_object.filename_force.get()
+    currentFilename_force = self.controller.shared_data["main_frame"]["filename_force"].get()
     # create GUI variable, for handling without reopening CSV's
     #if (currentFilename_force == ninecellfilename_side1):
-    if (self.gui_main_object.currentdirection.get() == "side1"):
+    if (self.controller.shared_data["main_frame"]["currentdirection"].get() == "side1"):
         self.gui_main_object.forcePushed_side1 = self.gui_main_object.forcePushed
         self.gui_main_object.distanceTraveled_side1 = self.gui_main_object.distanceTraveled
         self.gui_main_object.timeElapsed_side1 = self.gui_main_object.timeElapsed
         #if (currentFilename_force == ninecellfilename_side2):
-    if (self.gui_main_object.currentdirection.get() == "side2"):
+    if (self.controller.shared_data["main_frame"]["currentdirection"].get() == "side2"):
         self.gui_main_object.forcePushed_side2 = self.gui_main_object.forcePushed
         self.gui_main_object.distanceTraveled_side2 = self.gui_main_object.distanceTraveled
         self.gui_main_object.timeElapsed_side2 = self.gui_main_object.timeElapsed
         #if (currentFilename_force == ninecellfilename_side3):
-    if (self.gui_main_object.currentdirection.get() == "side3"):
+    if (self.controller.shared_data["main_frame"]["currentdirection"].get() == "side3"):
         self.gui_main_object.forcePushed_side3 = self.gui_main_object.forcePushed
         self.gui_main_object.distanceTraveled_side3 = self.gui_main_object.distanceTraveled
         self.gui_main_object.timeElapsed_side3 = self.gui_main_object.timeElapsed
         #if (currentFilename_force == ninecellfilename_forward):
-    if (self.gui_main_object.currentdirection.get() == "forward"):
+    if (self.controller.shared_data["main_frame"]["currentdirection"].get() == "forward"):
         self.gui_main_object.forcePushed_forward = self.gui_main_object.forcePushed
         self.gui_main_object.distanceTraveled_forward = self.gui_main_object.distanceTraveled
         self.gui_main_object.timeElapsed_forward = self.gui_main_object.timeElapsed
     
-
 
 def rename(self,filename): #if filename already exists - prompt user to rename
     popup = tk.Tk()
@@ -157,7 +157,7 @@ def incrementName(self,filename):
             return filename, lastchar, secondtolastchar, thirdtolastchar, lastcharandsecondtolastchar
 
         if filename == "": # default, if user tried to increment without inputting any varietyname, plotname, or filename
-            filename = Env.datestring+","+self.gui_main_object.timestring.get()
+            filename = Env.datestring+","+self.controller.shared_data["main_frame"]["timestring"].get()
             
         lastchar, secondtolastchar, thirdtolastchar, lastcharandsecondtolastchar = incrementvars(filename)
         filename, lastchar, secondtolastchar, thirdtolastchar, lastcharandsecondtolastchar = hyphencheck(filename,hyphen,lastchar, secondtolastchar, thirdtolastchar, lastcharandsecondtolastchar)
@@ -177,7 +177,7 @@ def incrementName(self,filename):
         else:
             newName = str(filename+"_1")
         return newName
-        #self.gui_main_object.filename_force.set(newName)
+        #self.controller.shared_data["main_frame"]["filename_force"].set(newName)
     
 ''' Edge cases: Filenaming '''
 def nameDirectionScrub(filename):
@@ -198,43 +198,43 @@ def nameMissing(self,varietyname,plotname):
     if varietyname == "":
         varietyname = Env.datestring
     if plotname == "":
-        plotname = self.gui_main_object.timestring.get() # plotname = self.gui_main_object.timestring.get() # if you want the timestring (serving at plotname) to not change...but then it will never change
+        plotname = self.controller.shared_data["main_frame"]["timestring"].get() # plotname = self.controller.shared_data["main_frame"]["timestring"].get() # if you want the timestring (serving at plotname) to not change...but then it will never change
     return varietyname, plotname
 
 def nameBlackBox(self,direction,filename):
-    varietyname = self.gui_main_object.varietyname.get()
-    plotname = self.gui_main_object.plotname.get()
-    check=self.gui_main_object.passfillednames_checkbox.get()
-    if self.gui_main_object.filename_force.get()=="" and check==1 and direction=='':
+    varietyname = self.controller.shared_data["main_frame"]["varietyname"].get()
+    plotname = self.controller.shared_data["main_frame"]["plotname"].get()
+    check=self.controller.shared_data["main_frame"]["passfillednames_checkbox"].get()
+    if self.controller.shared_data["main_frame"]["filename_force"].get()=="" and check==1 and direction=='':
         varietyname, plotname = nameMissing(varietyname, plotname)
         #print(varietyname, plotname)
         filename = str(varietyname+str(",")+plotname)
-    elif self.gui_main_object.filename_force.get()=="" and check==1 and direction!='':
+    elif self.controller.shared_data["main_frame"]["filename_force"].get()=="" and check==1 and direction!='':
         varietyname, plotname = nameMissing(varietyname, plotname)
         filename = str(varietyname+str(",")+plotname+"_"+direction)
-    elif self.gui_main_object.filename_force.get()=="" and check==0 and direction !='':
+    elif self.controller.shared_data["main_frame"]["filename_force"].get()=="" and check==0 and direction !='':
         filename = Env.datestring+","+time.strftime("%H%M")+"_"+direction
-    elif self.gui_main_object.filename_force.get()!="" and check==1 and direction !='':
+    elif self.controller.shared_data["main_frame"]["filename_force"].get()!="" and check==1 and direction !='':
         varietyname, plotname = nameMissing(varietyname, plotname)
         filename = str(varietyname+str(",")+plotname+str("_")+direction)
-    elif self.gui_main_object.filename_force.get()!="" and check==0 and direction !='':
+    elif self.controller.shared_data["main_frame"]["filename_force"].get()!="" and check==0 and direction !='':
         if ("side1" in filename) or ("side2" in filename) or ("side3" in filename) or ("forward" in filename) or ("postTest" in filename):
-            filename = nameDirectionScrub(self.gui_main_object.filename_force.get())
+            filename = nameDirectionScrub(self.controller.shared_data["main_frame"]["filename_force"].get())
             filename = filename+"_"+direction
         else:
             filename = filename+"_"+direction
-    elif self.gui_main_object.filename_force.get()=="" and check==0 and direction =='':
+    elif self.controller.shared_data["main_frame"]["filename_force"].get()=="" and check==0 and direction =='':
         filename = Env.datestring+","+time.strftime("%H%M")
-    elif self.gui_main_object.filename_force.get()!="" and check==1 and direction =='':
+    elif self.controller.shared_data["main_frame"]["filename_force"].get()!="" and check==1 and direction =='':
         varietyname, plotname = nameMissing(varietyname, plotname)
         filename = str(varietyname+str(",")+plotname)
-    elif self.gui_main_object.filename_force.get()!="" and check==0 and direction =='':
+    elif self.controller.shared_data["main_frame"]["filename_force"].get()!="" and check==0 and direction =='':
         if ("side1" in filename) or ("side2" in filename) or ("side3" in filename) or ("forward" in filename) or ("postTest" in filename):
-            filename = nameDirectionScrub(self.gui_main_object.filename_force.get())
+            filename = nameDirectionScrub(self.controller.shared_data["main_frame"]["filename_force"].get())
             filename = filename
         else:
             filename = filename
-    #self.gui_main_object.filename_postTest.set(filename_postTest)
+    #self.controller.shared_data["main_frame"]["filename_postTest"].set(filename_postTest)
     return filename
 ''' end: Edge cases: Filenaming '''
 

@@ -28,13 +28,15 @@ Fix:
 - Appended data issue when writing xlsx files, which comes from ".insert(" command.
 - Remove forcebar correction based on wooden ruler, which has not been used as a reference in 2020 or 2021.
 '''
+from pathlib import Path
 generate_rich_files_toggle = 0 # set to no, because I don't use em anyways
 #Data File Saving Locations:
 #Make sure this is USB address for saving data to
 usb = '/media/pi/0000-0001' # update code so data is saved here too
 #RPi backup saving location:
-address = '/home/pi/Desktop/SAVED_DATA_2020'
-address = r'C:\Users\clayton\OneDrive - University of Idaho\AqMEQ\SOCEM\SOCEM_DATA_2020_troubleshoot'
+#address = '/home/pi/Desktop/SAVED_DATA_2020'
+#address = r'C:\Users\clayton\OneDrive - University of Idaho\AqMEQ\SOCEM\SOCEM_DATA_2020_troubleshoot'
+address = Path(__file__).resolve().parent
 path = address
 #address = '/home/pi/Desktop/SAVED DATA 2019/RAW_'
 
@@ -43,6 +45,7 @@ path = address
 import serial.tools.list_ports
 import time
 import tkinter as tk
+import platform
 #from tkinter import 
 import threading
 import xlsxwriter
@@ -62,7 +65,7 @@ from os import path
 import numpy as np
 import EI_Interaction_Fx # script that computes EI assuming full interactions
 import EI_No_Interaction_Fx # script that computes EI assuming no interactions
-import optiH # script that determine optiaml force bar height
+#import optiH # script that determine optiaml force bar height
 import peakutils
 #from PeakUtils.Plot import plot as pplot
 import math
@@ -71,40 +74,9 @@ import PIL.ImageTk
 import PIL.Image
 
 #Global varibles  
-collect = False # controls data collection loop from GUI frontend
+#collect = False # controls data collection loop from GUI frontend
 getCount = False
 clearDisplay = True
-
-
-
-
-# old way
-decoded_bytes = list() # 
-string = list()
-dis = list()
-force = list()
-rowForce = list()
-rowMax = list()
-rowAve = list()
-cropHeight = list()
-elapsed = list()
-rowNum = list()
-stemNum = list()
-countDis = list()
-
-meanF = list()
-greatMean = list()
-medianF = list()
-medianPos = list()
-maxF = list()
-avelocity = list()
-hz = list()
-sampling = list()
-aveHeight = list()
-aveCount = list()
-density = list()
-spacing = list()
-FbHeight = list()
 
 # new way, to get rid of style: elapsed.insert(0 , "Time (s)")
 decoded_bytes = list() # 
@@ -128,7 +100,7 @@ maxF = list()
 avelocity = list()
 hz = list()
 sampling = list()
-aveHeight = list()
+#aveHeight = list()
 aveCount = list()
 density = list()
 spacing = list()
@@ -160,54 +132,69 @@ inchonvert = (((math.pi*(0.764))*31.4136)/359) # converts displacement to inches
 vis = "s" #set to live graph for data display
 
 # Determine Arduino serial port address
-def SerConnect():
+import serial
+import serial.tools.list_ports
 
 
+def SerConnect(verbose=True):
+    """
+    Establish a serial connection to an Arduino or other device.
+
+    Args:
+        port (str): Specific serial port to connect to (e.g., 'COM3' or '/dev/ttyUSB0'). If None, auto-detects.
+        baudrate (int): Baud rate for the connection.
+        timeout (int or float): Read timeout value.
+        verbose (bool): If True, prints debug information.
+
+    Returns:
+        serial.Serial: Opened serial connection, or None if it fails.
+    """
     try:
-        ports = serial.tools.list_ports.comports()
-        #print(ports)
-        #dev = '/dev/ttyACM0'
-        dev = ports[0].device
-        dev = 'COM3'
-        ser = serial.Serial(dev, 115200)
-        #print(ports)
-        #print(dev)
-        #dev = 'COM13'
+        ports = list(serial.tools.list_ports.comports())
+        if not ports:
+            raise IOError("No serial ports found.")
 
-##        ser = serial.Serial(
-##        port = "/dev/ttyUSB2",
-##        baudrate = 115200,
-##        bytesize = serial.EIGHTBITS, 
-##        parity = serial.PARITY_NONE,
-##        stopbits = serial.STOPBITS_ONE, 
-##        timeout = 1,
-##        xonxoff = False,
-##        rtscts = False,
-##        dsrdtr = False,
-##        writeTimeout = 2
-##        )
+        for port in ports:
+            try:
+                if verbose:
+                    print(f"[INFO] Trying port: {port.device}")
+                ser = serial.Serial(port.device, 115200, timeout=1)
+                if verbose:
+                    print(f"[SUCCESS] Connected to {port.device}")
+                return ser
+            except (serial.SerialException, OSError) as e:
+                if verbose:
+                    print(f"[WARN] {port.device} unavailable: {e}")
+        raise IOError("No available serial ports.")
+        
+    except Exception as e:
+        if verbose:
+            print(f"[ERROR] Serial connection failed: {e}")
+        return None
 
-        #ser.open()
-        #ser.isOpen()
-    except:
-        # FIX THIS, WE NEVER get ERROR e1 CB 4/5/2022
-        error = 'serial connection'
-        eCode = 'e1'
-        errors.append(error) # append error label
-        errorCodes.append(eCode) # append error code
-        popup('serial connection')
-
-    return ser
-    
-
-# if serial disconnect (unplugged) reconnect - NOTE: doesn't properly work currently. 
+# if serial disconnect (unplugged) reconnect
 def SerReconnect(ser): 
     ser.close()
-    SerConnect()
+    ser = SerConnect(verbose=True)
+    if ser:
+        print("Ready to communicate!")
+    else:
+        print("Connection failed.")
 
 #virtual keyboard
 def keyboard():
-    key = subprocess.Popen(['florence'], stdout=subprocess.PIPE, shell = False)
+    system = platform.system()
+    try:
+        if system == "Windows":
+            subprocess.Popen(["start", "osk"], shell=True)  # Launches without needing admin
+        elif system == "Linux":
+            subprocess.Popen(["florence"])
+        elif system == "Darwin":
+            print("macOS virtual keyboard not implemented.")
+        else:
+            print(f"No virtual keyboard support for OS: {system}")
+    except Exception as e:
+        print(f"[ERROR] Failed to launch virtual keyboard: {e}")
 
 #changes display method    #DELETE?
 def data_display(visual):
@@ -235,10 +222,6 @@ def rename(name):
     renameIt.pack(side='top', fill='x', pady=10)
     popup.mainloop()
 
-#closes GUI (from file menubar)
-def close():
-    python = sys.executable
-    os.execl(python, python, * sys.argv)
 
 # * # DATA COLLECTION FUNCTION - Acquires live data from Arduino # * #
 def run(self, ser):
@@ -290,10 +273,9 @@ def run(self, ser):
     
     i = 0
     
-
     try:
     
-        while collect == True: # GUI in fSerConnect()rontend controls value of collect to start/stop loop
+        while self.collect: # GUI in fSerConnect()rontend controls value of collect to start/stop loop
             
             if ser.inWaiting() > 0: #checks to see if Serial is available 
             
@@ -342,12 +324,12 @@ def run(self, ser):
                     '''Scrollbars Options'''
                     # if scrollbars option = on:
                     try: # puts data on GUI display by default (user can turn off)  
-                        self.Dislist.insert(END, str(dis[i]))# inserts at end of listbox to actually display
-                        self.Dislist.see(END)# makes sure listbox is at end so it displays live data
-                        self.Forcelist.insert(END, str('%.2f' % force[i]))
-                        self.Forcelist.see(END)
-                        self.Timelist.insert(END, str('%.2f' % elapsed[i]))
-                        self.Timelist.see(END)
+                        self.Dislist.insert(tk.END, str(dis[i]))# inserts at end of listbox to actually display
+                        self.Dislist.see(tk.END)# makes sure listbox is at end so it displays live data
+                        self.Forcelist.insert(tk.END, str('%.2f' % force[i]))
+                        self.Forcelist.see(tk.END)
+                        self.Timelist.insert(tk.END, str('%.2f' % elapsed[i]))
+                        self.Timelist.see(tk.END)
 
                     #scrollbars options = off        
                     except:
@@ -387,14 +369,14 @@ class GUI(tk.Tk):
         #filemenu.add_command(label='Errors', command = lambda:self.show_frame(ErrorReport))#, showErrors(self))
         filemenu.add_command(label='Serial Reconnect', command = lambda:SerReconnect(ser))
         filemenu.add_command(label='Errors', command = lambda:showErrors(self))
-        filemenu.add_command(label="Exit", command = lambda:close())
+        filemenu.add_command(label="Exit", command = lambda:self.close())
         menubar.add_cascade(label='File', menu=filemenu)
         menubar.add_cascade(label="Data Display", menu=datamenu)
         
         tk.Tk.config(self, menu=menubar)                
         self.frames = {}# empty dictionary
 
-        for F in (Home, DataCollect, Calibrate, Guide, ErrorReport, Heights):# must put all pages in here
+        for F in (Home, DataCollect, Calibrate, Guide, ErrorReport):# must put all pages in here
             frame = F(container, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky='nsew')
@@ -407,6 +389,13 @@ class GUI(tk.Tk):
         frame.tkraise()
 
         frame.event_generate("<<ShowFrame>>") # event
+        
+    #closes GUI (from file menubar)
+    def close(self):
+        self.quit()
+        self.destroy()
+        sys.exit()  # optional; ensures a clean exit in complex apps
+
 
 
 ##class UploadPage(tk.Frame):
@@ -560,14 +549,15 @@ class Home(tk.Frame):
         guideB = tk.Button(self, text = "Guide", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:controller.show_frame(Guide))
         guideB.place(x = 0, y = 360)
 
-        heightsB = tk.Button(self, text = "Heights", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:controller.show_frame(Heights))
-        heightsB.place(x = 675, y = 40+92)
-
         keyB = tk.Button(self, text = "Keyboard",
                        font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",
                        command=keyboard).place(x = 675, y = 316)
         print("in")
-        ser = SerConnect()
+        ser = SerConnect(verbose=True)
+        if ser:
+            print("Ready to communicate!")
+        else:
+            print("Connection failed.")
         #SerReconnect(ser)
 
         print("")
@@ -582,7 +572,7 @@ class Home(tk.Frame):
         Fb_center = barHeight # CB 3/13/2022 # In 2021 the ruler was not used, and the ruler is risky.
         Fb_bottom = Fb_center.get() - .32
         try: # this doesn't work if you're going from the Collect Data page to the Input page
-            stemHeight.set(aveH)# the issue, is aveH doesn't exist yet pulls in calculated value from Heights page
+            stemHeight.set(10)# the issue, is aveH doesn't exist yet pulls in calculated value from Heights page
             barHeight.set(Fb_place) # pulls in calculated value from Heights page
         except:
             print("Height calculator not used.")
@@ -692,14 +682,14 @@ class DataCollect(tk.Frame):
 
         if newOne >= 1 : # if a new dataset
             if clearDisplay == True: # clears the data display lists if new data & not just a renaming of previous data (overwrite protection)
-                self.Forcelist.delete(0, 'end')
-                self.Dislist.delete(0, 'end')
-                self.Timelist.delete(0, 'end')
+                self.Forcelist.delete(0, tk.END)
+                self.Dislist.delete(0, tk.END)
+                self.Timelist.delete(0, tk.END)
             words = len(filename.get())# number of letters in filename
             
             if self.dataset > 2: # if past 3rd dataset: erase previous incrementing value
                 NumErase = len(str(self.dataset-2))# how many chars to erase from filename for incrementing
-                self.entry_box.delete(words-NumErase, END)# deletes previous number from filename
+                self.entry_box.delete(words-NumErase, tk.END)# deletes previous number from filename
                 
             filename.set(filename.get()+str(self.dataset-1))# adds incremented number to filename
 
@@ -738,8 +728,8 @@ class DataCollect(tk.Frame):
         
     # calls run function (for collecting Arduino data) to run in backend while GUI runs in frontend     
     def start(self):
-        global collect # controls data collection loop
-        collect = True # True = run the loop
+        #global collect # controls data collection loop
+        self.collect = True # True = run the loop
         #global t1
         #print('isOpen ', ser.isOpen())
         #if ser.isOpen() == False:
@@ -800,7 +790,7 @@ class DataCollect(tk.Frame):
         clearDisplay = True 
         
         # RAW data filename (adds 'RAW_' to the front)
-        raw = address + '/RAW_' + (filename.get()) + '.xlsx'
+        raw = str(address) + '/RAW_' + (filename.get()) + '.xlsx'
 
         if self.overwriteGuard(raw) == True: # filename already exists, needs to be renamed
             self.dataset = self.dataset - 1 # don't increment data set
@@ -845,15 +835,6 @@ class DataCollect(tk.Frame):
         countDisEnd.append(endCount.get())
         
 
-        # new lists to save, with more than two values each
-        horzL = ["Horizontal Measurement Index (in.)"]
-        StemHeightsMeasured = ["Stem Heights (in.)"]
-        try:
-            horzL.extend(Xa)
-            StemHeightsMeasured.extend(Ha)
-        except:
-            print("Plot heights not input.")
-
         
         # open Excel worksheet
         workbook = xlsxwriter.Workbook(raw)
@@ -873,8 +854,6 @@ class DataCollect(tk.Frame):
         worksheet.write_column('K1', stemNumRight)
         worksheet.write_column('L1', countDisStart)
         worksheet.write_column('M1', countDisEnd)
-        worksheet.write_column('N1', horzL)
-        worksheet.write_column('O1', StemHeightsMeasured)
         
         
         # close workbook
@@ -1208,7 +1187,7 @@ class DataCollect(tk.Frame):
         avelocity.clear()
         hz.clear()
         sampling.clear()
-        aveHeight.clear()
+        #aveHeight.clear()
         aveCount.clear()
         density.clear()
         spacing.clear()
@@ -1231,9 +1210,9 @@ class DataCollect(tk.Frame):
         except:
             print("Push")
         finally:
-            global collect
+            #global collect
             #stops data collection loop
-            collect = False
+            self.collect = False
         
         try:
             stopped = 'x'
@@ -1282,7 +1261,7 @@ class Calibrate(tk.Frame):
                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=5,y=183)
 
         self.knownW = tk.DoubleVar() # know weight textvariable
-        self.knownW.set(0.0) # initially = 1.0 kg (assuming 1.0 kg will be used)
+        self.knownW.set(1.0) # initially = 1.0 kg (assuming 1.0 kg will be used)
         knownWEntry = tk.Entry(self, textvariable=self.knownW,
                font = ("arial", 14, "bold"), width= 5, bg="white", fg="gray1").place(x = 80, y =183)
 
@@ -1364,7 +1343,7 @@ class Calibrate(tk.Frame):
 
     def updateCali(self, cali): # update calibration factor
         self.factor = self.calibra.get() + cali
-        self.calibraEntry.delete(0, 'end')
+        self.calibraEntry.delete(0, tk.END)
         self.calibraEntry.insert(0, self.factor)
         return self.factor
 
@@ -1411,10 +1390,10 @@ class Calibrate(tk.Frame):
                     #print(diff)
                     #print(reading)
                     #print(str('%.2f' % reading))
-                    self.LClist.insert(END, str('%.2f' % reading)) # scrollbar list for force readings
-                    self.Difflist.see(END)
-                    self.Difflist.insert(END, str('%.1f' % diff)) # scrollbar list for forcebar - known weight 
-                    self.LClist.see(END)
+                    self.LClist.insert(tk.END, str('%.2f' % reading)) # scrollbar list for force readings
+                    self.Difflist.see(tk.END)
+                    self.Difflist.insert(tk.END, str('%.1f' % diff)) # scrollbar list for forcebar - known weight 
+                    self.LClist.see(tk.END)
                 except:
                     pass 
 
@@ -1460,177 +1439,15 @@ class ErrorReport(tk.Frame):
         
     def showErrors2(self):
 
-        self.ErrorCodeList.delete(0, 'end')
-        self.ErrorDesc.delete(0, 'end')
+        self.ErrorCodeList.delete(0, tk.END)
+        self.ErrorDesc.delete(0, tk.END)
 
         for e in range(len(errorCodes)):
-            self.ErrorCodeList.insert(END, errorCodes[e])# inserts at end   of listbox to actually display
-            self.ErrorCodeList.see(END)# makes sure listbox is at end so it displays live data
-            self.ErrorDesc.insert(END, errors[e])
-            self.ErrorDesc.see(END)
+            self.ErrorCodeList.insert(tk.END, errorCodes[e])# inserts at end   of listbox to actually display
+            self.ErrorCodeList.see(tk.END)# makes sure listbox is at end so it displays live data
+            self.ErrorDesc.insert(tk.END, errors[e])
+            self.ErrorDesc.see(tk.END)
 
-class Heights(tk.Frame):
-    
-    def __init__(self, parent, controller): # automatically runs
-
-        tk.Frame.__init__(self, parent)
-
-        Header = tk.Label(self, text = "Enter Heights Along Plot To Optimize Force Bar Height",
-                          font = ("arial", 17, "bold"), fg = "gray3", bg="ghost white").place(x=50,y=0)
-
-        Negatives = tk.Label(self, text = "*Negative values\n are converted\n to Null",
-                          font = ("arial", 17, "bold"), fg = "gray3", bg="ghost white").place(x=5,y=60)
-
-        xLabel = tk.Label(self, text = "x (in).",
-                          font = ("arial", 17, "bold"), fg = "gray3", bg="ghost white").place(x=230,y=60)
-
-        x1 = tk.DoubleVar()
-        x1.set(20)
-        x1Box = tk.Entry(self, textvariable=x1,
-               font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 230, y = 90)
-
-        x2 = tk.DoubleVar()
-        x2.set(40)
-        x2Box = tk.Entry(self, textvariable=x2,
-               font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 230, y = 118)
-
-        x3 = tk.DoubleVar()
-        x3.set(60)
-        x3Box = tk.Entry(self, textvariable=x3,
-               font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 230, y = 118+28)
-
-        x4 = tk.DoubleVar()
-        x4.set(80)
-        x4Box = tk.Entry(self, textvariable=x4,
-               font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 230, y = 118+28+28)
-
-        x5 = tk.DoubleVar()
-        x5.set(100)
-        x5Box = tk.Entry(self, textvariable=x5,
-               font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 230, y = 118+(3*28))
-
-        x6 = tk.DoubleVar()
-        x6.set(120)
-        x6Box = tk.Entry(self, textvariable=x6,
-               font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 230, y = 118+(4*28))
-
-        x7 = tk.DoubleVar()
-        x7.set(-1)
-        x7Box = tk.Entry(self, textvariable=x7,
-               font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 230, y = 118+(5*28))
-
-        x8 = tk.DoubleVar()
-        x8.set(-1)
-        x8Box = tk.Entry(self, textvariable=x8,
-               font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 230, y = 118+(6*28))
-
-        hLabel = tk.Label(self, text = "h (in).",
-                          font = ("arial", 17, "bold"), fg = "gray3", bg="ghost white").place(x=330,y=60)
-
-        h1 = tk.DoubleVar()
-        h1Box = tk.Entry(self, textvariable=h1,
-               font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 330, y = 90)
-
-        h2 = tk.DoubleVar()
-        h2Box = tk.Entry(self, textvariable=h2,
-               font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 330, y = 118)
-
-        h3 = tk.DoubleVar()
-        h3Box = tk.Entry(self, textvariable=h3,
-               font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 330, y = 118+28)
-
-        h4 = tk.DoubleVar()
-        h4Box = tk.Entry(self, textvariable=h4,
-               font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 330, y = 118+28+28)
-
-        h5 = tk.DoubleVar()
-        h5Box = tk.Entry(self, textvariable=h5,
-               font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 330, y = 118+(3*28))
-
-        h6 = tk.DoubleVar()
-        h6Box = tk.Entry(self, textvariable=h6,
-               font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 330, y = 118+(4*28))
-
-        h7 = tk.DoubleVar()
-        h7.set(-1)
-        h7Box = tk.Entry(self, textvariable=h7,
-               font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 330, y = 118+(5*28))
-
-        h8 = tk.DoubleVar()
-        h8.set(-1)
-        h8Box = tk.Entry(self, textvariable=h8,
-               font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 330, y = 118+(6*28))
-
-        #button that calculates optimized force bar height
-        optiB = tk.Button(self, text ="Optimize\n Force Bar",
-                        font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",
-                        command=lambda:self.optiH([x1.get(), x2.get(), x3.get(), x4.get(), x5.get(), x6.get(), x7.get(), x8.get()],
-                                                  [h1.get(), h2.get(), h3.get(), h4.get(), h5.get(), h6.get(), h7.get(), h8.get()])).place(x = 410, y = 90)
-
-        #button that goes back to 1st page (Inputs / home)
-        HomeB = tk.Button(self, text ="Inputs",
-                        font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",
-                        command=lambda:controller.show_frame(Home)).place(x = 0, y = 316)
-
-        
-        keyB = tk.Button(self, text = "Keyboard",
-                       font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",
-                       command=keyboard).place(x = 675, y = 316)
-
-    def optiH(self, X, H):
-        global Xa, Ha
-        Xa = [] # x non-null list, horzL
-        Ha= [] # H non-null list, xStemHeights
-        for i in range(len(X)):
-            if X[i] > 0:
-                Xa.append(X[i])
-                Ha.append(H[i])
-
-        global aveH, Fb_place, Fb
-        aveH = np.mean(Ha)
-        step = 0.5
-        Fb = optiH.optiH(Xa, Ha, step)
-        #print(Fb)
-        # Fb_plae = user will set force bar to this height (as measured by SOCEM wood ruler) 
-        # Fb_place = float(Fb[0]) + .466 + .32  # Fb + correction distance + fb radius # SEE force bar input code (around line 545)
-        # fb values should have been legitimate without correct.
-        Fb_place = float("%.4f" % float(Fb[0]))
-        print("Fb_place = ", str(Fb_place))
-
-        # has the friggin wooden ruler offset build in - fix this!!!! CB
-        
-        Fb1Label = tk.Label(self, text = "Force Bar Height: ",
-                          font = ("arial", 17, "bold"), fg = "gray3", bg="ghost white").place(x=410,y=190)
-
-        FbLabel = tk.Label(self, text = Fb_place,
-                          font = ("arial", 17, "bold"), fg = "dodgerblue2", bg = "ghost white").place(x=605,y=190)
-
-        hScoreLab = tk.Label(self, text = "Score:",
-                          font = ("arial", 17, "bold"), fg = "gray3", bg="ghost white").place(x=410,y=220)
-
-        hScore = tk.Label(self, text = Fb[2],
-                          font = ("arial", 17, "bold"), fg = "dodgerblue2", bg = "ghost white").place(x=485,y=220)
-
-        best= tk.Label(self, text = "(best = 1.0)",
-                          font = ("arial", 17, "bold"), fg = "gray3", bg="ghost white").place(x=550,y=220)
-
-        ratioLab = tk.Label(self, text = "Avg. h/l:",
-                          font = ("arial", 17, "bold"), fg = "gray3", bg="ghost white").place(x=410,y=250)
-
-        ratio = tk.Label(self, text = Fb[1],
-                          font = ("arial", 17, "bold"), fg = "dodgerblue2", bg = "ghost white").place(x=520,y=250)
-
-        aveHLab = tk.Label(self, text = "Avg. h:",
-                          font = ("arial", 17, "bold"), fg = "gray3", bg="ghost white").place(x=410,y=280)
-
-        aveHv = tk.Label(self, text = "%.2f " % aveH,
-                          font = ("arial", 17, "bold"), fg = "dodgerblue2", bg = "ghost white").place(x=500,y=280)
-
-        # need way to return these results such that they can be saved and passes on, CB
-        return Xa, Ha, aveH, Fb
-    #global Xa, Ha, aveH, fB
-
-        
  # Guide page 
 class Guide(tk.Frame):
     
@@ -1693,7 +1510,8 @@ if __name__ == "__main__":
     # INITIATES GUI TO START
     #root= tk.Tk() # added CB
     app = GUI()
-    #ser = SerConnect()
+    #ser = SerConnec
+    # t()
     b = DataCollect(app,tk.Frame)
     fig = plt.figure()
     #global filename

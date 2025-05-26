@@ -8,7 +8,7 @@ from socem25.core.pass_in import PassIn
 
 
 class Backup(PassIn):
-    def createBackupFile(self):
+    def createBackupFile(self, controller):
         ''' Create a temp text file, with a list of all variables and variable names, that would be awesome '''
         '''update_filename_preTest()
         update_filename_postTest()
@@ -23,17 +23,17 @@ class Backup(PassIn):
         filename_savestate_full = self.gui_main_object.address+"/"+filename_savestate
         print("State saved at "+str(datetime.datetime.fromtimestamp(unix_now_int))+": "+filename_savestate)
         # list all GUI vars, add them to a txt file
-        self.gui_main_object.masslist=[self.gui_main_object.cell1Mass.get(),self.gui_main_object.cell2Mass.get(),self.gui_main_object.cell3Mass.get(),self.gui_main_object.cell4Mass.get(),self.gui_main_object.cell5Mass.get(),self.gui_main_object.cell6Mass.get(),self.gui_main_object.cell7Mass.get(),self.gui_main_object.cell8Mass.get(),self.gui_main_object.cell9Mass.get()] 
-        self.gui_main_object.stemcounts=[self.gui_main_object.cell1Count.get(),self.gui_main_object.cell2Count.get(),self.gui_main_object.cell3Count.get(),self.gui_main_object.cell4Count.get(),self.gui_main_object.cell5Count.get(),self.gui_main_object.cell6Count.get(),self.gui_main_object.cell7Count.get(),self.gui_main_object.cell8Count.get(),self.gui_main_object.cell9Count.get()] 
-        self.gui_main_object.diameters_cell1 = [self.gui_main_object.cell1Diameter1.get(),self.gui_main_object.cell1Diameter2.get(),self.gui_main_object.cell1Diameter3.get(),self.gui_main_object.cell1Diameter4.get()]
-        self.gui_main_object.diameters_cell2 = [self.gui_main_object.cell2Diameter1.get(),self.gui_main_object.cell2Diameter2.get(),self.gui_main_object.cell2Diameter3.get(),self.gui_main_object.cell2Diameter4.get()]
-        self.gui_main_object.diameters_cell3 = [self.gui_main_object.cell3Diameter1.get(),self.gui_main_object.cell3Diameter2.get(),self.gui_main_object.cell3Diameter3.get(),self.gui_main_object.cell3Diameter4.get()]
-        self.gui_main_object.diameters_cell4 = [self.gui_main_object.cell4Diameter1.get(),self.gui_main_object.cell4Diameter2.get(),self.gui_main_object.cell4Diameter3.get(),self.gui_main_object.cell4Diameter4.get()]
-        self.gui_main_object.diameters_cell5 = [self.gui_main_object.cell5Diameter1.get(),self.gui_main_object.cell5Diameter2.get(),self.gui_main_object.cell5Diameter3.get(),self.gui_main_object.cell5Diameter4.get()]
-        self.gui_main_object.diameters_cell6 = [self.gui_main_object.cell6Diameter1.get(),self.gui_main_object.cell6Diameter2.get(),self.gui_main_object.cell6Diameter3.get(),self.gui_main_object.cell6Diameter4.get()]
-        self.gui_main_object.diameters_cell7 = [self.gui_main_object.cell7Diameter1.get(),self.gui_main_object.cell7Diameter2.get(),self.gui_main_object.cell7Diameter3.get(),self.gui_main_object.cell7Diameter4.get()]
-        self.gui_main_object.diameters_cell8 = [self.gui_main_object.cell8Diameter1.get(),self.gui_main_object.cell8Diameter2.get(),self.gui_main_object.cell8Diameter3.get(),self.gui_main_object.cell8Diameter4.get()]
-        self.gui_main_object.diameters_cell9 = [self.gui_main_object.cell9Diameter1.get(),self.gui_main_object.cell9Diameter2.get(),self.gui_main_object.cell9Diameter3.get(),self.gui_main_object.cell9Diameter4.get()]
+        self.gui_main_object.masslist=[controller.shared_data["main_frame"]["cell1"]["mass"].get(),controller.shared_data["main_frame"]["cell2"]["mass"].get(),controller.shared_data["main_frame"]["cell3"]["mass"].get(),controller.shared_data["main_frame"]["cell4"]["mass"].get(),controller.shared_data["main_frame"]["cell5"]["mass"].get(),controller.shared_data["main_frame"]["cell6"]["mass"].get(),controller.shared_data["main_frame"]["cell7"]["mass"].get(),controller.shared_data["main_frame"]["cell8"]["mass"].get(),controller.shared_data["main_frame"]["cell9"]["mass"].get()] 
+        self.gui_main_object.stemcounts=[controller.shared_data["main_frame"]["cell1"]["count"].get(),controller.shared_data["main_frame"]["cell2"]["count"].get(),controller.shared_data["main_frame"]["cell3"]["count"].get(),controller.shared_data["main_frame"]["cell4"]["count"].get(),controller.shared_data["main_frame"]["cell5"]["count"].get(),controller.shared_data["main_frame"]["cell6"]["count"].get(),controller.shared_data["main_frame"]["cell7"]["count"].get(),controller.shared_data["main_frame"]["cell8"]["count"].get(),controller.shared_data["main_frame"]["cell9"]["count"].get()] 
+        self.gui_main_object.diameters_cell1 = [controller.shared_data["main_frame"]["cell1"]["diameter1"].get(),controller.shared_data["main_frame"]["cell1"]["diameter2"].get(),controller.shared_data["main_frame"]["cell1"]["diameter3"].get(),controller.shared_data["main_frame"]["cell1"]["diameter4"].get()]
+        self.gui_main_object.diameters_cell2 = [controller.shared_data["main_frame"]["cell2"]["diameter1"].get(),controller.shared_data["main_frame"]["cell2"]["diameter2"].get(),controller.shared_data["main_frame"]["cell2"]["diameter3"].get(),controller.shared_data["main_frame"]["cell2"]["diameter4"].get()]
+        self.gui_main_object.diameters_cell3 = [controller.shared_data["main_frame"]["cell3"]["diameter1"].get(),controller.shared_data["main_frame"]["cell3"]["diameter2"].get(),controller.shared_data["main_frame"]["cell3"]["diameter3"].get(),controller.shared_data["main_frame"]["cell3"]["diameter4"].get()]
+        self.gui_main_object.diameters_cell4 = [controller.shared_data["main_frame"]["cell4"]["diameter1"].get(),controller.shared_data["main_frame"]["cell4"]["diameter2"].get(),controller.shared_data["main_frame"]["cell4"]["diameter3"].get(),controller.shared_data["main_frame"]["cell4"]["diameter4"].get()]
+        self.gui_main_object.diameters_cell5 = [controller.shared_data["main_frame"]["cell5"]["diameter1"].get(),controller.shared_data["main_frame"]["cell5"]["diameter2"].get(),controller.shared_data["main_frame"]["cell5"]["diameter3"].get(),controller.shared_data["main_frame"]["cell5"]["diameter4"].get()]
+        self.gui_main_object.diameters_cell6 = [controller.shared_data["main_frame"]["cell6"]["diameter1"].get(),controller.shared_data["main_frame"]["cell6"]["diameter2"].get(),controller.shared_data["main_frame"]["cell6"]["diameter3"].get(),controller.shared_data["main_frame"]["cell6"]["diameter4"].get()]
+        self.gui_main_object.diameters_cell7 = [controller.shared_data["main_frame"]["cell7"]["diameter1"].get(),controller.shared_data["main_frame"]["cell7"]["diameter2"].get(),controller.shared_data["main_frame"]["cell7"]["diameter3"].get(),controller.shared_data["main_frame"]["cell7"]["diameter4"].get()]
+        self.gui_main_object.diameters_cell8 = [controller.shared_data["main_frame"]["cell8"]["diameter1"].get(),controller.shared_data["main_frame"]["cell8"]["diameter2"].get(),controller.shared_data["main_frame"]["cell8"]["diameter3"].get(),controller.shared_data["main_frame"]["cell8"]["diameter4"].get()]
+        self.gui_main_object.diameters_cell9 = [controller.shared_data["main_frame"]["cell9"]["diameter1"].get(),controller.shared_data["main_frame"]["cell9"]["diameter2"].get(),controller.shared_data["main_frame"]["cell9"]["diameter3"].get(),controller.shared_data["main_frame"]["cell9"]["diameter4"].get()]
 
         lines = [
             'Units: diameter (mm), height (cm), range (cm), length (cm), mass (g), time (sec), force (N) \n',

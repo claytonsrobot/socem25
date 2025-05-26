@@ -50,7 +50,8 @@ V84
     - The way peak clicks are handled and saved was moved to the inside of the choose peaks code, becuase plt.show() won't give up.
     - Shut down plt.show after CSV file is saved.
 V88
-    - gui_main_object.filename_force updated on page change to either record force frame or final inputs page
+    - controller.shared_data["main_frame"]["filename_force"]
+ updated on page change to either record force frame or final inputs page
     - nameBlackBox updated to remove excess hyphen when direction ==''
     - XLSX compilation file functional, currently set to seek force and EI files
     - EI calcualtion works - only needs 1 file for all four nine-cell-scheme tests. 
@@ -61,7 +62,8 @@ V90
 V92
     - Trigger peak selection for all tests, with the assessAllTests boolean.
     - Noticed that encoderWorked_override is poorly implemented. No reason to fix now, but, should be alterable as opposed to needing manual suppression through commenting
-    - gui_main_object.currentdirection.get() set to "" on_frame_show self.gui_record_force_object.
+    - controller.shared_data["main_frame"]["currentdirection"]
+.get() set to "" on_frame_show self.gui_record_force_object.
 V94
     - Changed mass measurement from kg to gramsa
     - Fixed all time units to be (sec), not (s) or (seconds), and certainly not (ms)
@@ -82,7 +84,8 @@ Fix:
 - move header variable inputs
 - make directory inputtable using dropdown menu item and textbox
 - upgrade tkinter items to CustomTkinter
-- PRIORITY: CREATE BASE NAME FROM VARIABLE AND PLOT: gui_main_object.filename_force.get() is getting dangerous.
+- PRIORITY: CREATE BASE NAME FROM VARIABLE AND PLOT: controller.shared_data["main_frame"]["filename_force"]
+.get() is getting dangerous.
      
 Notes:
 - exec() is your friend. Use is to run multiple lines of code which you can copy and paste into a shell, using triple '  commenting

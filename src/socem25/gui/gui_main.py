@@ -17,13 +17,13 @@ class SocemGuiMain(PassIn, tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         self.parent = parent
+        self.render(controller)
 
     def this_is_done_in__main__(self,*args, **kwargs):
         tk.Tk.__init__(self,*args, **kwargs)
-    def run(self):
+    def render(self,controller,config):
         
-        self.initialize_tk_vars_gui_main()
-        self.refresh_tk_vars_gui_main()
+        self.initialize_tk_vars_gui_main(controller)
         
         # Frame setup code (menus, containers, etc.)
         container = tk.Frame(self)
@@ -77,29 +77,57 @@ class SocemGuiMain(PassIn, tk.Frame):
         
         tk.Tk.config(self, menu=menubar)  
         
-    def initialize_tk_vars_gui_main(self):
-        self.filename_force = tk.StringVar()
-        self.filename_preTest = tk.StringVar()
-        self.filename_postTest = tk.StringVar()
-        self.filename_all = tk.StringVar()
-        self.varietyname = tk.StringVar()
-        self.plotname = tk.StringVar()
-        self.stemheight = tk.DoubleVar()
-        self.currentdirection = tk.StringVar()#
-        self.barmiddle = tk.DoubleVar() #
-        self.barbottom = tk.DoubleVar() #
-        self.passfillednames_checkbox = tk.IntVar() # revert
-        self.timestring = tk.StringVar()
-        self.startRange1, self.startRange2, self.startRange3 = tk.DoubleVar(),  tk.DoubleVar(),  tk.DoubleVar() # cm = tk.StringVar()
-        self.addressInput = tk.StringVar()
+    def initialize_tk_vars_gui_main(self,controller):
+
+        tk_vars_gui_main = {
+            "filename_force": tk.StringVar(),
+            "filename_preTest": tk.StringVar(),
+            "filename_postTest": tk.StringVar(),
+            "filename_all": tk.StringVar(),
+            "varietyname": tk.StringVar(),
+            "plotname": tk.StringVar(),
+            "stemheight": tk.DoubleVar(),
+            "currentdirection": tk.StringVar(),
+            "barmiddle": tk.DoubleVar(),
+            "barbottom": tk.DoubleVar(),
+            "passfillednames_checkbox": tk.IntVar(),
+            "timestring": tk.StringVar(),
+            "startRange1": tk.DoubleVar(),
+            "startRange2": tk.DoubleVar(),
+            "startRange3": tk.DoubleVar(),
+            "addressInput": tk.StringVar()
+        }
+        controller.shared_data["main_frame"].update(tk_vars_gui_main)
         
-        self.cell1Mass,self.cell2Mass,self.cell3Mass,self.cell4Mass,self.cell5Mass,self.cell6Mass,self.cell7Mass,self.cell8Mass,self.cell9Mass =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
-        self.cell1Count,self.cell2Count,self.cell3Count,self.cell4Count,self.cell5Count,self.cell6Count,self.cell7Count,self.cell8Count,self.cell9Count =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
-        self.cell1Diameter1,self.cell2Diameter1,self.cell3Diameter1,self.cell4Diameter1,self.cell5Diameter1,self.cell6Diameter1,self.cell7Diameter1,self.cell8Diameter1,self.cell9Diameter1 =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
-        self.cell1Diameter2,self.cell2Diameter2,self.cell3Diameter2,self.cell4Diameter2,self.cell5Diameter2,self.cell6Diameter2,self.cell7Diameter2,self.cell8Diameter2,self.cell9Diameter2 =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
-        self.cell1Diameter3,self.cell2Diameter3,self.cell3Diameter3,self.cell4Diameter3,self.cell5Diameter3,self.cell6Diameter3,self.cell7Diameter3,self.cell8Diameter3,self.cell9Diameter3 =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
-        self.cell1Diameter4,self.cell2Diameter4,self.cell3Diameter4,self.cell4Diameter4,self.cell5Diameter4,self.cell6Diameter4,self.cell7Diameter4,self.cell8Diameter4,self.cell9Diameter4 =  tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
-    
+        controller.shared_data["main_frame"]["filename_force"] = tk.StringVar()
+        controller.shared_data["main_frame"]["filename_preTest"] = tk.StringVar()
+        controller.shared_data["main_frame"]["filename_postTest"] = tk.StringVar()
+        controller.shared_data["main_frame"]["filename_all"] = tk.StringVar()
+        controller.shared_data["main_frame"]["varietyname"] = tk.StringVar()
+        controller.shared_data["main_frame"]["plotname"] = tk.StringVar()
+        controller.shared_data["main_frame"]["stemheight"] = tk.DoubleVar()
+        controller.shared_data["main_frame"]["currentdirection"] = tk.StringVar()#
+        controller.shared_data["main_frame"]["barmiddle"] = tk.DoubleVar() #
+        controller.shared_data["main_frame"]["barbottom"] = tk.DoubleVar() #
+        controller.shared_data["main_frame"]["passfillednames_checkbox"] = tk.IntVar() # revert
+        controller.shared_data["main_frame"]["timestring"] = tk.StringVar()
+        controller.shared_data["main_frame"]["startRange1"], controller.shared_data["main_frame"]["startRange2"], controller.shared_data["main_frame"]["startRange3"] = tk.DoubleVar(),  tk.DoubleVar(),  tk.DoubleVar() # cm = tk.StringVar()
+        controller.shared_data["main_frame"]["addressInput"] = tk.StringVar()
+        
+        # Initialize cellular attributes     
+        cellular_data = {
+            f"cell{i}": {
+                "mass": tk.DoubleVar(value=0.0),
+                "count": tk.DoubleVar(value=0.0),
+                "diameter1": tk.DoubleVar(value=0.0),
+                "diameter2": tk.DoubleVar(value=0.0),
+                "diameter3": tk.DoubleVar(value=0.0),
+                "diameter4": tk.DoubleVar(value=0.0),
+                }
+                for i in range(1, 10)
+            }
+        controller.shared_data["main_frame"].update(cellular_data)
+
     def initialize_nine_cell_vars(self):
         '''For generic and nine-cell assessment GUI vars, initialize ''' 
         # for nine cell assessment, save state
@@ -164,35 +192,36 @@ class SocemGuiMain(PassIn, tk.Frame):
         self.EI_nocontact = []
         self.AvgEI_intermediatecontact = []
 
-    def refresh_tk_vars_gui_main(self): #clear_all(self)?
+    def refresh_tk_vars_gui_main(self,controller): #clear_all(self)?
+        self.initialize_tk_vars_gui_main()
     
-        self.filename_force.set("")
-        self.filename_preTest.set("")
-        self.filename_postTest.set("")
-        self.filename_all.set("")
-        self.varietyname.set("")
-        self.plotname.set("")
-        self.startRange1.set(50)
-        self.startRange2.set(150) 
-        self.startRange3.set(250) # centimeters
-        self.stemheight.set(self.config_object.get("default_stemheight")) # cm
-        self.barbottom.set(round(self.stemheight.get()*initial_barbottomOverStemheight_coeff,3)) # cm
-        self.barmiddle.set(round(self.barbottom.get()+self.config_object.get("barradius"),3)) # cm
-        self.passfillednames_checkbox.set(1)
-        self.timestring.set(time.strftime("%H%M"))
-        self.currentdirection.set("")
-        self.addressInput.set("")
+        controller.shared_data["main_frame"]["filename_force"].set("")
+        controller.shared_data["main_frame"]["filename_preTest"].set("")
+        controller.shared_data["main_frame"]["filename_postTest"].set("")
+        controller.shared_data["main_frame"]["filename_all"].set("")
+        controller.shared_data["main_frame"]["varietyname"].set("")
+        controller.shared_data["main_frame"]["plotname"].set("")
+        controller.shared_data["main_frame"]["startRange1"].set(50)
+        controller.shared_data["main_frame"]["startRange2"].set(150) 
+        controller.shared_data["main_frame"]["startRange3"].set(250) # centimeters
+        controller.shared_data["main_frame"]["stemheight"].set(self.config_object.get("default_stemheight")) # cm
+        controller.shared_data["main_frame"]["barbottom"].set(round(controller.shared_data["main_frame"]["stemheight"].get()*self.config_object.get("initial_barbottomOverStemheight_coeff"),3)) # cm
+        controller.shared_data["main_frame"]["barmiddle"].set(round(controller.shared_data["main_frame"]["barbottom"].get()+self.config_object.get("barradius"),3)) # cm
+        controller.shared_data["main_frame"]["passfillednames_checkbox"].set(1)
+        controller.shared_data["main_frame"]["timestring"].set(time.strftime("%H%M"))
+        controller.shared_data["main_frame"]["currentdirection"].set("")
+        controller.shared_data["main_frame"]["addressInput"].set("")
         
-        ''' Set post test variables for mass, count, and diameter'''
-        self.cell1Mass.set(0),self.cell2Mass.set(0),self.cell3Mass.set(0),self.cell4Mass.set(0),self.cell5Mass.set(0),self.cell6Mass.set(0),self.cell7Mass.set(0),self.cell8Mass.set(0),self.cell9Mass.set(0)
-        self.cell1Count.set(0),self.cell2Count.set(0),self.cell3Count.set(0),self.cell4Count.set(0),self.cell5Count.set(0),self.cell6Count.set(0),self.cell7Count.set(0),self.cell8Count.set(0),self.cell9Count.set(0)
-        self.cell1Diameter1.set(0),self.cell2Diameter1.set(0),self.cell3Diameter1.set(0),self.cell4Diameter1.set(0),self.cell5Diameter1.set(0),self.cell6Diameter1.set(0),self.cell7Diameter1.set(0),self.cell8Diameter1.set(0),self.cell9Diameter1.set(0)
-        self.cell1Diameter2.set(0),self.cell2Diameter2.set(0),self.cell3Diameter2.set(0),self.cell4Diameter2.set(0),self.cell5Diameter2.set(0),self.cell6Diameter2.set(0),self.cell7Diameter2.set(0),self.cell8Diameter2.set(0),self.cell9Diameter2.set(0)
-        self.cell1Diameter3.set(0),self.cell2Diameter3.set(0),self.cell3Diameter3.set(0),self.cell4Diameter3.set(0),self.cell5Diameter3.set(0),self.cell6Diameter3.set(0),self.cell7Diameter3.set(0),self.cell8Diameter3.set(0),self.cell9Diameter3.set(0)
-        self.cell1Diameter4.set(0),self.cell2Diameter4.set(0),self.cell3Diameter4.set(0),self.cell4Diameter4.set(0),self.cell5Diameter4.set(0),self.cell6Diameter4.set(0),self.cell7Diameter4.set(0),self.cell8Diameter4.set(0),self.cell9Diameter4.set(0)
-
         if self.config_object.get("autopopulatestemcount") == True:
-            self.cell1Count.set(self.config_object.get("defaultstemcount")),self.cell2Count.set(self.config_object.get("defaultstemcount")),self.cell3Count.set(self.config_object.get("defaultstemcount")),self.cell4Count.set(self.config_object.get("defaultstemcount")),self.cell5Count.set(self.config_object.get("defaultstemcount")),self.cell6Count.set(self.config_object.get("defaultstemcount")),self.cell7Count.set(self.config_object.get("defaultstemcount")),self.cell8Count.set(self.config_object.get("defaultstemcount")),self.cell9Count.set(self.config_object.get("defaultstemcount"))
+            controller.shared_data["main_frame"]["cell1"]["count"].set(self.config_object.get("defaultstemcount")),
+            controller.shared_data["main_frame"]["cell2"]["count"].set(self.config_object.get("defaultstemcount")),
+            controller.shared_data["main_frame"]["cell3"]["count"].set(self.config_object.get("defaultstemcount")),
+            controller.shared_data["main_frame"]["cell4"]["count"].set(self.config_object.get("defaultstemcount")),
+            controller.shared_data["main_frame"]["cell5"]["count"].set(self.config_object.get("defaultstemcount")),
+            controller.shared_data["main_frame"]["cell6"]["count"].set(self.config_object.get("defaultstemcount")),
+            controller.shared_data["main_frame"]["cell7"]["count"].set(self.config_object.get("defaultstemcount")),
+            controller.shared_data["main_frame"]["cell8"]["count"].set(self.config_object.get("defaultstemcount")),
+            controller.shared_data["main_frame"]["cell9"]["count"].set(self.config_object.get("defaultstemcount"))
         ''' end '''
 
 
