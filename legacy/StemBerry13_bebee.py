@@ -599,7 +599,6 @@ class DataCollect(tk.Frame):
         
         # global filename
         
-        
         self.dataset = 1 # tracks dataset number 
         self.pastSet = self.dataset
         self.legends = []

@@ -29,27 +29,20 @@ Fix:
 - Remove forcebar correction based on wooden ruler, which has not been used as a reference in 2020 or 2021.
 '''
 from pathlib import Path
-generate_rich_files_toggle = 0 # set to no, because I don't use em anyways
+generate_rich_files_toggle = True # set to no, because I don't use em anyways
 #Data File Saving Locations:
-#Make sure this is USB address for saving data to
-usb = '/media/pi/0000-0001' # update code so data is saved here too
-#RPi backup saving location:
-#address = '/home/pi/Desktop/SAVED_DATA_2020'
-#address = r'C:\Users\clayton\OneDrive - University of Idaho\AqMEQ\SOCEM\SOCEM_DATA_2020_troubleshoot'
 address = Path(__file__).resolve().parent
-path = address
-#address = '/home/pi/Desktop/SAVED DATA 2019/RAW_'
+# 2025 note: hardcoding addresses is risky, painful, and non-modular. 
+# I (Clayton Bennett) have made it so that there is an export folder that will be generated wherever this script is located.
 
 #Needed libraries
-#from serial import Serial
 import serial.tools.list_ports
 import time
 import tkinter as tk
 import platform
-#from tkinter import 
 import threading
 import xlsxwriter
-import csv
+#import csv
 import matplotlib
 from matplotlib import style
 matplotlib.use("TkAgg")
@@ -73,14 +66,11 @@ import struct
 import PIL.ImageTk
 import PIL.Image
 
-#Global varibles  
+#Global varibles  # This family does not use global variables
 #collect = False # controls data collection loop from GUI frontend
-getCount = False
-clearDisplay = True
+#clearDisplay = True
 
-# new way, to get rid of style: elapsed.insert(0 , "Time (s)")
-decoded_bytes = list() # 
-string = list()
+
 elapsed = ['Time (s)']
 dis = ['Distance (in.)']
 force = ['Force (lbs.)']
@@ -222,132 +212,135 @@ def rename(name):
     renameIt.pack(side='top', fill='x', pady=10)
     popup.mainloop()
 
-
-# * # DATA COLLECTION FUNCTION - Acquires live data from Arduino # * #
-def run(self, ser):
-    try:        
-        started = 's'
-        ser.write(started.encode()) #sends 's' to arduino, telling it to start
-        #print('s')
-    except:
-        errors.append('serial com. (start data)') # label 
-        eCode = 'e2'
-        errorCodes.append(eCode)
-        popup('start data collect')
-
-    #DATA COLLECTION CODE
-
-    elapsed = ['Time (s)']
-    dis = ['Distance (in.)']
-    force = ['Force (lbs.)']
-
-    if vis == 's':# data displayed in scrollbars (default)
-        # Displays incoming data 
-        scroll = tk.Scrollbar(self)
-
-        self.timeLabel = tk.Label(self, text = "s",font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
-        self.timeLabel.place(x = 274, y = 70)
-        self.Timelist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 1, font = ("arial", 14, "bold"), fg = "dodgerblue2")
-        self.Timelist.place(x = 240, y = 100)
-
-        self.disLabel = tk.Label(self, text = "in.",font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
-        self.disLabel.place(x = 357, y = 70)
-        self.Dislist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 1, font = ("arial", 14, "bold"), fg = "dodgerblue2")
-        self.Dislist.place(x = 330, y = 100)
-
-        self.forceLabel = tk.Label(self, text = "lbs.",font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
-        self.forceLabel.place(x = 444, y = 70)
-        self.Forcelist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 11, font = ("arial", 14, "bold"), fg = "dodgerblue2")
-        self.Forcelist.place(x = 420, y = 100)
-
-    else:# user decided for no data display
-        try:#clear scrollbars if they were there
-            self.Dislist.place_forget()
-            self.Forcelist.place_forget()
-            self.Timelist.place_forget()
-            self.disLabel.place_forget()
-            self.forceLabel.place_forget()
-            self.timeLabel.place_forget()
-        except:# no scrollbars
-            pass
-    
-    i = 0
-    
-    try:
-    
-        while self.collect: # GUI in fSerConnect()rontend controls value of collect to start/stop loop
+class Data:
+    def __init__(self):
+        self.serial_string = list()
+        self.time_data = list()
+        self.distance_data
+        self.force_data
+        #DATA COLLECTION CODE
+        """
+        string = list()
+        elapsed = ['Time (s)']
+        dis = ['Distance (in.)']
+        force = ['Force (lbs.)']
+        """
             
-            if ser.inWaiting() > 0: #checks to see if Serial is available 
-            
-                try: #make sure serial data can be read/is there
-                    ser_bytes = ser.readline()
-                except:
-                    errors.append('serial read') # label 
-                    eCode = 'e3'
-                    errorCodes.append(eCode)
-                    popup("serial read")
-        
-
-                if i == 0:
-                    start = time.time() #stopwatch starts
-
-                #DELETE?
-                #decoded_bytes.insert(i,(ser_bytes[0:len(ser_bytes)-2].decode("utf-8"))) # acquires & decodes bytes (incoming Arduino data)
-                #string.insert(i,str(decoded_bytes[i])) # inserts decoded bytes into string
-
-                bytesDecoded = (ser_bytes[0:len(ser_bytes)-2].decode("utf-8"))
-                string.insert(i,str(bytesDecoded)) # inserts decoded bytes into string
-                #print(' run ser read ', string[i]) # useful debugging tool
-                split = string[i].split("|") # splits data at | (1st = distance, 2nd = force)
-                   
-                if len(split) >= 2 and split[0] != "" and split[1] != "": #makes sure data is in proper formatting before processing (else pair: A)
-                    inches = split[0]
-                    pounds = split[1]
-                    
-                    try:
-                        # insert changed to extend, CB, HERE
-                        elapsed.extend(time.time() - start)# list of elapsed time
-                        dis.extend(float(inches))# list of inches traveled 
-                        force.extend(float(pounds))# list of force traveled
-
-##                        elapsed.insert(i, time.time() - start)# list of elapsed time
-##                        dis.insert(i, float(inches))# list of inches traveled 
-##                        force.insert(i, float(pounds))# list of force traveled
-
-                    except:
-                        errors.append('data append') # label 
-                        eCode = 'e4'
-                        errorCodes.append(eCode)  
-                     #   popup("Arduino data error")
-                      #  print(string[i])
-
-                    '''Scrollbars Options'''
-                    # if scrollbars option = on:
-                    try: # puts data on GUI display by default (user can turn off)  
-                        self.Dislist.insert(tk.END, str(dis[i]))# inserts at end of listbox to actually display
-                        self.Dislist.see(tk.END)# makes sure listbox is at end so it displays live data
-                        self.Forcelist.insert(tk.END, str('%.2f' % force[i]))
-                        self.Forcelist.see(tk.END)
-                        self.Timelist.insert(tk.END, str('%.2f' % elapsed[i]))
-                        self.Timelist.see(tk.END)
-
-                    #scrollbars options = off        
-                    except:
-                        pass
-                    
-                    i = i+1
-                              
-                else: # skips incoming data if not in right format (if pair: A
-                    errors.append('data skip (incorrect format)') # label 
-                    eCode = 'e5'
-                    errorCodes.append(eCode)                    
-    except:
-        if collect == True:
-            errors.append('serial disconnect')
-            eCode = 'e6'
+    # * # DATA COLLECTION FUNCTION - Acquires live data from Arduino # * #
+    def run(self, ser, collect):
+        try:        
+            started = str('s')
+            ser.write(started.encode()) #sends 's' to arduino, telling it to start
+            #print('s')
+        except:
+            errors.append('serial com. (start data)') # label 
+            eCode = 'e2'
             errorCodes.append(eCode)
-        else:
-            pass
+            popup('start data collect')
+
+        #DATA COLLECTION CODE
+        string = list()
+        elapsed = ['Time (s)']
+        dis = ['Distance (in.)']
+        force = ['Force (lbs.)']
+
+        if vis == 's':# data displayed in scrollbars (default)
+            # Displays incoming data 
+            scroll = tk.Scrollbar(self)
+
+            self.timeLabel = tk.Label(self, text = "s",font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
+            self.timeLabel.place(x = 274, y = 70)
+            self.Timelist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 1, font = ("arial", 14, "bold"), fg = "dodgerblue2")
+            self.Timelist.place(x = 240, y = 100)
+
+            self.disLabel = tk.Label(self, text = "in.",font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
+            self.disLabel.place(x = 357, y = 70)
+            self.Dislist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 1, font = ("arial", 14, "bold"), fg = "dodgerblue2")
+            self.Dislist.place(x = 330, y = 100)
+
+            self.forceLabel = tk.Label(self, text = "lbs.",font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
+            self.forceLabel.place(x = 444, y = 70)
+            self.Forcelist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 11, font = ("arial", 14, "bold"), fg = "dodgerblue2")
+            self.Forcelist.place(x = 420, y = 100)
+
+        else:# user decided for no data display
+            try:#clear scrollbars if they were there
+                self.Dislist.place_forget()
+                self.Forcelist.place_forget()
+                self.Timelist.place_forget()
+                self.disLabel.place_forget()
+                self.forceLabel.place_forget()
+                self.timeLabel.place_forget()
+            except:# no scrollbars
+                pass
+        
+        i = 0
+        
+        try:
+            while collect: # GUI in fSerConnect()rontend controls value of collect to start/stop loop
+                if ser.inWaiting() > 0: #checks to see if Serial is available 
+                
+                    try: #make sure serial data can be read/is there
+                        ser_bytes = ser.readline()
+                    except:
+                        errors.append('serial read') # label 
+                        eCode = 'e3'
+                        errorCodes.append(eCode)
+                        popup("serial read")
+            
+
+                    if i == 0:
+                        start = time.time() #stopwatch starts
+
+                    bytesDecoded = (ser_bytes[0:len(ser_bytes)-2].decode("utf-8"))
+                    string.insert(i,str(bytesDecoded)) # inserts decoded bytes into string
+                    #print(' run ser read ', string[i]) # useful debugging tool
+                    split = string[i].split("|") # splits data at | (1st = distance, 2nd = force)
+                    
+                    if len(split) >= 2 and split[0] != "" and split[1] != "": #makes sure data is in proper formatting before processing (else pair: A)
+                        inches = split[0]
+                        pounds = split[1]
+                        
+                        try:
+                            # insert changed to extend, CB, HERE
+                            elapsed.extend(time.time() - start)# list of elapsed time
+                            dis.extend(float(inches))# list of inches traveled 
+                            force.extend(float(pounds))# list of force traveled
+
+                        except:
+                            errors.append('data append') # label 
+                            eCode = 'e4'
+                            errorCodes.append(eCode)  
+                        #   popup("Arduino data error")
+                        #  print(string[i])
+
+                        '''Scrollbars Options'''
+                        # if scrollbars option = on:
+                        try: # puts data on GUI display by default (user can turn off)  
+                            self.Dislist.insert(tk.END, str(dis[i]))# inserts at end of listbox to actually display
+                            self.Dislist.see(tk.END)# makes sure listbox is at end so it displays live data
+                            self.Forcelist.insert(tk.END, str('%.2f' % force[i]))
+                            self.Forcelist.see(tk.END)
+                            self.Timelist.insert(tk.END, str('%.2f' % elapsed[i]))
+                            self.Timelist.see(tk.END)
+
+                        #scrollbars options = off        
+                        except:
+                            pass
+                        
+                        i = i+1
+                                
+                    else: # skips incoming data if not in right format (if pair: A
+                        errors.append('data skip (incorrect format)') # label 
+                        eCode = 'e5'
+                        errorCodes.append(eCode)                    
+        except:
+            if collect:
+                errors.append('serial disconnect')
+                eCode = 'e6'
+                errorCodes.append(eCode)
+            else:
+                pass
 
 # GUI overarching class
 class GUI(tk.Tk):
@@ -389,7 +382,7 @@ class GUI(tk.Tk):
         frame.tkraise()
 
         frame.event_generate("<<ShowFrame>>") # event
-        
+
     #closes GUI (from file menubar)
     def close(self):
         self.quit()
@@ -669,7 +662,7 @@ class DataCollect(tk.Frame):
         
     
     def named(self, filename):
-        global clearDisplay # used to indicate whether or not to clear data display
+        #global clearDisplay # used to indicate whether or not to clear data display
 
         if self.dataset == 1: #set initial previous filename
             self.prevName = filename.get()
@@ -681,7 +674,7 @@ class DataCollect(tk.Frame):
             self.dataset = 2 #reset increment number if new filename
 
         if newOne >= 1 : # if a new dataset
-            if clearDisplay == True: # clears the data display lists if new data & not just a renaming of previous data (overwrite protection)
+            if self.clearDisplay: # clears the data display lists if new data & not just a renaming of previous data (overwrite protection)
                 self.Forcelist.delete(0, tk.END)
                 self.Dislist.delete(0, tk.END)
                 self.Timelist.delete(0, tk.END)
@@ -728,37 +721,24 @@ class DataCollect(tk.Frame):
         
     # calls run function (for collecting Arduino data) to run in backend while GUI runs in frontend     
     def start(self):
-        #global collect # controls data collection loop
         self.collect = True # True = run the loop
-        #global t1
-        #print('isOpen ', ser.isOpen())
+        print('isOpen ', ser.isOpen())
         #if ser.isOpen() == False:
          #   ser.open()
-        #print(ser)
-        # close initial serial port
-        #print('')
-        #print(' SERRR? ? ', ser)
-        #serial = SerDisconnect(ser)
-        #print('ser disconnect ', serial)
-        #serial = SerConnect()
-        #print('')
-        #print('start ser ', ser)
         #Fb_center = barHeight.get() - .466 # corrects fb ruler measurement to actual fb center, originally was .5625 but it depends on tire pressure
         #Fb_center = barHeight.get() # CB 3/13/2022 # In 2021 the ruler was not used, and the ruler is risky.
         #self.Fb_bottom = Fb_center - .32 # Fb_center - radius of Fb (NOTE: depends on force bar height/radius)
-        # For 2020 and 2021, we wrote down the wrong numbers, but the right numbers were saved to files
-        #print("Fb center: ", Fb_center)
-        #print("Fb bottom: ", self.Fb_bottom)
         #print(rows.get())
 
         #threading run function (simultaneously performs run function in backend)
-        t1 = threading.Thread(target = run,args=(self, ser))
+        data=Data()
+        t1 = threading.Thread(target = data.run,args=(ser, collect=self.collect)) # references run()
         t1.start()
 
     #zeroes load cell measurement
     def tare(self):
         ser.flush()#wait until all data is written
-        tare = 't'
+        tare = str('t')
         ser.write(tare.encode()) #sends 't' to arduino, telling it to tare
         time.sleep(0.3)#wait x seconds for Arduino to tare load cell (for smoothing)
 
@@ -781,34 +761,26 @@ class DataCollect(tk.Frame):
         plt.axis = ([min(dis), max(dis), min(force), max(force)])
         
     def overwriteGuard(self, raw):# prevents overwriting by checking if filename already exists in saving folder
-
         return os.path.exists(raw) # True = already exits, False = doesn't exist
     
     # saves raw data in case of errors in processing of auto stats/graph save
     def saveRaw(self, filename):
-        global clearDisplay # controls whether to clear Data display or not
-        clearDisplay = True 
+        self.clearDisplay = True # controls whether to clear Data display or not # is altered by user input
         
         # RAW data filename (adds 'RAW_' to the front)
-        raw = str(address) + '/RAW_' + (filename.get()) + '.xlsx'
+        raw = str(address) + '\\export\\RAW_' + (filename.get()) + '.xlsx'
 
         if self.overwriteGuard(raw) == True: # filename already exists, needs to be renamed
             self.dataset = self.dataset - 1 # don't increment data set
-            clearDisplay = False # don't clear data display
+            self.clearDisplay = False # don't clear data display
             rename(filename.get()) # prompt user to rename file
             
         else:
-            clearDisplay = True
+            self.clearDisplay = True
 
-        #try:   
-        # Labels for Excel
-        # ERROR CB FIX THIS JUNT
         dis = ["Distance (in.)"]
         force = ["Force (lbs.)"]
-        elapsed = ["Time (s)"]
-
-        #dis.append()
-        
+        elapsed = ["Time (s)"]        
         cropHeight=["Height (in.)"]
         FbSetHeight=["Fb Middle Height (in.)"] # new, CB
         FbHeight=["Fb Bottom Height (in.)"]
@@ -833,9 +805,7 @@ class DataCollect(tk.Frame):
         stemNumRight.append(rowCountRight.get())
         countDisStart.append(startCount.get())
         countDisEnd.append(endCount.get())
-        
-
-        
+                
         # open Excel worksheet
         workbook = xlsxwriter.Workbook(raw)
         worksheet = workbook.add_worksheet()
@@ -855,7 +825,6 @@ class DataCollect(tk.Frame):
         worksheet.write_column('L1', countDisStart)
         worksheet.write_column('M1', countDisEnd)
         
-        
         # close workbook
         workbook.close()
         
@@ -874,14 +843,14 @@ class DataCollect(tk.Frame):
         self.RawSaved.place(x=5, y = 90)
 
         try: 
-            if max(dis) > 5 and generate_rich_files_toggle == 1: # checked if Encoder worked by making sure that the SOCEM traveled at least 5 inches
+            if max(dis) > 5 and generate_rich_files_toggle: # checked if Encoder worked by making sure that the SOCEM traveled at least 5 inches
                 self.calcs(filename)#run calcs function
         except:
             print("Push2")
         #except:
-         #   errors.append('raw Excel writing') # error label
-          #  eCode = 'e6'
-           # errorCodes.append(eCode)  
+        #    errors.append('raw Excel writing') # error label
+        #    eCode = 'e6'
+        #    errorCodes.append(eCode)  
 
     #Automatic stat calculation, INCLUDES EI ESTIMATIONS
     def calcs(self, filename):#Automated Calculations & Stats
@@ -899,7 +868,6 @@ class DataCollect(tk.Frame):
                 startF = 0
             
             i = i + 1
-        #print('1 out')
         
         j = 0
         for j in range(len(force)-1):# estimate distance point of plot's end
@@ -1041,7 +1009,6 @@ class DataCollect(tk.Frame):
 
     def excel(self, filename): # writes data with auto calcs to Excel file
         # Put labels back on for Excel
-        # I guess this is fine? CB
         dis.insert(0, "Distance (in.)")
         force.insert(0, "Force (lbs.)")
         elapsed.insert(0 , "Time (s)")
@@ -1051,7 +1018,7 @@ class DataCollect(tk.Frame):
         stemNum.insert(0, "Ave Stem Count")
         countDis.insert(0, "Sample Distance (in.)")
         
-        f = address + '/' + (filename.get()) + ".xlsx" # address + filename
+        f = str(address) + '\\export\\' + (filename.get()) + ".xlsx" # address + filename
 
         workbook = xlsxwriter.Workbook(f)
         worksheet = workbook.add_worksheet('Plot_Data') # 1st sheet for plot data
@@ -1138,7 +1105,7 @@ class DataCollect(tk.Frame):
         
         self.DataSaved = tk.Label(self, text = "Processed data saved.", font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
         self.DataSaved.place(x=5, y = 125)
-       #self.namedfile = tk.Label(self,textvariable = filename,font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
+        #self.namedfile = tk.Label(self,textvariable = filename,font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
         #self.namedfile.place(x = 146, y = 165)
                 
         self.AnotherOne = tk.Label(self, text = "Ready for the next set of data.", font = ("arial", 14, "bold"), fg = "gray3", bg = "ghost white")
@@ -1215,7 +1182,7 @@ class DataCollect(tk.Frame):
             self.collect = False
         
         try:
-            stopped = 'x'
+            stopped = str('x')
             ser.write(stopped.encode())# sends 'x' to Arduino to stop reading sensors
             time.sleep(.5)# for potential error protection?
             #ser.close()
@@ -1238,6 +1205,8 @@ class DataCollect(tk.Frame):
 class Calibrate(tk.Frame):
     
     def __init__(self, parent, controller): # automatically runs
+        # register variable associated with this class
+        self.caliLoop = None
         
         tk.Frame.__init__(self, parent)
         
@@ -1349,7 +1318,7 @@ class Calibrate(tk.Frame):
 
     def tare(self):
         ser.flush()#wait until all data is written
-        tare = 't'
+        tare = str('t')
         ser.write(tare.encode()) #sends 't' to arduino, telling it to tare
         time.sleep(0.3)#wait x seconds for Arduino to tare load cell (for smoothing)
        
@@ -1366,11 +1335,10 @@ class Calibrate(tk.Frame):
         ser.write(strFactor.encode()) # send cali factor to Arduino
         ser.flush() # make sure it gets it before proceeding
 
-        global caliLoop
-        caliLoop = True
+        self.caliLoop = True
         #for i in range(20):
         #z = 0
-        while caliLoop == True: # loop to continuously print Arduino force readings
+        while self.caliLoop: # loop to continuously print Arduino force readings
 
             if ser.inWaiting() > 0: #checks to see if Serial is available 
                     
@@ -1405,10 +1373,9 @@ class Calibrate(tk.Frame):
 
     def doneCali(self): # stops calibration process
         ser.reset_input_buffer()# clear the input buffer
-        global caliLoop
-        caliLoop = False # stop loop asking for data
+        self.caliLoop = False # stop loop asking for data
         
-        send = 'd'
+        send = str('d')
         ser.write(send.encode()) # send 'd' to stop Arduino sending data
         
 # error page for displaying errors
@@ -1510,13 +1477,8 @@ if __name__ == "__main__":
     # INITIATES GUI TO START
     #root= tk.Tk() # added CB
     app = GUI()
-    #ser = SerConnec
-    # t()
     b = DataCollect(app,tk.Frame)
     fig = plt.figure()
-    #global filename
-    #filename = tk.StringVar()
-    #c = named(app, tk.Frame)
     app.title("StemBerry")
     app.geometry("800x480+0+0")
     #app.iconbitmap(s'/home/pi/Desktop/SOCEM Code')
@@ -1524,4 +1486,3 @@ if __name__ == "__main__":
     #app.geometry("{0}x{1}+0+0".format(app.winfo_screenwidth()-3,app.winfo_screenheight()-3))
     app.mainloop()
         
-
