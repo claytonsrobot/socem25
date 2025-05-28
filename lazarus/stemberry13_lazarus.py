@@ -212,136 +212,6 @@ def rename(name):
     renameIt.pack(side='top', fill='x', pady=10)
     popup.mainloop()
 
-class Data:
-    def __init__(self):
-        self.serial_string = list()
-        self.time_data = list()
-        self.distance_data
-        self.force_data
-        #DATA COLLECTION CODE
-        """
-        string = list()
-        elapsed = ['Time (s)']
-        dis = ['Distance (in.)']
-        force = ['Force (lbs.)']
-        """
-            
-    # * # DATA COLLECTION FUNCTION - Acquires live data from Arduino # * #
-    def run(self, ser, collect):
-        try:        
-            started = str('s')
-            ser.write(started.encode()) #sends 's' to arduino, telling it to start
-            #print('s')
-        except:
-            errors.append('serial com. (start data)') # label 
-            eCode = 'e2'
-            errorCodes.append(eCode)
-            popup('start data collect')
-
-        #DATA COLLECTION CODE
-        string = list()
-        elapsed = ['Time (s)']
-        dis = ['Distance (in.)']
-        force = ['Force (lbs.)']
-
-        if vis == 's':# data displayed in scrollbars (default)
-            # Displays incoming data 
-            scroll = tk.Scrollbar(self)
-
-            self.timeLabel = tk.Label(self, text = "s",font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
-            self.timeLabel.place(x = 274, y = 70)
-            self.Timelist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 1, font = ("arial", 14, "bold"), fg = "dodgerblue2")
-            self.Timelist.place(x = 240, y = 100)
-
-            self.disLabel = tk.Label(self, text = "in.",font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
-            self.disLabel.place(x = 357, y = 70)
-            self.Dislist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 1, font = ("arial", 14, "bold"), fg = "dodgerblue2")
-            self.Dislist.place(x = 330, y = 100)
-
-            self.forceLabel = tk.Label(self, text = "lbs.",font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
-            self.forceLabel.place(x = 444, y = 70)
-            self.Forcelist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 11, font = ("arial", 14, "bold"), fg = "dodgerblue2")
-            self.Forcelist.place(x = 420, y = 100)
-
-        else:# user decided for no data display
-            try:#clear scrollbars if they were there
-                self.Dislist.place_forget()
-                self.Forcelist.place_forget()
-                self.Timelist.place_forget()
-                self.disLabel.place_forget()
-                self.forceLabel.place_forget()
-                self.timeLabel.place_forget()
-            except:# no scrollbars
-                pass
-        
-        i = 0
-        
-        try:
-            while collect: # GUI in fSerConnect()rontend controls value of collect to start/stop loop
-                if ser.inWaiting() > 0: #checks to see if Serial is available 
-                
-                    try: #make sure serial data can be read/is there
-                        ser_bytes = ser.readline()
-                    except:
-                        errors.append('serial read') # label 
-                        eCode = 'e3'
-                        errorCodes.append(eCode)
-                        popup("serial read")
-            
-
-                    if i == 0:
-                        start = time.time() #stopwatch starts
-
-                    bytesDecoded = (ser_bytes[0:len(ser_bytes)-2].decode("utf-8"))
-                    string.insert(i,str(bytesDecoded)) # inserts decoded bytes into string
-                    #print(' run ser read ', string[i]) # useful debugging tool
-                    split = string[i].split("|") # splits data at | (1st = distance, 2nd = force)
-                    
-                    if len(split) >= 2 and split[0] != "" and split[1] != "": #makes sure data is in proper formatting before processing (else pair: A)
-                        inches = split[0]
-                        pounds = split[1]
-                        
-                        try:
-                            # insert changed to extend, CB, HERE
-                            elapsed.extend(time.time() - start)# list of elapsed time
-                            dis.extend(float(inches))# list of inches traveled 
-                            force.extend(float(pounds))# list of force traveled
-
-                        except:
-                            errors.append('data append') # label 
-                            eCode = 'e4'
-                            errorCodes.append(eCode)  
-                        #   popup("Arduino data error")
-                        #  print(string[i])
-
-                        '''Scrollbars Options'''
-                        # if scrollbars option = on:
-                        try: # puts data on GUI display by default (user can turn off)  
-                            self.Dislist.insert(tk.END, str(dis[i]))# inserts at end of listbox to actually display
-                            self.Dislist.see(tk.END)# makes sure listbox is at end so it displays live data
-                            self.Forcelist.insert(tk.END, str('%.2f' % force[i]))
-                            self.Forcelist.see(tk.END)
-                            self.Timelist.insert(tk.END, str('%.2f' % elapsed[i]))
-                            self.Timelist.see(tk.END)
-
-                        #scrollbars options = off        
-                        except:
-                            pass
-                        
-                        i = i+1
-                                
-                    else: # skips incoming data if not in right format (if pair: A
-                        errors.append('data skip (incorrect format)') # label 
-                        eCode = 'e5'
-                        errorCodes.append(eCode)                    
-        except:
-            if collect:
-                errors.append('serial disconnect')
-                eCode = 'e6'
-                errorCodes.append(eCode)
-            else:
-                pass
-
 # GUI overarching class
 class GUI(tk.Tk):
     def __init__(self, *args, **kwargs):# automatically runs
@@ -403,7 +273,7 @@ class GUI(tk.Tk):
 class Home(tk.Frame):
     
     def __init__(self, parent, controller): # automatically runs
-        # global variables within Home that are used in multiple Classes & functions
+        # global variables within Home that are used in multiple Classes & functions # Clayton does not like this, but he understands
         global ser # serial port
         global barHeight # tracks force bar height
         global rows # tracks # of rows inSerConnect() contact w/ force bar
@@ -581,7 +451,11 @@ class DataCollect(tk.Frame):
 
         
         # global filename
-        
+        # A hopeful little bit of hallucination - AG
+        #self.serial_string = list()
+        #self.time_data = list()
+        #self.distance_data = list()
+        #self.force_data = list()
         
         self.dataset = 1 # tracks dataset number 
         self.pastSet = self.dataset
@@ -606,7 +480,7 @@ class DataCollect(tk.Frame):
         name = tk.Label(self, text = "Filename: ",
                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=0,y=35)
         
-        #self.filename = filename.get()
+        #self.filename = self.filename.get()
         self.filename = tk.StringVar()# user inputted filename
         '''
         if usePlotnameAsFilenameYN.get() == 1:
@@ -628,12 +502,128 @@ class DataCollect(tk.Frame):
         ''
         #gives access to buttons for data collection control 
         newB = tk.Button(self, text = "New",
-                        font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:self.named(self.filename)).place(x = 550, y = 40)
+                        font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:self.named(self.filename.get())).place(x = 550, y = 40)
 
         #plotnameB = tk.Button(self, text = "Use Plotname as Filename",
          #               font = ("arial", 16, "bold"), height = 2, width = 12, fg = "ghost white", bg = "gray2",command=lambda:controller.shared_data["main_frame"]["plotname"]ToFilename(plotname.get())).place(x = 0, y = 220)
 
         self.bind("<<ShowFrame>>", self.on_show_frame_DataCollection)
+
+    # * # DATA COLLECTION FUNCTION - Acquires live data from Arduino # * #
+    def run(self, ser, collect):
+        try:        
+            started = str('s')
+            ser.write(started.encode()) #sends 's' to arduino, telling it to start
+            #print('s')
+        except:
+            errors.append('serial com. (start data)') # label 
+            eCode = 'e2'
+            errorCodes.append(eCode)
+            popup('start data collect')
+
+        #DATA COLLECTION CODE
+        string = list()
+        elapsed = ['Time (s)']
+        dis = ['Distance (in.)']
+        force = ['Force (lbs.)']
+
+        if vis == 's':# data displayed in scrollbars (default)
+            # Displays incoming data 
+            scroll = tk.Scrollbar(self)
+
+            self.timeLabel = tk.Label(self, text = "s",font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
+            self.timeLabel.place(x = 274, y = 70)
+            self.Timelist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 1, font = ("arial", 14, "bold"), fg = "dodgerblue2")
+            self.Timelist.place(x = 240, y = 100)
+
+            self.disLabel = tk.Label(self, text = "in.",font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
+            self.disLabel.place(x = 357, y = 70)
+            self.Dislist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 1, font = ("arial", 14, "bold"), fg = "dodgerblue2")
+            self.Dislist.place(x = 330, y = 100)
+
+            self.forceLabel = tk.Label(self, text = "lbs.",font = ("arial", 14, "bold"), fg = "dodgerblue2", bg = "ghost white")
+            self.forceLabel.place(x = 444, y = 70)
+            self.Forcelist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 11, font = ("arial", 14, "bold"), fg = "dodgerblue2")
+            self.Forcelist.place(x = 420, y = 100)
+
+        else:# user decided for no data display
+            try:#clear scrollbars if they were there
+                self.Dislist.place_forget()
+                self.Forcelist.place_forget()
+                self.Timelist.place_forget()
+                self.disLabel.place_forget()
+                self.forceLabel.place_forget()
+                self.timeLabel.place_forget()
+            except:# no scrollbars
+                pass
+        
+        i = 0
+        
+        try:
+            while collect: # GUI in fSerConnect()rontend controls value of collect to start/stop loop
+                if ser.inWaiting() > 0: #checks to see if Serial is available 
+                
+                    try: #make sure serial data can be read/is there
+                        ser_bytes = ser.readline()
+                    except:
+                        errors.append('serial read') # label 
+                        eCode = 'e3'
+                        errorCodes.append(eCode)
+                        popup("serial read")
+            
+
+                    if i == 0:
+                        start = time.time() #stopwatch starts
+
+                    bytesDecoded = (ser_bytes[0:len(ser_bytes)-2].decode("utf-8"))
+                    string.insert(i,str(bytesDecoded)) # inserts decoded bytes into string
+                    #print(' run ser read ', string[i]) # useful debugging tool
+                    split = string[i].split("|") # splits data at | (1st = distance, 2nd = force)
+                    
+                    if len(split) >= 2 and split[0] != "" and split[1] != "": #makes sure data is in proper formatting before processing (else pair: A)
+                        inches = split[0]
+                        pounds = split[1]
+                        
+                        try:
+                            # insert changed to extend, CB, HERE
+                            elapsed.extend(time.time() - start)# list of elapsed time
+                            dis.extend(float(inches))# list of inches traveled 
+                            force.extend(float(pounds))# list of force traveled
+
+                        except:
+                            errors.append('data append') # label 
+                            eCode = 'e4'
+                            errorCodes.append(eCode)  
+                        #   popup("Arduino data error")
+                        #  print(string[i])
+
+                        '''Scrollbars Options'''
+                        # if scrollbars option = on:
+                        try: # puts data on GUI display by default (user can turn off)  
+                            self.Dislist.insert(tk.END, str(dis[i]))# inserts at end of listbox to actually display
+                            self.Dislist.see(tk.END)# makes sure listbox is at end so it displays live data
+                            self.Forcelist.insert(tk.END, str('%.2f' % force[i]))
+                            self.Forcelist.see(tk.END)
+                            self.Timelist.insert(tk.END, str('%.2f' % elapsed[i]))
+                            self.Timelist.see(tk.END)
+
+                        #scrollbars options = off        
+                        except:
+                            pass
+                        
+                        i = i+1
+                                
+                    else: # skips incoming data if not in right format (if pair: A
+                        errors.append('data skip (incorrect format)') # label 
+                        eCode = 'e5'
+                        errorCodes.append(eCode)                    
+        except:
+            if collect:
+                errors.append('serial disconnect')
+                eCode = 'e6'
+                errorCodes.append(eCode)
+            else:
+                pass
         
     def on_show_frame_DataCollection(self, event):
         # global filename # putting this here fixed it
@@ -665,9 +655,9 @@ class DataCollect(tk.Frame):
         #global clearDisplay # used to indicate whether or not to clear data display
 
         if self.dataset == 1: #set initial previous filename
-            self.prevName = filename.get()
+            self.prevName = self.filename.get()
         
-        currentName = filename.get() #gets current name
+        currentName = self.filename.get() #gets current name
         newOne = self.dataset - self.pastSet #checks to see if a new dataset is being made after 'New' button is pressed
 
         if currentName != self.prevName:# check if inputted filename has changed 
@@ -678,13 +668,13 @@ class DataCollect(tk.Frame):
                 self.Forcelist.delete(0, tk.END)
                 self.Dislist.delete(0, tk.END)
                 self.Timelist.delete(0, tk.END)
-            words = len(filename.get())# number of letters in filename
+            words = len(self.filename.get())# number of letters in filename
             
             if self.dataset > 2: # if past 3rd dataset: erase previous incrementing value
                 NumErase = len(str(self.dataset-2))# how many chars to erase from filename for incrementing
                 self.entry_box.delete(words-NumErase, tk.END)# deletes previous number from filename
                 
-            filename.set(filename.get()+str(self.dataset-1))# adds incremented number to filename
+            filename.set(self.filename.get()+str(self.dataset-1))# adds incremented number to filename
 
             #removes saving info text 
             self.DataSaved.place_forget()
@@ -703,7 +693,7 @@ class DataCollect(tk.Frame):
         startB.place(x = 675, y = 40)
         
         #tells Arduino to stop collecting data & saves the data (calls filename function)
-        stopB = tk.Button(self, text = "Stop\n&\nSave", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:self.stop(filename))
+        stopB = tk.Button(self, text = "Stop\n&\nSave", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:self.stop(self.filename.get()))
         stopB.place(x = 675, y = 132)
 
         #tares/zeros load cell
@@ -717,7 +707,7 @@ class DataCollect(tk.Frame):
         graphB.place(x = 675 , y = 0)
 
         self.pastSet = self.dataset # records past dataset number
-        self.prevName = filename.get() # records past filename
+        self.prevName = self.filename.get() # records past filename
         
     # calls run function (for collecting Arduino data) to run in backend while GUI runs in frontend     
     def start(self):
@@ -731,8 +721,18 @@ class DataCollect(tk.Frame):
         #print(rows.get())
 
         #threading run function (simultaneously performs run function in backend)
-        data=Data()
-        t1 = threading.Thread(target = data.run,args=(ser, collect=self.collect)) # references run()
+        """
+        Why threading is used here:
+
+        - The `run()` function likely contains a continuous or long-running loop (e.g., reading from a serial port).
+        - Running this directly in the main thread would block it, causing the GUI or other parts of the program to freeze.
+        - Threading allows us to run `run()` in the background without interrupting the flow of the main program.
+        - This is essential in interactive applications (like those with a GUI) where responsiveness must be maintained.
+        - Threading makes it possible to collect serial data or perform background tasks while still handling user inputs, UI updates, or other logic in the main thread.
+        """
+
+        #data=Data()
+        t1 = threading.Thread(target = self.run,args=(ser, self.collect)) # references run()
         t1.start()
 
     #zeroes load cell measurement
@@ -750,13 +750,13 @@ class DataCollect(tk.Frame):
         if not plt.get_fignums():#if graph figure was closed, reset legend
             self.legends.clear()
             #print("new fig who dis")
-        self.legends.append(filename.get())#add current filename to legend
+        self.legends.append(self.filename.get())#add current filename to legend
         #fig = plt.figure(figsize=(8,4.8)) #fig size control 
         #plots force displacement graph
         plt.plot(dis, force)
         plt.xlabel("Distance (in.)")
         plt.ylabel("Force (lbs.)")
-        plt.title(filename.get())
+        plt.title(self.filename.get())
         plt.legend(self.legends)
         plt.axis = ([min(dis), max(dis), min(force), max(force)])
         
@@ -768,12 +768,17 @@ class DataCollect(tk.Frame):
         self.clearDisplay = True # controls whether to clear Data display or not # is altered by user input
         
         # RAW data filename (adds 'RAW_' to the front)
-        raw = str(address) + '\\export\\RAW_' + (filename.get()) + '.xlsx'
+        raw = str(address) + '\\export\\RAW_' + (self.filename.get()) + '.xlsx'
+        # Create the directory if it doesn't exist
+        folder = os.path.dirname(raw)
+        os.makedirs(folder, exist_ok=True)
+
+
 
         if self.overwriteGuard(raw) == True: # filename already exists, needs to be renamed
             self.dataset = self.dataset - 1 # don't increment data set
             self.clearDisplay = False # don't clear data display
-            rename(filename.get()) # prompt user to rename file
+            rename(self.filename.get()) # prompt user to rename file
             
         else:
             self.clearDisplay = True
@@ -806,7 +811,6 @@ class DataCollect(tk.Frame):
         countDisStart.append(startCount.get())
         countDisEnd.append(endCount.get())
                 
-        # open Excel worksheet
         workbook = xlsxwriter.Workbook(raw)
         worksheet = workbook.add_worksheet()
 
@@ -1018,9 +1022,12 @@ class DataCollect(tk.Frame):
         stemNum.insert(0, "Ave Stem Count")
         countDis.insert(0, "Sample Distance (in.)")
         
-        f = str(address) + '\\export\\' + (filename.get()) + ".xlsx" # address + filename
-
+        f = str(address) + '\\export\\' + (self.filename.get()) + ".xlsx" # address + filename
+        # Create the directory if it doesn't exist
+        folder = os.path.dirname(f)
+        os.makedirs(folder, exist_ok=True)
         workbook = xlsxwriter.Workbook(f)
+
         worksheet = workbook.add_worksheet('Plot_Data') # 1st sheet for plot data
         worksheet2 = workbook.add_worksheet('Row_Data_Calcs') # 2nd sheet for row data & auto-calcs
         worksheet3 = workbook.add_worksheet('SOCEM_Data') # 3rd sheet for SOCEM/user data
@@ -1165,7 +1172,7 @@ class DataCollect(tk.Frame):
         EIN.clear()
         EIave.clear()
         
-        filename = '' # issue?
+        #### filename.set('') # issue?
        # EI_Interaction.clear_all()
        # EI_NoInteraction2.clear_all()
 
@@ -1191,8 +1198,9 @@ class DataCollect(tk.Frame):
             eCode = 'e7'
             errorCodes.append(eCode)  
         finally:
-            print("File saved: ", str(filename.get()))
-            self.saveRaw(filename)# run the Save Raw Data function (it then runs the Auto-Calcs function)
+            print("File saved: ", str(self.filename.get()))
+            
+            self.saveRaw(self.filename.get())# run the Save Raw Data function (it then runs the Auto-Calcs function)
             self.dataset+=1 # increases the data set number 
             if self.dataset > 1: # updates 'New' button label to include increment
                 incra = tk.Label(self, text = '(increment)', bg='gray2', fg = 'ghost white', font = ('arial', 12))
@@ -1368,10 +1376,21 @@ class Calibrate(tk.Frame):
                 #z+=1
                 
     def caliThread(self): #threading calibrate function (simultaneously performs caliFactor function in backend)
-        thread = threading.Thread(target = Calibrate.caliFactor,args=(self,))
+        """
+        Why threading is used here:
+
+        - The `run()` function likely contains a continuous or long-running loop (e.g., reading from a serial port).
+        - Running this directly in the main thread would block it, causing the GUI or other parts of the program to freeze.
+        - Threading allows us to run `run()` in the background without interrupting the flow of the main program.
+        - This is essential in interactive applications (like those with a GUI) where responsiveness must be maintained.
+        - Threading makes it possible to collect serial data or perform background tasks while still handling user inputs, UI updates, or other logic in the main thread.
+        """
+        thread = threading.Thread(target = self.caliFactor,args=(self))
         thread.start()
 
     def doneCali(self): # stops calibration process
+        if not ser.is_open:
+            ser.open()
         ser.reset_input_buffer()# clear the input buffer
         self.caliLoop = False # stop loop asking for data
         
