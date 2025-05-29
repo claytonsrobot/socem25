@@ -56,8 +56,8 @@ import sys
 import os
 from os import path
 import numpy as np
-import EI_Interaction_Fx # script that computes EI assuming full interactions
-import EI_No_Interaction_Fx # script that computes EI assuming no interactions
+import lazarus.EI_Interaction_Fx as EI_Interaction_Fx  # script that computes EI assuming full interactions
+import lazarus.EI_No_Interaction_Fx as EI_No_Interaction_Fx # script that computes EI assuming no interactions
 #import optiH # script that determine optiaml force bar height
 import peakutils
 #from PeakUtils.Plot import plot as pplot
@@ -125,139 +125,153 @@ vis = "s" #set to live graph for data display
 import serial
 import serial.tools.list_ports
 
+class Utilities:
+    @staticmethod
+    def serial_connect(verbose=True):
+        """
+        Establish a serial connection to an Arduino or other device.
 
-def SerConnect(verbose=True):
-    """
-    Establish a serial connection to an Arduino or other device.
+        Args:
+            port (str): Specific serial port to connect to (e.g., 'COM3' or '/dev/ttyUSB0'). If None, auto-detects.
+            baudrate (int): Baud rate for the connection.
+            timeout (int or float): Read timeout value.
+            verbose (bool): If True, prints debug information.
 
-    Args:
-        port (str): Specific serial port to connect to (e.g., 'COM3' or '/dev/ttyUSB0'). If None, auto-detects.
-        baudrate (int): Baud rate for the connection.
-        timeout (int or float): Read timeout value.
-        verbose (bool): If True, prints debug information.
+        Returns:
+            serial.Serial: Opened serial connection, or None if it fails.
+        """
+        try:
+            ports = list(serial.tools.list_ports.comports())
+            if not ports:
+                raise IOError("No serial ports found.")
 
-    Returns:
-        serial.Serial: Opened serial connection, or None if it fails.
-    """
-    try:
-        ports = list(serial.tools.list_ports.comports())
-        if not ports:
-            raise IOError("No serial ports found.")
+            for port in ports:
+                try:
+                    if verbose:
+                        print(f"[INFO] Trying port: {port.device}")
+                    ser = serial.Serial(port = port.device, baudrate= 115200, timeout=0.5)
+                    if verbose:
+                        print(f"[SUCCESS] Connected to {port.device}")
+                    return ser
+                except (serial.SerialException, OSError) as e:
+                    if verbose:
+                        print(f"[WARN] {port.device} unavailable: {e}")
+            raise IOError("No available serial ports.")
+            
+        except Exception as e:
+            if verbose:
+                print(f"[ERROR] Serial connection failed: {e}")
+            return None
 
-        for port in ports:
-            try:
-                if verbose:
-                    print(f"[INFO] Trying port: {port.device}")
-                ser = serial.Serial(port.device, 115200, timeout=1)
-                if verbose:
-                    print(f"[SUCCESS] Connected to {port.device}")
-                return ser
-            except (serial.SerialException, OSError) as e:
-                if verbose:
-                    print(f"[WARN] {port.device} unavailable: {e}")
-        raise IOError("No available serial ports.")
-        
-    except Exception as e:
-        if verbose:
-            print(f"[ERROR] Serial connection failed: {e}")
-        return None
-
-# if serial disconnect (unplugged) reconnect
-def SerReconnect(ser): 
-    ser.close()
-    ser = SerConnect(verbose=True)
-    if ser:
-        print("Ready to communicate!")
-    else:
-        print("Connection failed.")
-
-#virtual keyboard
-def keyboard():
-    system = platform.system()
-    try:
-        if system == "Windows":
-            subprocess.Popen(["start", "osk"], shell=True)  # Launches without needing admin
-        elif system == "Linux":
-            subprocess.Popen(["florence"])
-        elif system == "Darwin":
-            print("macOS virtual keyboard not implemented.")
+    # if serial disconnect (unplugged) reconnect
+    @staticmethod
+    def serial_re_connect(ser): 
+        self.controller.ser.close()
+        ser = Utilities.serial_connect(verbose=True)
+        if ser:
+            print("Ready to communicate!")
         else:
-            print(f"No virtual keyboard support for OS: {system}")
-    except Exception as e:
-        print(f"[ERROR] Failed to launch virtual keyboard: {e}")
+            print("Connection failed.")
 
-#changes display method    #DELETE?
-def data_display(visual):
-    global vis
-    vis = visual
-    return vis
+    #virtual keyboard
+    @staticmethod
+    def keyboard_onscreen():
+        system = platform.system()
+        try:
+            if system == "Windows":
+                subprocess.Popen(["start", "osk"], shell=True)  # Launches without needing admin
+            elif system == "Linux":
+                subprocess.Popen(["florence"])
+            elif system == "Darwin":
+                print("macOS virtual keyboard not implemented.")
+            else:
+                print(f"No virtual keyboard support for OS: {system}")
+        except Exception as e:
+            print(f"[ERROR] Failed to launch virtual keyboard: {e}")
 
-#if any error occurs, display popup error msg
-def popup(error):
-    popup = tk.Tk()
-    popup.wm_title("Error")
-    Elabel = tk.Label(popup, text="A {} error occurred.".format(error), font=("arial", 12, "bold"))
-    Elabel.pack(side="top", fill="x", pady=10)               
-    popup.mainloop()
-
-def showErrors(self):
-    self.show_frame(ErrorReport) # show Error Report page
-    ErrorReport.showErrors2(self.frames[ErrorReport]) # display errors in lists 
+    #changes display method    #DELETE?
+    @staticmethod
+    def data_display(visual):
+        global vis
+        vis = visual
+        return vis
+class Popups:
+    #if any error occurs, display popup error msg
+    @staticmethod
+    def popup_box(error):
+        popup = tk.Tk()
+        popup.wm_title("Error")
+        Elabel = tk.Label(popup, text="A {} error occurred.".format(error), font=("arial", 12, "bold"))
+        Elabel.pack(side="top", fill="x", pady=10)               
+        popup.mainloop()
+        
     
-#if filename already exists - prompt user to rename
-def rename(name):
-    popup = tk.Tk()
-    popup.wm_title('Filename already exists.')
-    renameIt = tk.Label(popup, text = '"{}" already exists in the saving location. Please rename and press Save.'.format(name), font = ('arial', 12, 'bold'))
-    renameIt.pack(side='top', fill='x', pady=10)
-    popup.mainloop()
+    #if filename already exists - prompt user to rename
+    @staticmethod
+    def rename_box(name):
+        popup = tk.Tk()
+        popup.wm_title('Filename already exists.')
+        renameIt = tk.Label(popup, text = '"{}" already exists in the saving location. Please rename and press Save.'.format(name), font = ('arial', 12, 'bold'))
+        renameIt.pack(side='top', fill='x', pady=10)
+        popup.mainloop()
 
 # GUI overarching class
 class GUI(tk.Tk):
-    def __init__(self, *args, **kwargs):# automatically runs
-        
-        tk.Tk.__init__(self, *args, **kwargs)
+    def __init__(self, ser,*args, **kwargs,):# automatically runs
+        super().__init__(*args, **kwargs) #tk.Tk.__init__(self, *args, **kwargs)
         container = tk.Frame(self)
         container.pack(side='top', fill='both',expand = True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
+        self.ser = ser
+                  
+        self.frames = {}# empty dictionary
+        for F in (Home, DataCollect, Calibrate, Guide, ErrorReport):# must put all pages in here
+            frame = F(parent = container, controller = self)
+            self.frames[F] = frame
+            frame.grid(row=0, column=0, sticky='nsew')
+            frame.configure(background = 'ghost white')
+    
+        self.build_top_menu(container)
+        self.show_frame(Home)
 
+    def build_top_menu(self,container):
         # top menu configuration
         menubar = tk.Menu(container)
+        self.config(menu=menubar)
         datamenu = tk.Menu(menubar, tearoff=0)
         #datamenu.add_command(label="Live Graph", command = lambda:data_display("g"))
         datamenu.add_command(label="Data Scrollbars", command = lambda:data_display("s"))
         datamenu.add_command(label="None", command = lambda:data_display(""))
         filemenu = tk.Menu(menubar, tearoff=0)
         #filemenu.add_command(label='Errors', command = lambda:self.show_frame(ErrorReport))#, showErrors(self))
-        filemenu.add_command(label='Serial Reconnect', command = lambda:SerReconnect(ser))
-        filemenu.add_command(label='Errors', command = lambda:showErrors(self))
-        filemenu.add_command(label="Exit", command = lambda:self.close())
+        filemenu.add_command(label='Serial Reconnect', command = lambda:Utilities.serial_re_connect(ser))
+        filemenu.add_command(label='Errors', command = lambda:self.showErrors(self))
+        filemenu.add_command(label="Exit", command = lambda:self.on_close())
         menubar.add_cascade(label='File', menu=filemenu)
         menubar.add_cascade(label="Data Display", menu=datamenu)
         
-        tk.Tk.config(self, menu=menubar)                
-        self.frames = {}# empty dictionary
-
-        for F in (Home, DataCollect, Calibrate, Guide, ErrorReport):# must put all pages in here
-            frame = F(container, self)
-            self.frames[F] = frame
-            frame.grid(row=0, column=0, sticky='nsew')
-            frame.configure(background = 'ghost white')
-            
-        self.show_frame(Home)
-
     def show_frame(self, cont):
         frame = self.frames[cont]
         frame.tkraise()
-
         frame.event_generate("<<ShowFrame>>") # event
 
     #closes GUI (from file menubar)
-    def close(self):
-        self.quit()
+    def on_close(self):
+        try:
+            data_page = self.frames[DataCollect]
+            data_page.collect = False  # Only if collect is defined in that class
+            if self.ser.is_open:
+                self.ser.close()
+        except Exception as e:
+            print(f"Shutdown cleanup failed: {e}")
+        #self.quit()
         self.destroy()
-        sys.exit()  # optional; ensures a clean exit in complex apps
+        sys.exit(0)  # optional; ensures a clean exit in complex apps
+
+    def showErrors(self):
+        self.show_frame(ErrorReport) # show Error Report page
+        self.frames[ErrorReport].showErrors2() # display errors in lists 
 
 
 
@@ -274,9 +288,9 @@ class Home(tk.Frame):
     
     def __init__(self, parent, controller): # automatically runs
         # global variables within Home that are used in multiple Classes & functions # Clayton does not like this, but he understands
-        global ser # serial port
-        global barHeight # tracks force bar height
-        global rows # tracks # of rows inSerConnect() contact w/ force bar
+        #global ser # serial port
+        #global barHeight # tracks force bar height
+        global rows # tracks # of rows in contact w/ force bar
         global stemCount # tracks ave stem count
         global perDis # tracks stem count distance
         global stemHeight # tracks ave stem height
@@ -284,32 +298,41 @@ class Home(tk.Frame):
         global startCount, endCount # tracks horizontal range of manual counts
         global Fb_bottom, Fb_center, Fb_place
         global usePlotnameAsFilenameYN, plotText
+
+        self.barHeight = None
         
         tk.Frame.__init__(self, parent)
         
         # GUI design (text, user inputs (text input, buttons):
         homeheader = tk.Label(self, text = "INPUTS",
-                          font = ("arial", 17, "bold"), fg = "gray3", bg="ghost white").place(x=350,y=0)
+                          font = ("arial", 17, "bold"), fg = "gray3", bg="ghost white")
+        homeheader.place(x=350,y=0)
         first = tk.Label(self, text = "(complete before collecting data)",
-                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=245,y=30)
+                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white")
+        first.place(x=245,y=30)
 
         # y = 255, 220, 285, 80, 150, 185, 115
         '''
         plotText = tk.StringVar()
         plotText.set("")
         plotLabel = tk.Label(self, text = "Plot: ",
-                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=0,y=80)
+                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white")
+        plotLabel.place(x=0,y=80)
         plotEntry = tk.Entry(self, textvariable=plotText,
-                font = ("arial", 14, "bold"), width= 10, bg="white", fg="gray1").place(x = 75, y = 80)
+                font = ("arial", 14, "bold"), width= 10, bg="white", fg="gray1")
+        plotEntry.place(x = 75, y = 80)
         plotPostLabel = tk.Label(self, text = "(Example: 'HW429')",
-                          font = ("arial", 14, "italic"), fg = "gray3", bg="ghost white").place(x=200,y=80)
+                          font = ("arial", 14, "italic"), fg = "gray3", bg="ghost white")
+        plotPostLabel.place(x=200,y=80)
         
         ''
         usePlotnameAsFilenameYN = tk.IntVar()
         usePlotnameAsFilenameYN.set(1)
         #plotnameAsfilenameLabel = tk.Label(self, text = "Use Plot Name as File Name?",
-        #                  font = ("arial", 10, ""), fg = "gray3", bg="ghost white").place(x=230,y=80)
-        plotnameAsFilenameCheckbox = tk.Checkbutton(self, text= "Use Plot Name as File Name?",variable = usePlotnameAsFilenameYN).grid(row=0, sticky=W)
+        #                  font = ("arial", 10, ""), fg = "gray3", bg="ghost white")
+        #plotnameAsfilenameLabel.place(x=230,y=80)
+        plotnameAsFilenameCheckbox = tk.Checkbutton(self, text= "Use Plot Name as File Name?",variable = usePlotnameAsFilenameYN)
+        plotnameAsFilenameCheckbox.grid(row=0, sticky=W)
         '''
 
         rowCountLeft = tk.IntVar()
@@ -339,42 +362,52 @@ class Home(tk.Frame):
                 font = ("arial", 14, "bold"), width= 4, bg="white", fg="gray1").place(x = 455, y = 160)
 
         
-        barHeight = tk.DoubleVar() # Whatever number is typed into the field
+        self.barHeight = tk.DoubleVar() # Whatever number is typed into the field
         Fb_place = 7.5 # default value, which can be altered 
-        barHeight.set(Fb_place) #
-        Fb_center = barHeight # CB 3/13/2022 # In 2021 the ruler was not used, and the ruler is risky.
+        self.barHeight.set(Fb_place) #
+        Fb_center = self.barHeight # CB 3/13/2022 # In 2021 the ruler was not used, and the ruler is risky.
         Fb_bottom = Fb_center.get() - .32
         barHeightLabel = tk.Label(self, text = "Forcebar Height (in.):",
-                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=0,y=200) 
-        barHeightEntry = tk.Entry(self, textvariable=barHeight,
-               font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 200, y = 200)
+                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white")
+        barHeightLabel.place(x=0,y=200) 
+        barHeightEntry = tk.Entry(self, textvariable=self.barHeight,
+               font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1")
+        barHeightEntry.place(x = 200, y = 200)
         barHeightPostLabel = tk.Label(self, text = "(measured from the middle of the forcebar)",
-                          font = ("arial", 14, "italic"), fg = "gray3", bg="ghost white").place(x=290,y=200)
+                          font = ("arial", 14, "italic"), fg = "gray3", bg="ghost white")
+        barHeightPostLabel.place(x=290,y=200)
         
         stemHeightLabel = tk.Label(self, text = "Avg. Stem Height (in.):",
-                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=0,y=240)
+                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white")
+        stemHeightLabel.place(x=0,y=240)
         stemHeight = tk.DoubleVar()
         stemHeight.set(10)# sets initial stem height to 10 (ave. estimate observed)
         stemHeightEntry = tk.Entry(self, textvariable=stemHeight,
-                font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1").place(x = 210, y = 240)
+                font = ("arial", 14, "bold"), width= 6, bg="white", fg="gray1")
+        stemHeightEntry.place(x = 210, y = 240)
 
         rows = tk.IntVar()
         rows.set(4)#sets rows to be 4 initially since typical number
         rowsLabel = tk.Label(self, text = "# of Contact Rows:",
-                font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=0,y=280)
+                font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white")
+        rowsLabel.place(x=0,y=280)
         rowsEntry = tk.Entry(self, textvariable=rows,
-               font = ("arial", 14, "bold"), width= 4, bg="white", fg="gray1").place(x = 190, y = 280)
+               font = ("arial", 14, "bold"), width= 4, bg="white", fg="gray1")
+        rowsEntry.place(x = 190, y = 280)
         rowsPostLabel = tk.Label(self, text = "(likely will stay the same for all plots in a field)",
-                font = ("arial", 14, "italic"), fg = "gray3", bg="ghost white").place(x=250,y=280)
+                font = ("arial", 14, "italic"), fg = "gray3", bg="ghost white")
+        rowsPostLabel.place(x=250,y=280)
         
         # possibly get rid of this box, though the variable needs to be kept for passing to storage
         stemCount = tk.DoubleVar()
         stemCount.set(99)
         stemCount.set((rowCountLeft.get()+rowCountRight.get())/2)
         stemCountLabel = tk.Label(self, text = "Avg. Stem Count:",
-                          font = ("arial", 14, "italic"), fg = "gray3", bg="ghost white").place(x=0,y=320)
+                          font = ("arial", 14, "italic"), fg = "gray3", bg="ghost white")
+        stemCountLabel.place(x=0,y=320)
         stemCountEntry = tk.Entry(self, textvariable=stemCount,
-                font = ("arial", 14, "italic"), width= 6, bg="white", fg="gray1").place(x = 161, y = 320)
+                font = ("arial", 14, "italic"), width= 6, bg="white", fg="gray1")
+        stemCountEntry.place(x = 161, y = 320)
         
         # possibly get rid of this box, though the variable needs to be kept for passing to storage
         perDisLabel = tk.Label(self, text = "per (in.):",
@@ -401,27 +434,25 @@ class Home(tk.Frame):
                 font = ("arial", 12, "italic"), fg = "gray3", bg="ghost white").place(x=440,y=440)
         
         # button that enters DataCollect page/class
-        dataB = tk.Button(self, text = "Collect\nData",
+        dataButton = tk.Button(self, text = "Collect\nData",
                        font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",
-                       command=lambda:controller.show_frame(DataCollect)).place(x = 675, y = 40)
+                       command=lambda:controller.show_frame(DataCollect))
+        dataButton.place(x = 675, y = 40)
         # button that enters Calibrate page/class
-        calibrateB = tk.Button(self, text = "Calibrate\nForce\nSensor",
+        calibrateButton = tk.Button(self, text = "Calibrate\nForce\nSensor",
                        font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",
-                       command=lambda:controller.show_frame(Calibrate)).place(x = 675, y = 224)
+                       command=lambda:controller.show_frame(Calibrate))
+        calibrateButton.place(x = 675, y = 224)
         #tares/zeros load cell
-        guideB = tk.Button(self, text = "Guide", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:controller.show_frame(Guide))
-        guideB.place(x = 0, y = 360)
+        guideButton = tk.Button(self, text = "Guide", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:controller.show_frame(Guide))
+        guideButton.place(x = 0, y = 360)
 
-        keyB = tk.Button(self, text = "Keyboard",
+        keyButton = tk.Button(self, text = "Keyboard",
                        font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",
-                       command=keyboard).place(x = 675, y = 316)
+                       command=Utilities.keyboard_onscreen)
+        keyButton.place(x = 675, y = 316)
         print("in")
-        ser = SerConnect(verbose=True)
-        if ser:
-            print("Ready to communicate!")
-        else:
-            print("Connection failed.")
-        #SerReconnect(ser)
+        
 
         print("")
         self.bind("<<ShowFrame>>", self.on_show_frame_Inputs)
@@ -432,11 +463,11 @@ class Home(tk.Frame):
         print("Return to Input screen, text fields updated")
         stemCount.set((rowCountLeft.get()+rowCountRight.get())/2)
         perDis.set(endCount.get()-startCount.get())
-        Fb_center = barHeight # CB 3/13/2022 # In 2021 the ruler was not used, and the ruler is risky.
+        Fb_center = self.barHeight # CB 3/13/2022 # In 2021 the ruler was not used, and the ruler is risky.
         Fb_bottom = Fb_center.get() - .32
         try: # this doesn't work if you're going from the Collect Data page to the Input page
             stemHeight.set(10)# the issue, is aveH doesn't exist yet pulls in calculated value from Heights page
-            barHeight.set(Fb_place) # pulls in calculated value from Heights page
+            self.barHeight.set(Fb_place) # pulls in calculated value from Heights page
         except:
             print("Height calculator not used.")
         
@@ -448,7 +479,7 @@ class DataCollect(tk.Frame):
     #window = Tk()
     #filename = tk.StringVar()
     def __init__(self, parent, controller):# automatically runs
-
+        self.controller = controller
         
         # global filename
         # A hopeful little bit of hallucination - AG
@@ -465,20 +496,24 @@ class DataCollect(tk.Frame):
         tk.Frame.__init__(self, parent)
 
         #GUI design of this page
-        label = tk.Label(self, text ="DATA COLLECTION",
-                         font = ("arial", 17, "bold"), fg = "gray3", bg="ghost white").place(x=275,y=0)
+        titleLabel = tk.Label(self, text ="DATA COLLECTION",
+                         font = ("arial", 17, "bold"), fg = "gray3", bg="ghost white")
+        titleLabel.place(x=275,y=0)
 
         #button that goes back to 1st page (Inputs / home)
-        HomeB = tk.Button(self, text ="Inputs",
+        homeButton = tk.Button(self, text ="Inputs",
                         font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",
-                        command=lambda:controller.show_frame(Home)).place(x = 0, y = 316)
+                        command=lambda:controller.show_frame(Home))
+        homeButton.place(x = 0, y = 316)
         
-        keyB = tk.Button(self, text = "Keyboard",
+        keyButton = tk.Button(self, text = "Keyboard",
                font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",
-               command=keyboard).place(x = 675, y = 316)
+               command=Utilities.keyboard_onscreen)
+        keyButton.place(x = 675, y = 316)
         
-        name = tk.Label(self, text = "Filename: ",
-                         font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=0,y=35)
+        filenameLabel = tk.Label(self, text = "Filename: ",
+                         font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white")
+        filenameLabel.place(x=0,y=35)
         
         #self.filename = self.filename.get()
         self.filename = tk.StringVar()# user inputted filename
@@ -501,25 +536,40 @@ class DataCollect(tk.Frame):
         self.entry_box.place(x = 96, y = 35)
         ''
         #gives access to buttons for data collection control 
-        newB = tk.Button(self, text = "New",
-                        font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:self.named(self.filename.get())).place(x = 550, y = 40)
+        newButton = tk.Button(self, text = "New",
+                        font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:self.named(self.filename.get()))
+        newButton.place(x = 550, y = 40)
 
-        #plotnameB = tk.Button(self, text = "Use Plotname as Filename",
-         #               font = ("arial", 16, "bold"), height = 2, width = 12, fg = "ghost white", bg = "gray2",command=lambda:controller.shared_data["main_frame"]["plotname"]ToFilename(plotname.get())).place(x = 0, y = 220)
+        #plotnameButton = tk.Button(self, text = "Use Plotname as Filename",
+        #               font = ("arial", 16, "bold"), height = 2, width = 12, fg = "ghost white", bg = "gray2",command=lambda:controller.shared_data["main_frame"]["plotname"]ToFilename(plotname.get()))
+        #plotnameButton.place(x = 0, y = 220)
 
         self.bind("<<ShowFrame>>", self.on_show_frame_DataCollection)
 
+    def mockdata_fallback(self):
+        print("[WARN] Serial not available, generating test curve.")
+        from lazarus.mockdata import generate_mock_data 
+        elapsed, dis, force = generate_mock_data()
+        for i in range(len(elapsed)):
+            self.Dislist.insert(tk.END, str('%.2f' % dis[i]))
+            self.Dislist.see(tk.END)
+            self.Forcelist.insert(tk.END, str('%.2f' % force[i]))
+            self.Forcelist.see(tk.END)
+            self.Timelist.insert(tk.END, str('%.2f' % elapsed[i]))
+            self.Timelist.see(tk.END)
+
     # * # DATA COLLECTION FUNCTION - Acquires live data from Arduino # * #
-    def run(self, ser, collect):
+    def run(self):
         try:        
             started = str('s')
-            ser.write(started.encode()) #sends 's' to arduino, telling it to start
+            self.controller.ser.write(started.encode()) #sends 's' to arduino, telling it to start
             #print('s')
-        except:
+        except Exception as e:
             errors.append('serial com. (start data)') # label 
             eCode = 'e2'
             errorCodes.append(eCode)
-            popup('start data collect')
+            Popups.popup_box('start data collect')
+
 
         #DATA COLLECTION CODE
         string = list()
@@ -560,16 +610,16 @@ class DataCollect(tk.Frame):
         i = 0
         
         try:
-            while collect: # GUI in fSerConnect()rontend controls value of collect to start/stop loop
-                if ser.inWaiting() > 0: #checks to see if Serial is available 
+            while self.collect: # GUI in frontend controls value of collect to start/stop loop
+                if self.controller.ser.inWaiting() > 0: #checks to see if Serial is available 
                 
                     try: #make sure serial data can be read/is there
-                        ser_bytes = ser.readline()
+                        ser_bytes = self.controller.ser.readline()
                     except:
                         errors.append('serial read') # label 
                         eCode = 'e3'
                         errorCodes.append(eCode)
-                        popup("serial read")
+                        Popups.popup_box("serial read")
             
 
                     if i == 0:
@@ -594,7 +644,7 @@ class DataCollect(tk.Frame):
                             errors.append('data append') # label 
                             eCode = 'e4'
                             errorCodes.append(eCode)  
-                        #   popup("Arduino data error")
+                        #   Popups.popup_box("Arduino data error")
                         #  print(string[i])
 
                         '''Scrollbars Options'''
@@ -609,6 +659,7 @@ class DataCollect(tk.Frame):
 
                         #scrollbars options = off        
                         except:
+                            print("DATA NEVER CAME")
                             pass
                         
                         i = i+1
@@ -618,7 +669,7 @@ class DataCollect(tk.Frame):
                         eCode = 'e5'
                         errorCodes.append(eCode)                    
         except:
-            if collect:
+            if self.collect:
                 errors.append('serial disconnect')
                 eCode = 'e6'
                 errorCodes.append(eCode)
@@ -631,7 +682,7 @@ class DataCollect(tk.Frame):
         print("Flip to Date Collect screen, text fields updated")
         stemCount.set((rowCountLeft.get()+rowCountRight.get())/2)
         perDis.set(endCount.get()-startCount.get())
-        Fb_center = barHeight # CB 3/13/2022 # In 2021 the ruler was not used, and the ruler is risky.
+        Fb_center = self.controller.frames[Home].barHeight # CB 3/13/2022 # In 2021 the ruler was not used, and the ruler is risky.
         Fb_bottom = Fb_center.get() - .32
         '''
         if usePlotnameAsFilenameYN.get()==1:
@@ -689,22 +740,22 @@ class DataCollect(tk.Frame):
 
         #Data collection buttons now displayed after 1st pressing of the 'New' button:
         #tells Arduino to start collecting data
-        startB = tk.Button(self, text = "Start", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:self.start())
-        startB.place(x = 675, y = 40)
+        startButton = tk.Button(self, text = "Start", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:self.start())
+        startButton.place(x = 675, y = 40)
         
         #tells Arduino to stop collecting data & saves the data (calls filename function)
-        stopB = tk.Button(self, text = "Stop\n&\nSave", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:self.stop(self.filename.get()))
-        stopB.place(x = 675, y = 132)
+        stopButton = tk.Button(self, text = "Stop\n&\nSave", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:self.stop(self.filename.get()))
+        stopButton.place(x = 675, y = 132)
 
         #tares/zeros load cell
-        tareB = tk.Button(self, text = "Tare", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:self.tare())
-        tareB.place(x = 675, y = 224)
+        tareButton = tk.Button(self, text = "Tare", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:self.tare())
+        tareButton.place(x = 675, y = 224)
         
         self.checkAutoGraph = tk.IntVar()
         self.checkAutoGraph.set(1)
         #on/off control of auto graph after stopping & saving data
-        graphB = tk.Checkbutton(self, text = "Auto graph", variable = self.checkAutoGraph, width = 13, height = 2, bg = 'ghost white')
-        graphB.place(x = 675 , y = 0)
+        graphButton = tk.Checkbutton(self, text = "Auto graph", variable = self.checkAutoGraph, width = 13, height = 2, bg = 'ghost white')
+        graphButton.place(x = 675 , y = 0)
 
         self.pastSet = self.dataset # records past dataset number
         self.prevName = self.filename.get() # records past filename
@@ -712,11 +763,11 @@ class DataCollect(tk.Frame):
     # calls run function (for collecting Arduino data) to run in backend while GUI runs in frontend     
     def start(self):
         self.collect = True # True = run the loop
-        print('isOpen ', ser.isOpen())
-        #if ser.isOpen() == False:
-         #   ser.open()
-        #Fb_center = barHeight.get() - .466 # corrects fb ruler measurement to actual fb center, originally was .5625 but it depends on tire pressure
-        #Fb_center = barHeight.get() # CB 3/13/2022 # In 2021 the ruler was not used, and the ruler is risky.
+        print('isOpen ', self.controller.ser.isOpen())
+        #if self.controller.ser.isOpen() == False:
+         #   self.controller.ser.open()
+        #Fb_center = self.controller.frames[Home].barHeight.get() - .466 # corrects fb ruler measurement to actual fb center, originally was .5625 but it depends on tire pressure
+        #Fb_center = self.controller.frames[Home].barHeight.get() # CB 3/13/2022 # In 2021 the ruler was not used, and the ruler is risky.
         #self.Fb_bottom = Fb_center - .32 # Fb_center - radius of Fb (NOTE: depends on force bar height/radius)
         #print(rows.get())
 
@@ -732,14 +783,14 @@ class DataCollect(tk.Frame):
         """
 
         #data=Data()
-        t1 = threading.Thread(target = self.run,args=(ser, self.collect)) # references run()
+        t1 = threading.Thread(target = self.run) # references run()
         t1.start()
 
     #zeroes load cell measurement
     def tare(self):
-        ser.flush()#wait until all data is written
+        self.controller.ser.flush()#wait until all data is written
         tare = str('t')
-        ser.write(tare.encode()) #sends 't' to arduino, telling it to tare
+        self.controller.ser.write(tare.encode()) #sends 't' to arduino, telling it to tare
         time.sleep(0.3)#wait x seconds for Arduino to tare load cell (for smoothing)
 
     #auto graph feature 
@@ -778,7 +829,7 @@ class DataCollect(tk.Frame):
         if self.overwriteGuard(raw) == True: # filename already exists, needs to be renamed
             self.dataset = self.dataset - 1 # don't increment data set
             self.clearDisplay = False # don't clear data display
-            rename(self.filename.get()) # prompt user to rename file
+            Popups.rename_box(self.filename.get()) # prompt user to rename file
             
         else:
             self.clearDisplay = True
@@ -794,7 +845,7 @@ class DataCollect(tk.Frame):
         countDis=["Sample Count Distance (in.)"]
 
         cropHeight.append(stemHeight.get()) # TypeError: 'float' object is not iterable
-        FbSetHeight.append(barHeight.get()) # new, CB
+        FbSetHeight.append(self.controller.frames[Home].barHeight.get()) # new, CB
         FbHeight.append(Fb_bottom)
         rowNum.append(rows.get())
         stemNum.append(stemCount.get())
@@ -850,7 +901,9 @@ class DataCollect(tk.Frame):
             if max(dis) > 5 and generate_rich_files_toggle: # checked if Encoder worked by making sure that the SOCEM traveled at least 5 inches
                 self.calcs(filename)#run calcs function
         except:
-            print("Push2")
+            print("No data captured.")
+            self.mockdata_fallback()
+
         #except:
         #    errors.append('raw Excel writing') # error label
         #    eCode = 'e6'
@@ -1180,7 +1233,7 @@ class DataCollect(tk.Frame):
 
     def stop(self,filename):
         try:
-            ser.flushInput()# wait until all data is written
+            self.controller.ser.flushInput()# wait until all data is written
         except:
             print("Push")
         finally:
@@ -1190,9 +1243,9 @@ class DataCollect(tk.Frame):
         
         try:
             stopped = str('x')
-            ser.write(stopped.encode())# sends 'x' to Arduino to stop reading sensors
+            self.controller.ser.write(stopped.encode())# sends 'x' to Arduino to stop reading sensors
             time.sleep(.5)# for potential error protection?
-            #ser.close()
+            #self.controller.ser.close()
         except:
             errors.append('serial com. (stopping data)') # error label
             eCode = 'e7'
@@ -1206,7 +1259,7 @@ class DataCollect(tk.Frame):
                 incra = tk.Label(self, text = '(increment)', bg='gray2', fg = 'ghost white', font = ('arial', 12))
                 incra.place(x = 575, y = 100)
 
-            #print('stop isOpen ', ser.isOpen())      
+            #print('stop isOpen ', self.controller.ser.isOpen())      
             
 
 # Load cell calibration page 
@@ -1214,6 +1267,7 @@ class Calibrate(tk.Frame):
     
     def __init__(self, parent, controller): # automatically runs
         # register variable associated with this class
+        self.controller = controller
         self.caliLoop = None
         
         tk.Frame.__init__(self, parent)
@@ -1269,34 +1323,40 @@ class Calibrate(tk.Frame):
         self.calibraEntry.place(x = 125, y = 223)
 
         #tares/zeros load cell
-        tareB = tk.Button(self, text = "Tare", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:DataCollect.tare) # confirm this works
-        tareB.place(x = 559, y = 44)
+        tareButton = tk.Button(self, text = "Tare", font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",command=lambda:DataCollect.tare) # confirm this works
+        tareButton.place(x = 559, y = 44)
 
         # updates cali factor & starts/continues cali. process
-        caliB = tk.Button(self, text ="Update\nCali.\nFactor",
+        caliButton = tk.Button(self, text ="Update\nCali.\nFactor",
                          font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",
-                         command=lambda:self.caliThread()).place(x = 675, y = 44)
+                         command=lambda:self.caliThread())
+        caliButton.place(x = 675, y = 44)
         # stops cali. process
-        doneB = tk.Button(self, text ="Done",
+        doneButton = tk.Button(self, text ="Done",
                          font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",
-                         command=lambda:self.doneCali()).place(x = 675, y = 224)
+                         command=lambda:self.doneCali())
+        doneButton.place(x = 675, y = 224)
 
         # + 1000 to calibra
-        p1000B = tk.Button(self, text ="+1000",
+        p1000Button = tk.Button(self, text ="+1000",
                          font = ("arial", 16, "bold"), height = 1, width = 8, fg = "ghost white", bg = "gray2",
-                         command=lambda:self.updateCali(1000)).place(x = 559, y = 136)
+                         command=lambda:self.updateCali(1000))
+        p1000Button.place(x = 559, y = 136)
         # - 1000 to calibra
-        n1000B = tk.Button(self, text ="-1000",
+        n1000Button = tk.Button(self, text ="-1000",
                          font = ("arial", 16, "bold"), height = 1, width = 8, fg = "ghost white", bg = "gray2",
-                         command=lambda:self.updateCali(-1000)).place(x = 559, y = 136+44)
+                         command=lambda:self.updateCali(-1000))
+        n1000Button.place(x = 559, y = 136+44)
         # + 100
-        p100B = tk.Button(self, text ="+100",
+        p100Button = tk.Button(self, text ="+100",
                          font = ("arial", 16, "bold"), height = 1, width = 8, fg = "ghost white", bg = "gray2",
-                         command=lambda:self.updateCali(100)).place(x = 675, y = 136)
+                         command=lambda:self.updateCali(100))
+        p100Button.place(x = 675, y = 136)
         # - 100
-        n100B = tk.Button(self, text ="-100",
+        n100Button = tk.Button(self, text ="-100",
                          font = ("arial", 16, "bold"), height = 1, width = 8, fg = "ghost white", bg = "gray2",
-                         command=lambda:self.updateCali(-100)).place(x = 675, y = 136+44)
+                         command=lambda:self.updateCali(-100))
+        n100Button.place(x = 675, y = 136+44)
 
         scroll = tk.Scrollbar(self)
 
@@ -1310,13 +1370,15 @@ class Calibrate(tk.Frame):
         self.Difflist = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 7, height = 14, font = ("arial", 14, "bold"), fg = "dodgerblue2")
         self.Difflist.place(x = 400, y = 73)
 
-        HomeB = tk.Button(self, text ="Inputs",
+        HomeButton = tk.Button(self, text ="Inputs",
                         font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",
-                        command=lambda:controller.show_frame(Home)).place(x = 0, y = 316)
+                        command=lambda:controller.show_frame(Home))
+        HomeButton.place(x = 0, y = 316)
 
-        keyB = tk.Button(self, text = "Keyboard",
+        keyButton = tk.Button(self, text = "Keyboard",
                        font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",
-                       command=keyboard).place(x = 675, y = 316)
+                       command=Utilities.keyboard_onscreen)
+        keyButton.place(x = 675, y = 316)
 
     def updateCali(self, cali): # update calibration factor
         self.factor = self.calibra.get() + cali
@@ -1325,9 +1387,9 @@ class Calibrate(tk.Frame):
         return self.factor
 
     def tare(self):
-        ser.flush()#wait until all data is written
+        self.controller.ser.flush()#wait until all data is written
         tare = str('t')
-        ser.write(tare.encode()) #sends 't' to arduino, telling it to tare
+        self.controller.ser.write(tare.encode()) #sends 't' to arduino, telling it to tare
         time.sleep(0.3)#wait x seconds for Arduino to tare load cell (for smoothing)
        
     def caliFactor(self):
@@ -1340,23 +1402,23 @@ class Calibrate(tk.Frame):
         self.doneCali() # if Arduino sending force data, this will momentarily stop it 
         
         strFactor = str(self.factor) # cali factor as string
-        ser.write(strFactor.encode()) # send cali factor to Arduino
-        ser.flush() # make sure it gets it before proceeding
+        self.controller.ser.write(strFactor.encode()) # send cali factor to Arduino
+        self.controller.ser.flush() # make sure it gets it before proceeding
 
         self.caliLoop = True
         #for i in range(20):
         #z = 0
         while self.caliLoop: # loop to continuously print Arduino force readings
 
-            if ser.inWaiting() > 0: #checks to see if Serial is available 
+            if self.controller.ser.inWaiting() > 0: #checks to see if Serial is available 
                     
                 try: #make sure serial data can be read/is there
-                    ser_bytes = ser.readline()
+                    ser_bytes = self.controller.ser.readline()
                 except:
                     errors.append('serial read')
                     eCode = 'e8'
                     errorCodes.append(eCode)
-                    #popup("serial read")
+                    #Popups.popup_box("serial read")
                     
                 bytesDecoded = (ser_bytes[0:len(ser_bytes)-2].decode("utf-8")) # force reading bytes
                 #print(str(bytesDecoded))
@@ -1389,13 +1451,13 @@ class Calibrate(tk.Frame):
         thread.start()
 
     def doneCali(self): # stops calibration process
-        if not ser.is_open:
-            ser.open()
-        ser.reset_input_buffer()# clear the input buffer
+        if not self.controller.ser.is_open:
+            self.controller.ser.open()
+        self.controller.ser.reset_input_buffer()# clear the input buffer
         self.caliLoop = False # stop loop asking for data
         
         send = str('d')
-        ser.write(send.encode()) # send 'd' to stop Arduino sending data
+        self.controller.ser.write(send.encode()) # send 'd' to stop Arduino sending data
         
 # error page for displaying errors
 class ErrorReport(tk.Frame):
@@ -1404,17 +1466,20 @@ class ErrorReport(tk.Frame):
         tk.Frame.__init__(self, parent)
 
         # button that returns to Geo. Inputs page/class
-        HomeB = tk.Button(self, text ="Inputs",
+        HomeButton = tk.Button(self, text ="Inputs",
                 font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",
-                command=lambda:controller.show_frame(Home)).place(x = 675, y = 316)
+                command=lambda:controller.show_frame(Home))
+        HomeButton.place(x = 675, y = 316)
         # button that returns to DataCollect page/class
-        dataB = tk.Button(self, text = "Collect\nData",
+        dataButton = tk.Button(self, text = "Collect\nData",
                        font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",
-                       command=lambda:controller.show_frame(DataCollect)).place(x = 675, y = 225)
+                       command=lambda:controller.show_frame(DataCollect))
+        dataButton.place(x = 675, y = 225)
         
         scroll = tk.Scrollbar(self)
         
-        self.ErrorCodeLabel = tk.Label(self, text = "Error Code\n(Location)",font = ("arial", 14, "bold"), fg = "gray3", bg = "ghost white").place(x = 179, y = 50)
+        self.ErrorCodeLabel = tk.Label(self, text = "Error Code\n(Location)",font = ("arial", 14, "bold"), fg = "gray3", bg = "ghost white")
+        self.ErrorCodeLabel.place(x = 179, y = 50)
         self.ErrorCodeList = tk.Listbox(self, yscrollcommand = scroll.set, bg = "ghost white",highlightbackground = "gray2", width = 10, height = 13, font = ("arial", 14, "bold"), fg = "dodgerblue2")
         self.ErrorCodeList.place(x = 175, y = 100)
 
@@ -1442,41 +1507,53 @@ class Guide(tk.Frame):
         tk.Frame.__init__(self, parent)
         
         guideHeader = tk.Label(self, text = "GUIDE",
-                          font = ("arial", 17, "bold"), fg = "gray3", bg="ghost white").place(x=350,y=0)
+                          font = ("arial", 17, "bold"), fg = "gray3", bg="ghost white")
+        guideHeader.place(x=350,y=0)
 
         # instruction steps:
         one = tk.Label(self, text = "1. Position SOCEM as shown",
-                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=5,y=30)
+                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white")
+        one.place(x=5,y=30)
 
         two = tk.Label(self, text = "2. Clear any debris in plot",
-                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=5,y=56)
+                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white")
+        two.place(x=5,y=56)
 
         three = tk.Label(self, text = "3. Adjust forcebar to 70-90% stem height",
-                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=5,y=81)
+                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white")
+        three.place(x=5,y=81)
         
         four = tk.Label(self, text = "4. Enter all required inputs.",
-                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=5,y=106)
+                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white")
+        four.place(x=5,y=106)
         
-        four = tk.Label(self, text = '5. Press "Collect Data" button',
-                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=5,y=131)
+        fourB = tk.Label(self, text = '5. Press "Collect Data" button',
+                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white")
+        fourB.place(x=5,y=131)
 
         five = tk.Label(self, text = '6. Enter filename for new dataset',
-                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=5,y=156)
+                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white")
+        five.place(x=5,y=156)
 
         six = tk.Label(self, text = '6. Press "New" & then "Start" buttons',
-                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=5,y=181)
+                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white")
+        six.place(x=5,y=181)
         
         seven = tk.Label(self, text = "7. Slowly & steadily push SOCEM through plot",
-                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=5,y=206)
+                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white")
+        seven.place(x=5,y=206)
         
         eight = tk.Label(self, text = '8. Press "Stop&Save" button',
-                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=5,y=231)
+                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white")
+        eight.place(x=5,y=231)
 
         nine = tk.Label(self, text = '9. Press "New" and rename for next data file',
-                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=5,y=256)
+                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white")
+        nine.place(x=5,y=256)
 
         ten = tk.Label(self, text = '10. Repeat 5.-9.',
-                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white").place(x=5,y=281)
+                          font = ("arial", 14, "bold"), fg = "gray3", bg="ghost white")
+        ten.place(x=5,y=281)
 
         '''
         # SOCEM diagram of use 
@@ -1488,20 +1565,28 @@ class Guide(tk.Frame):
         '''
 
         #button that goes back to 1st page (Inputs / home)
-        HomeB = tk.Button(self, text ="Inputs",
+        HomeButton = tk.Button(self, text ="Inputs",
                         font = ("arial", 16, "bold"), height = 3, width = 8, fg = "ghost white", bg = "gray2",
-                        command=lambda:controller.show_frame(Home)).place(x = 0, y = 316)
+                        command=lambda:controller.show_frame(Home))
+        HomeButton.place(x = 0, y = 316)
 
 if __name__ == "__main__":
+    ser = Utilities.serial_connect(verbose=True)
+    if ser:
+        print("Ready to communicate!")
+    else:
+        print("Connection failed.")
+    #Utilities.serial_re_connect(ser)]
+
     # INITIATES GUI TO START
-    #root= tk.Tk() # added CB
-    app = GUI()
-    b = DataCollect(app,tk.Frame)
-    fig = plt.figure()
+    app = GUI(ser)
+    app.protocol("WM_DELETE_WINDOW", app.on_close)
     app.title("StemBerry")
     app.geometry("800x480+0+0")
-    #app.iconbitmap(s'/home/pi/Desktop/SOCEM Code')
+    app.mainloop()
     #full screen:
     #app.geometry("{0}x{1}+0+0".format(app.winfo_screenwidth()-3,app.winfo_screenheight()-3))
-    app.mainloop()
+    #b = DataCollect(app,tk.Frame)
+    #fig = plt.figure()
+    
         
