@@ -36,6 +36,7 @@ address = Path(__file__).resolve().parent
 # I (Clayton Bennett) have made it so that there is an export folder that will be generated wherever this script is located.
 
 #Needed libraries
+import serial
 import serial.tools.list_ports
 import time
 import tkinter as tk
@@ -122,9 +123,6 @@ inchonvert = (((math.pi*(0.764))*31.4136)/359) # converts displacement to inches
 vis = "s" #set to live graph for data display
 
 # Determine Arduino serial port address
-import serial
-import serial.tools.list_ports
-
 class Utilities:
     @staticmethod
     def serial_connect(verbose=True):
@@ -283,6 +281,7 @@ class GUI(tk.Tk):
 ##    def on_show_frame(self, event):
 ##        print("I am being shown...")
 
+#---split
 #Home page 
 class Home(tk.Frame):
     
@@ -471,7 +470,7 @@ class Home(tk.Frame):
         except:
             print("Height calculator not used.")
         
-
+#--split
 # Data collection page
 class DataCollect(tk.Frame):
     
@@ -1084,23 +1083,6 @@ class DataCollect(tk.Frame):
         worksheet = workbook.add_worksheet('Plot_Data') # 1st sheet for plot data
         worksheet2 = workbook.add_worksheet('Row_Data_Calcs') # 2nd sheet for row data & auto-calcs
         worksheet3 = workbook.add_worksheet('SOCEM_Data') # 3rd sheet for SOCEM/user data
-        # adjusting column widths
-        # 1st sheet
-        worksheet.set_column(0, 2, 12)
-        worksheet.set_column(3, 3, 20)
-        worksheet.set_column(4, 4, 12)
-        worksheet.set_column(5, 5, 20)
-        worksheet.set_column(6, 6, 8)
-        worksheet.set_column(7, 7, 14)
-        worksheet.set_column(8, 8, 17)
-        worksheet.set_column(9, 9, 12)
-        worksheet.set_column(10, 10, 14)
-        # 2nd sheet
-        worksheet2.set_column(0, 1, 14)
-        worksheet2.set_column(2, 4, 23)
-        worksheet2.set_column(5, 7, 15)
-        # 3rd sheet
-        worksheet3.set_column(0, 1, 16)
 
         # 1st sheet: plot data
         worksheet.write_column('A1', elapsed)
@@ -1261,7 +1243,7 @@ class DataCollect(tk.Frame):
 
             #print('stop isOpen ', self.controller.ser.isOpen())      
             
-
+#--split
 # Load cell calibration page 
 class Calibrate(tk.Frame):
     

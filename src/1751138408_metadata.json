@@ -1,0 +1,13 @@
+{
+    "test_identifier": "test_20250628_142008",
+    "entity_id": "28June",
+    "group": "Bennett",
+    "sub_group": "Clayton",
+    "timestamp": "2025-06-28T14:20:08.243181",
+    "csv_file": "1751138408_data.csv",
+    "metadata_file": "1751138408_metadata.json",
+    "serial_config": {
+        "port": "COM4",
+        "baudrate": 9600
+    }
+}

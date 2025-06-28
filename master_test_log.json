@@ -1,0 +1,15 @@
+{
+    "1751139184": {
+        "test_identifier": "test_20250628_143304",
+        "entity_id": "layto",
+        "group": "1",
+        "sub_group": "A",
+        "timestamp": "2025-06-28T14:33:04.604264",
+        "csv_file": "1751139184_data.csv",
+        "metadata_file": "1751139184_metadata.json",
+        "serial_config": {
+            "port": "COM3",
+            "baudrate": 9600
+        }
+    }
+}
