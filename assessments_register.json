@@ -1,0 +1,16 @@
+[
+  {
+    "assessment_id": "3d29d281",
+    "raw_filename": "src\\lazarus\\test_data.csv",
+    "assessed_filename": "test_data__assessed_3d29d281.csv",
+    "x_col": "time",
+    "y_col": "force"
+  },
+  {
+    "assessment_id": "bcb96b00",
+    "raw_filename": "src/lazarus/test_data.csv",
+    "assessed_filename": "test_data__assessed_bcb96b00.csv",
+    "x_col": "time",
+    "y_col": "force"
+  }
+]

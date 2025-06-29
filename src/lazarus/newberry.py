@@ -43,24 +43,27 @@ def read_serial_data(csv_filename):
     try:
         with serial.Serial(serial_config['port'], serial_config['baudrate'], timeout=1) as ser, \
              open(csv_filename, 'w', newline='') as csvfile:
-            
+
+            print(f"Opened file: {csv_filename}")
             writer = csv.writer(csvfile)
             writer.writerow(['elapsed_time_sec', 'force', 'displacement'])
 
             while collecting:
                 line = ser.readline().decode(errors='ignore').strip()
-                print(f"line = {line}")
+                print("Line read:", line)
                 if not line:
                     continue
                 try:
                     force, displacement = map(float, line.split(','))
                     elapsed_time = time.time() - start_time
                     writer.writerow([elapsed_time, force, displacement])
+                    csvfile.flush()
+                    print("Parsed and wrote:", elapsed_time, force, displacement)
                 except Exception as e:
                     print(f"Data parse error: {e}")
-                    continue
     except Exception as e:
         sg.popup_error(f"Error opening serial port: {e}")
+
 
 @log_function_call(level=logging.INFO)
 def save_metadata(values, test_identifier, unix_timestamp):

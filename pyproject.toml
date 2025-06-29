@@ -1,40 +1,36 @@
 [project]
 name = "socem25"
 version = "2.0.0"
-description = "Clayton takes a stab at modularizing his old SOCEM code.The goals is to create a directory of code, rather than a single file, and to use good coding principles."
+description = "Clayton takes a stab at modularizing his old SOCEM code. The goal is to create a directory of code, rather than a single file, and to use good coding principles."
 authors = [
-    {name = "Clayton Bennett",email = "georgeclaytonbennett@gmail.com"},
-    {name = "Austin Bebee"},
-    {name = "Tim Stevens",  email="stev1754@vandals.uidaho.edu"}
+    { name = "Clayton Bennett", email = "georgeclaytonbennett@gmail.com" },
+    { name = "Austin Bebee" },
+    { name = "Tim Stevens", email = "stev1754@vandals.uidaho.edu" }
 ]
-license = {text = "BSD-3"}
+license = { text = "BSD-3" }
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = [
-    "pyserial (>=3.5,<4.0)",
-    "cmd2 (>=2.5.11,<3.0.0)",
-    "numpy (>=2.2.4,<3.0.0)",
-    "six (>=1.17.0,<2.0.0)",
-    "python-dateutil (>=2.9.0.post0,<3.0.0)",
-    "matplotlib (>=3.10.1,<4.0.0)",
-    "xlsxwriter (>=3.2.2,<4.0.0)",
-    "toml (>=0.10.2,<0.11.0)",
-    "pandas (>=2.2.3,<3.0.0)",
-    "fastapi (>=0.115.12,<0.116.0)",
-    "uvicorn (>=0.34.2,<0.35.0)",
-    "peakutils (>=1.3.5,<2.0.0)",
-    "freesimplegui (>=5.2.0.post1,<6.0.0)"
+
+# Make sure Poetry can find your actual package
+packages = [
+    { include = "socem25", from = "src" }
 ]
 
-[build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.setuptools]
-package-dir = {"" = "src"}
-
-[tool.setuptools.packages.find]
-where = ["src"]
+dependencies = [
+    "pyserial>=3.5,<4.0",
+    "cmd2>=2.5.11,<3.0.0",
+    "numpy>=2.2.4,<3.0.0",
+    "six>=1.17.0,<2.0.0",
+    "python-dateutil>=2.9.0.post0,<3.0.0",
+    "matplotlib>=3.10.1,<4.0.0",
+    "xlsxwriter>=3.2.2,<4.0.0",
+    "toml>=0.10.2,<0.11.0",
+    "pandas>=2.2.3,<3.0.0",
+    "fastapi>=0.115.12,<0.116.0",
+    "uvicorn>=0.34.2,<0.35.0",
+    "peakutils>=1.3.5,<2.0.0",
+    "freesimplegui>=5.2.0.post1,<6.0.0"
+]
 
 [project.optional-dependencies]
 dev = ["pytest", "black", "mypy", "ruff"]
@@ -45,12 +41,13 @@ cli = ["cmd2"]
 socem = "socem25.run:main"
 socem-cli = "socem25.shell.main:cli"
 socem-gui = "socem25.gui.main:run_gui"
-#socem-api = "uvicorn socem25.api.main:app"
 socem-api = "socem25.api.__main__:run"
 
-[flake8]
-exclude = [".venv", "build", "dist", ".git", "__pycache__"]
-max-line-length = 88
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+# ---- Linting/Formatting ----
 
 [tool.black]
 line-length = 88
@@ -60,3 +57,7 @@ line-length = 88
 select = ["E", "F", "B"]
 ignore = ["E203", "E266", "E501"]
 exclude = ["tests/fixtures/*"]
+
+[flake8]
+exclude = [".venv", "build", "dist", ".git", "__pycache__"]
+max-line-length = 88
