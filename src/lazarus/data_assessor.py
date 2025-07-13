@@ -7,6 +7,9 @@ from collections import defaultdict
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
+import logging
+logger = logging.getLogger(__name__)
+
 
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import FreeSimpleGUI as sg
@@ -42,6 +45,7 @@ def load_csv_data(filename, x_match="time", y_match="force"):
                 data['row'].append(row)
             except ValueError:
                 continue
+    logging.info(f"{filename} loaded.")
     return data, x_col, y_col
 
 def draw_figure(canvas_elem, figure):

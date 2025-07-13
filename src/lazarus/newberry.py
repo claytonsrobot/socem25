@@ -7,6 +7,7 @@ import json
 import time
 from datetime import datetime
 import logging
+logger = logging.getLogger(__name__)
 
 from src.socem25.decoractors import log_function_call
 

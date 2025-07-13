@@ -12,5 +12,47 @@
     "assessed_filename": "test_data__assessed_bcb96b00.csv",
     "x_col": "time",
     "y_col": "force"
+  },
+  {
+    "assessment_id": "c05c39ba",
+    "raw_filename": "src/lazarus/test_data.csv",
+    "assessed_filename": "test_data__assessed_c05c39ba.csv",
+    "x_col": "time",
+    "y_col": "force"
+  },
+  {
+    "assessment_id": "8abceed6",
+    "raw_filename": "src/lazarus/test_data.csv",
+    "assessed_filename": "test_data__assessed_8abceed6.csv",
+    "x_col": "time",
+    "y_col": "force"
+  },
+  {
+    "assessment_id": "298d319b",
+    "raw_filename": "src/lazarus/test_data.csv",
+    "assessed_filename": "test_data__assessed_298d319b.csv",
+    "x_col": "time",
+    "y_col": "force"
+  },
+  {
+    "assessment_id": "56fd2c33",
+    "raw_filename": "src/lazarus/test_data.csv",
+    "assessed_filename": "test_data__assessed_56fd2c33.csv",
+    "x_col": "time",
+    "y_col": "force"
+  },
+  {
+    "assessment_id": "7e6adaa8",
+    "raw_filename": "src/lazarus/test_data2.csv",
+    "assessed_filename": "test_data2__assessed_7e6adaa8.csv",
+    "x_col": "time",
+    "y_col": "force"
+  },
+  {
+    "assessment_id": "eb72d1f9",
+    "raw_filename": "src/lazarus/test_data.csv",
+    "assessed_filename": "test_data__assessed_eb72d1f9.csv",
+    "x_col": "time",
+    "y_col": "force"
   }
 ]
